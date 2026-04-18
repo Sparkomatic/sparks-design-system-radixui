@@ -323,6 +323,39 @@ If the Figma component does something no Radix primitive handles — build it fr
 
 **Never fork Radix source code.** You lose upstream accessibility fixes and behaviour updates.
 
+### Radix Popover with a custom trigger (not Popover.Trigger)
+
+When building a component that uses `Popover.Root` with `Popover.Anchor` instead of `Popover.Trigger` — e.g. a Combobox where the input controls open state — two things will cause the dropdown to close immediately after opening:
+
+1. **`onPointerDownOutside`** — Radix's DismissableLayer sees clicks on the anchor as "outside" the content and dismisses it.
+2. **`onFocusOutside`** — focus on the input (which lives in the anchor, not the content) is treated as focus leaving the popover.
+
+Fix both on `Popover.Content` by checking whether the interaction originated inside the trigger area. **Always use `e.detail.originalEvent.target`** — not `e.target`. Radix wraps these events in a `CustomEvent`; `e.target` is the document, not the clicked element.
+
+```tsx
+// Ref to the trigger/anchor element — set via context or prop
+const triggerRef = React.useRef<HTMLDivElement | null>(null)
+
+<Popover.Content
+  onPointerDownOutside={e => {
+    if (triggerRef.current?.contains(e.detail.originalEvent.target as Node)) {
+      e.preventDefault()
+    }
+  }}
+  onFocusOutside={e => {
+    if (triggerRef.current?.contains(e.detail.originalEvent.target as Node)) {
+      e.preventDefault()
+    }
+  }}
+>
+```
+
+Also always set both of these to prevent Radix moving focus away from your custom input:
+```tsx
+onOpenAutoFocus={e => e.preventDefault()}
+onCloseAutoFocus={e => e.preventDefault()}
+```
+
 ### Where custom and extended components live
 
 All design system components — whether Radix-backed, extended, or pure layout — live in `src/components/ui/`. There is no separate "custom" folder. The distinction is captured in a comment at the top of each component file, not in the folder structure.
