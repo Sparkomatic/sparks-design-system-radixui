@@ -264,9 +264,15 @@ const ComboboxContent = React.forwardRef<HTMLDivElement, ComboboxContentProps>(
           // Keep focus on the input when dropdown opens/closes
           onOpenAutoFocus={e => e.preventDefault()}
           onCloseAutoFocus={e => e.preventDefault()}
-          // Don't close when the user clicks the trigger — it manages open state itself
+          // Don't close when the user interacts with the trigger.
+          // Radix wraps these in CustomEvent — the real target is in detail.originalEvent.
           onPointerDownOutside={e => {
-            if (triggerRef.current?.contains(e.target as Node)) {
+            if (triggerRef.current?.contains(e.detail.originalEvent.target as Node)) {
+              e.preventDefault()
+            }
+          }}
+          onFocusOutside={e => {
+            if (triggerRef.current?.contains(e.detail.originalEvent.target as Node)) {
               e.preventDefault()
             }
           }}
