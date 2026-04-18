@@ -7,6 +7,7 @@
 @import "@/tokens/semantic.css";
 /* Component token files — add one line per component as it is built */
 @import "@/tokens/components/card.css";
+@import "@/tokens/components/combobox.css";
 
 /* ── Tailwind dark mode via class strategy ───────────────────────────────── */
 @custom-variant dark (&:is(.dark *));
