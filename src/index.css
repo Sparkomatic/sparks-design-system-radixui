@@ -5,11 +5,8 @@
 
 /* ── Design tokens ───────────────────────────────────────────────────────── */
 @import "@/tokens/semantic.css";
-/* Component-level token files are imported here as components are built:
-   @import "@/tokens/components/button.css";
-   @import "@/tokens/components/input.css";
-   etc.
-*/
+/* Component token files — add one line per component as it is built */
+@import "@/tokens/components/card.css";
 
 /* ── Tailwind dark mode via class strategy ───────────────────────────────── */
 @custom-variant dark (&:is(.dark *));

@@ -1,9 +1,11 @@
 import * as React from "react"
 
 import { ButtonPreview } from "./previews/button"
+import { CardPreview } from "./previews/card"
 
 const previews: { name: string; component: React.ComponentType }[] = [
   { name: "Button", component: ButtonPreview },
+  { name: "Card", component: CardPreview },
 ]
 
 export function Playground() {
