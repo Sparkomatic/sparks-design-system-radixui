@@ -1,0 +1,81 @@
+/* ── Core ─────────────────────────────────────────────────────────────────── */
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "@fontsource-variable/inter";
+
+/* ── Design tokens ───────────────────────────────────────────────────────── */
+@import "@/tokens/semantic.css";
+/* Component-level token files are imported here as components are built:
+   @import "@/tokens/components/button.css";
+   @import "@/tokens/components/input.css";
+   etc.
+*/
+
+/* ── Tailwind dark mode via class strategy ───────────────────────────────── */
+@custom-variant dark (&:is(.dark *));
+
+/* ── Bridge semantic tokens → Tailwind utility classes ──────────────────── */
+@theme inline {
+  /* Font */
+  --font-sans: var(--font-family-sans);
+
+  /* Colors — Tailwind will generate bg-background, text-foreground, etc. */
+  --color-background:           var(--color-background);
+  --color-foreground:           var(--color-text-primary);
+  --color-muted:                var(--color-surface-raised);
+  --color-muted-foreground:     var(--color-text-secondary);
+  --color-border:               var(--color-border-default);
+  --color-ring:                 var(--color-border-focus);
+  --color-input:                var(--color-border-default);
+
+  --color-primary:              var(--color-accent);
+  --color-primary-foreground:   var(--color-accent-foreground);
+
+  --color-secondary:            var(--color-surface-raised);
+  --color-secondary-foreground: var(--color-text-primary);
+
+  --color-destructive:          var(--color-destructive);
+  --color-destructive-foreground: var(--color-destructive-fg);
+
+  --color-card:                 var(--color-surface);
+  --color-card-foreground:      var(--color-text-primary);
+
+  --color-popover:              var(--color-surface-overlay);
+  --color-popover-foreground:   var(--color-text-primary);
+
+  /* Radius */
+  --radius-sm:  var(--radius-sm);
+  --radius-md:  var(--radius-md);
+  --radius-lg:  var(--radius-lg);
+  --radius-xl:  var(--radius-xl);
+  --radius-2xl: var(--radius-2xl);
+  --radius-full: var(--radius-full);
+}
+
+/* ── Base layer ──────────────────────────────────────────────────────────── */
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+    box-sizing: border-box;
+  }
+
+  html {
+    font-family: var(--font-family-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-size: var(--font-size-md);
+    line-height: var(--line-height-normal);
+  }
+
+  /* Respect reduced-motion preferences across all transitions */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
