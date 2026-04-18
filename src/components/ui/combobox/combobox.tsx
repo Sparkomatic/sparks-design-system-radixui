@@ -22,6 +22,8 @@ interface ComboboxContextValue {
   listboxId: string
   /** Registry of all mounted items: value → label. Insertion order = render order. */
   registry: React.MutableRefObject<Map<string, string>>
+  /** Ref to the trigger element — used by Content to ignore outside-clicks on it. */
+  triggerRef: React.RefObject<HTMLDivElement | null>
 }
 
 const ComboboxContext = React.createContext<ComboboxContextValue | null>(null)
@@ -59,6 +61,7 @@ function Combobox({ value = "", onValueChange, children }: ComboboxProps) {
   const [selectedValue, setSelectedValue] = React.useState(value)
   const [highlightedValue, setHighlightedValue] = React.useState<string | null>(null)
   const registry = React.useRef<Map<string, string>>(new Map())
+  const triggerRef = React.useRef<HTMLDivElement | null>(null)
   const inputId = React.useId()
   const listboxId = React.useId()
 
@@ -96,6 +99,7 @@ function Combobox({ value = "", onValueChange, children }: ComboboxProps) {
       highlightedValue, setHighlightedValue,
       inputId, listboxId,
       registry,
+      triggerRef,
     }}>
       <Popover.Root open={open} onOpenChange={setOpen}>
         {children}
@@ -121,6 +125,7 @@ const ComboboxTrigger = React.forwardRef<HTMLDivElement, ComboboxTriggerProps>(
       highlightedValue, setHighlightedValue,
       inputId, listboxId,
       registry,
+      triggerRef,
     } = useComboboxContext("ComboboxTrigger")
 
     const inputRef = React.useRef<HTMLInputElement>(null)
@@ -185,7 +190,11 @@ const ComboboxTrigger = React.forwardRef<HTMLDivElement, ComboboxTriggerProps>(
     return (
       <Popover.Anchor asChild>
         <div
-          ref={ref}
+          ref={(node) => {
+            triggerRef.current = node
+            if (typeof ref === "function") ref(node)
+            else if (ref) ref.current = node
+          }}
           className={cn(
             "relative flex h-10 w-full items-center gap-1 rounded-md border border-border bg-background px-3 text-sm",
             "focus-within:outline-2 focus-within:outline-offset-1 focus-within:outline-ring",
@@ -244,7 +253,7 @@ export interface ComboboxContentProps
 
 const ComboboxContent = React.forwardRef<HTMLDivElement, ComboboxContentProps>(
   ({ className, children, ...props }, ref) => {
-    const { listboxId } = useComboboxContext("ComboboxContent")
+    const { listboxId, triggerRef } = useComboboxContext("ComboboxContent")
 
     return (
       <Popover.Portal>
@@ -252,9 +261,15 @@ const ComboboxContent = React.forwardRef<HTMLDivElement, ComboboxContentProps>(
           asChild
           sideOffset={4}
           align="start"
-          // Keep focus on the input when dropdown opens
+          // Keep focus on the input when dropdown opens/closes
           onOpenAutoFocus={e => e.preventDefault()}
           onCloseAutoFocus={e => e.preventDefault()}
+          // Don't close when the user clicks the trigger — it manages open state itself
+          onPointerDownOutside={e => {
+            if (triggerRef.current?.contains(e.target as Node)) {
+              e.preventDefault()
+            }
+          }}
           style={{ width: "var(--radix-popover-trigger-width)" }}
         >
           <div
