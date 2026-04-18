@@ -345,7 +345,66 @@ If the Figma component does something no Radix primitive handles — build it fr
 
 ---
 
-## 13. What NOT to Do
+## 13. Playground
+
+Every component must have a preview file in `src/playground/previews/`. This is how components are visually reviewed against the Figma design and how Storybook stories will be authored later — the structure is intentionally similar so migration is low effort.
+
+### Adding a preview
+
+1. Create `src/playground/previews/{component-name}.tsx`
+2. Import it in `src/playground/index.tsx` and add it to the `previews` array
+
+### Preview file pattern
+
+```tsx
+import { Section, Row } from "@/playground/components"
+import { Button } from "@/components/ui/button"
+
+export function ButtonPreview() {
+  return (
+    <Section
+      title="Button"
+      description="Trigger an action. Maps to the Button component in Figma."
+    >
+      <Row label="Variants">
+        <Button variant="default">Default</Button>
+        <Button variant="destructive">Destructive</Button>
+        <Button variant="outline">Outline</Button>
+        <Button variant="ghost">Ghost</Button>
+      </Row>
+
+      <Row label="Sizes">
+        <Button size="sm">Small</Button>
+        <Button size="md">Medium</Button>
+        <Button size="lg">Large</Button>
+      </Row>
+
+      <Row label="States">
+        <Button disabled>Disabled</Button>
+      </Row>
+
+      <Row label="With icon">
+        <Button><PlusIcon /> Add item</Button>
+      </Row>
+    </Section>
+  )
+}
+```
+
+Rules:
+- One `Section` per preview file — title matches the Figma component name exactly.
+- One `Row` per Figma variant group (variants, sizes, states, boolean combos).
+- Render every CVA variant value. If a variant isn't shown, it isn't reviewed.
+- Use `dark` prop on `Row` when the component is designed for a dark surface.
+- No logic in preview files — static renders only.
+
+### Storybook migration later
+
+When Storybook is added, each `Row` maps directly to a story. The preview files stay as-is for the playground; stories are written separately using the same grouping structure.
+
+---
+
+## 14. What NOT to Do
 
 - Do not build a component without reading the full Figma spec first.
 - Do not hardcode color values — always trace back to a token.
