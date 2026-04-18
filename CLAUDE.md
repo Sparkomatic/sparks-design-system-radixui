@@ -176,16 +176,19 @@ Figma boolean properties (e.g. "Has Icon = True") become optional React props (`
 
 Map Figma states to the correct CSS mechanism. Do not invent custom classes for states Radix or CSS already handles.
 
-| Figma state | CSS / Radix mechanism |
-|---|---|
-| Hover | `hover:` Tailwind prefix |
-| Pressed / Active | `active:` Tailwind prefix |
-| Focused | `focus-visible:` Tailwind prefix (never `focus:` alone) |
-| Disabled | `data-[disabled]:` (Radix sets this) or `disabled:` for native elements |
-| Open | `data-[state=open]:` |
-| Checked | `data-[state=checked]:` |
-| Selected | `data-[state=active]:` or `data-[highlighted]:` depending on primitive |
-| Loading | `aria-[busy=true]:` or a `data-loading` attribute |
+| Figma state | Mechanism | Where it lives |
+|---|---|---|
+| Hover (colour change) | `.component-variant:hover {}` | Component token CSS file |
+| Hover (layout change) | `hover:shadow-md` etc. | Tailwind prefix, fine here |
+| Pressed / Active (colour) | `.component-variant:active {}` | Component token CSS file |
+| Focused (ring/outline) | `focus-visible:ring-2` etc. | Tailwind prefix, fine here |
+| Disabled | `.component-variant[data-disabled]` or `:disabled` | Component token CSS file |
+| Open | `data-[state=open]:` | Tailwind prefix or CSS |
+| Checked | `data-[state=checked]:` | Tailwind prefix or CSS |
+| Selected | `data-[highlighted]:` | Tailwind prefix or CSS |
+| Loading | `data-loading` attribute | CSS `[data-loading]` selector |
+
+Colour changes always live in the CSS file. Structural/layout state changes (shadow, ring, outline, transform) can use Tailwind prefixes.
 
 ---
 
@@ -204,46 +207,134 @@ Map Figma states to the correct CSS mechanism. Do not invent custom classes for 
 ```
 
 ### Component tokens (`src/tokens/components/{component}.css`)
+
+Token names mirror the Figma variable names exactly — slashes become hyphens, prefixed with `--`. This means a Figma export drops straight in with zero renaming.
+
 ```
---{component}-{part}-{css-property}              (default state)
---{component}-{part}-hover-{css-property}        (hover state)
---{component}-{part}-active-{css-property}       (pressed state)
---{component}-{part}-disabled-{css-property}     (disabled state)
---{component}-{part}-focus-{css-property}        (focus state)
+Figma variable                             CSS custom property
+──────────────────────────────────────────────────────────────
+button/color/primary/background        →   --button-color-primary-background
+button/color/primary/hover/background  →   --button-color-primary-hover-background
+button/color/primary/text              →   --button-color-primary-text
+button/color/primary/disabled/background → --button-color-primary-disabled-background
+button/radius                          →   --button-radius
+input/color/border/default             →   --input-color-border-default
+input/color/border/focus               →   --input-color-border-focus
 ```
 
-Examples:
+The component CSS file defines both the custom properties AND the variant classes that apply them:
+
 ```css
---button-root-background:         var(--color-accent);
---button-root-hover-background:   var(--color-accent-hover);
---button-label-color:             var(--color-accent-foreground);
---button-root-disabled-opacity:   0.5;
---input-root-border-color:        var(--color-border-default);
---input-root-focus-border-color:  var(--color-border-focus);
+/* src/tokens/components/button.css */
+
+/* Token definitions — values reference semantic tokens, never raw */
+:root {
+  --button-color-primary-background:          var(--color-accent);
+  --button-color-primary-hover-background:    var(--color-accent-hover);
+  --button-color-primary-text:                var(--color-accent-foreground);
+  --button-color-primary-disabled-background: var(--color-accent-subtle);
+  --button-color-primary-disabled-text:       var(--color-text-disabled);
+  --button-radius:                            var(--radius-control);
+}
+
+/* Variant classes — applied by CVA, reference only the tokens above */
+.button-primary {
+  background-color: var(--button-color-primary-background);
+  color:            var(--button-color-primary-text);
+  border-radius:    var(--button-radius);
+}
+.button-primary:hover {
+  background-color: var(--button-color-primary-hover-background);
+}
+.button-primary[data-disabled],
+.button-primary:disabled {
+  background-color: var(--button-color-primary-disabled-background);
+  color:            var(--button-color-primary-disabled-text);
+}
 ```
 
 Rules:
 - Component tokens always reference semantic tokens (`var(--color-*)`) — never raw values.
 - Semantic tokens always use `oklch()` values — never hex, hsl, or rgb.
 - If a Figma-linked token doesn't match an existing semantic token, add the semantic token first, then reference it.
-- Scope component tokens inside the component's selector or a `[data-component="name"]` attribute to avoid bleed.
+- Token names must match the Figma variable name exactly (slashes → hyphens). This is the contract that makes Figma exports drop-in replaceable.
+- When Figma tokens are exported and updated, only the `:root {}` block changes — the variant classes never need to change.
 
 ---
 
-## 8. Tailwind Classes vs CSS Custom Properties
+## 8. Tailwind vs Plain CSS — The Hard Split
 
-Use **Tailwind utility classes** for:
-- Layout (flexbox, grid, padding, margin, gap)
-- Typography (font-size, font-weight, line-height, tracking)
-- Responsive breakpoints
-- Hover/focus/active states that are uniform across all variants
+This is a strict rule, not a guideline. Mixing Tailwind colour utilities with CSS custom properties causes specificity fights (the same problem that makes shadcn hard to override). Avoid it from the start by keeping Tailwind and CSS in completely separate lanes.
 
-Use **CSS custom properties** for:
-- Any value that changes between Figma variants or themes
-- Any value that comes directly from a Figma-linked token
-- Colors, border-colors, background-colors that differ per variant/state
+### Tailwind handles: layout only
 
-Use **inline CVA variant classes** (via `cn(componentVariants({...}))`) for combining the above — never string-interpolate variant values into class names.
+```
+flex, grid, inline-flex     — display and flow
+items-center, justify-*     — alignment
+gap-*, p-*, px-*, py-*      — spacing (only when NOT token-driven)
+w-*, h-*, min-w-*, max-w-*  — sizing
+font-medium, text-sm        — typography scale
+transition-colors           — transition utility
+truncate, overflow-hidden   — text/overflow helpers
+sr-only                     — screen reader visibility
+```
+
+### Plain CSS (in component token files) handles: everything visual
+
+```
+background-color    — always via var(--token)
+color               — always via var(--token)
+border-color        — always via var(--token)
+border-radius       — always via var(--token)
+box-shadow          — always via var(--token)
+opacity             — always via var(--token) if token-driven
+```
+
+**Never use Tailwind colour utilities** (`bg-*`, `text-*`, `border-*`, `ring-*`) inside component variant definitions. They are not wrong in principle — they are wrong here because they create a two-source-of-truth problem: the Figma token export updates the CSS var but the Tailwind class still wins in the cascade.
+
+### How CVA variant classes work under this rule
+
+CVA variant values are CSS class names defined in the component token file, not Tailwind utilities:
+
+```tsx
+// ✅ Correct — CVA variant points to a CSS class from the token file
+const buttonVariants = cva(
+  "inline-flex items-center justify-center font-medium transition-colors",
+  {
+    variants: {
+      variant: {
+        primary:     "button-primary",     // ← defined in button.css
+        secondary:   "button-secondary",   // ← defined in button.css
+        destructive: "button-destructive", // ← defined in button.css
+      },
+      size: {
+        sm: "h-8 px-3 text-sm gap-1.5",   // ← layout only, Tailwind fine here
+        md: "h-10 px-4 text-sm gap-2",
+        lg: "h-12 px-5 text-base gap-2",
+      },
+    },
+  }
+)
+
+// ❌ Wrong — Tailwind colour utility in a variant
+primary: "bg-blue-500 text-white hover:bg-blue-600"
+```
+
+### State changes (hover, active, disabled) belong in CSS
+
+Hover and active colour changes are token-driven, so they live in the CSS class alongside the base state — not as Tailwind `hover:` prefixes:
+
+```css
+/* ✅ Correct — state colours live in the CSS class */
+.button-primary:hover        { background-color: var(--button-color-primary-hover-background); }
+.button-primary:active       { background-color: var(--button-color-primary-active-background); }
+.button-primary[data-disabled] { background-color: var(--button-color-primary-disabled-background); }
+
+/* ❌ Wrong — Tailwind hover prefix on a colour */
+/* hover:bg-blue-600 */
+```
+
+Tailwind `hover:` and `focus-visible:` prefixes are still fine for layout-level state changes (e.g. `hover:shadow-md`, `focus-visible:ring-2`) — just not for colour.
 
 ---
 
