@@ -1,10 +1,9 @@
 import * as React from "react"
 
-// Import preview files here as components are built:
-// import { ButtonPreview } from "./previews/button"
+import { ButtonPreview } from "./previews/button"
 
 const previews: { name: string; component: React.ComponentType }[] = [
-  // { name: "Button", component: ButtonPreview },
+  { name: "Button", component: ButtonPreview },
 ]
 
 export function Playground() {
