@@ -323,6 +323,28 @@ If the Figma component does something no Radix primitive handles — build it fr
 
 **Never fork Radix source code.** You lose upstream accessibility fixes and behaviour updates.
 
+### Where custom and extended components live
+
+All design system components — whether Radix-backed, extended, or pure layout — live in `src/components/ui/`. There is no separate "custom" folder. The distinction is captured in a comment at the top of each component file, not in the folder structure.
+
+```
+src/components/ui/
+├── button/           ← wraps Radix Slot + native <button>
+├── card/             ← pure layout, no Radix primitive
+├── card-promo/       ← extends Card with an image slot and eyebrow
+└── dialog/           ← wraps Radix Dialog primitive
+```
+
+At the top of every component file, add one of these origin comments:
+
+```tsx
+// Origin: Radix primitive — @radix-ui/react-dialog
+// Origin: Layout component — no Radix primitive
+// Origin: Extends Card — adds image slot and eyebrow label
+```
+
+This makes it immediately clear during review and when migrating to Storybook what each component is built from, without needing to open the imports.
+
 ---
 
 ## 11. Accessibility
