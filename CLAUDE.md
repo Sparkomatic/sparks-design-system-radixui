@@ -1,6 +1,36 @@
-# Sparks Design System — Component Rules
+# Sparks Design System
 
-This repo converts Figma designs (with component tokens) into production-ready React components built on Radix UI primitives. These rules govern every component. Follow them without deviation unless explicitly overridden for a specific component.
+A component library that converts Figma designs — with component tokens — into production-ready React components built on Radix UI primitives. Each component is built directly from a Figma source: no manual interpretation, full token parity, full variant coverage.
+
+## Getting started
+
+```bash
+npm install
+npm run dev       # dev server at localhost:5173
+npm run build     # production build
+npm run typecheck # type-check without building
+```
+
+## Structure
+
+```
+src/
+├── components/ui/{name}/   one folder per component
+├── tokens/
+│   ├── semantic.css        role-based design tokens (colours, spacing, radius…)
+│   └── components/         per-component token overrides, imported as built
+└── index.css               token imports + Tailwind bridge
+```
+
+Components are built using Radix UI primitives, styled with Tailwind v4 utility classes, and use CVA (class-variance-authority) for variant logic. Tokens live in CSS custom properties and flow from semantic → component layer.
+
+To add a new component: read the Figma component fully via MCP, then follow the rules below.
+
+---
+
+## Component rules
+
+*The sections below govern how every component in this repo is built — by humans and AI alike.*
 
 ---
 
@@ -236,7 +266,66 @@ Each sub-part has its own CVA function if it has variants. The parent passes con
 
 ---
 
-## 10. Accessibility
+## 10. Extending Radix Components
+
+**Radix owns behaviour. You own structure.**
+
+Radix primitives handle keyboard navigation, focus management, ARIA state, and open/close logic. Never modify or replace that layer. Everything visual and structural around it is plain HTML and React — extend it freely.
+
+When a Figma component has more layers than a Radix primitive provides out of the box, there are three scenarios:
+
+### Scenario A — Extra presentational layer (subtitle, description, eyebrow, badge slot)
+
+Add it as a new compound component part. It's just a styled element — it doesn't need Radix behind it.
+
+```tsx
+// Radix has no Card primitive — it's pure layout, build all parts yourself
+<Card>
+  <CardHeader>
+    <CardTitle>Plan name</CardTitle>
+    <CardSubtitle>Billed monthly</CardSubtitle>  {/* ← new part, just a <p> */}
+  </CardHeader>
+  <CardBody>...</CardBody>
+</Card>
+```
+
+`CardSubtitle` is a `forwardRef` wrapping a `<p>` with its own token-driven styles. It has no Radix involvement.
+
+### Scenario B — Extra content inside a Radix interactive part
+
+Pass it as children. Radix primitives are open — you can put whatever you need inside a `Select.Item`, `DropdownMenu.Item`, `Dialog.Content`, etc.
+
+```tsx
+<Select.Item value="gb">
+  <Flag country="gb" />                          {/* ← your addition */}
+  <Select.ItemText>United Kingdom</Select.ItemText>
+  <span className="text-muted-foreground">+44</span>  {/* ← your addition */}
+</Select.Item>
+```
+
+No wrapping needed — just add children alongside the Radix parts.
+
+### Scenario C — Genuinely different interaction model
+
+If the Figma component does something no Radix primitive handles — build it from scratch using a `<div>` with the correct ARIA role. Document which ARIA pattern you followed and why no Radix primitive was suitable. This should be rare.
+
+---
+
+### Decision guide
+
+| Figma has... | Approach |
+|---|---|
+| Extra label / text / icon slot | New compound part (`forwardRef` + styled element) |
+| Richer content inside an item | Add as children of the Radix part |
+| A layout-only component (Card, Page Header) | All parts are your own — no Radix needed |
+| A different interaction model entirely | New component with explicit ARIA role |
+| The same structure as Radix | Wrap the Radix primitive directly |
+
+**Never fork Radix source code.** You lose upstream accessibility fixes and behaviour updates.
+
+---
+
+## 11. Accessibility
 
 - **Let Radix handle all ARIA attributes** it is designed to manage. Do not add `aria-expanded`, `aria-selected`, `aria-controls` etc. manually if the Radix primitive already manages them.
 - **Do** pass `aria-label` or `aria-labelledby` props through when a visible label is absent (e.g. icon-only buttons).
@@ -246,7 +335,7 @@ Each sub-part has its own CVA function if it has variants. The parent passes con
 
 ---
 
-## 11. TypeScript
+## 12. TypeScript
 
 - Strict mode is on. No `any`. No `@ts-ignore` without a code comment explaining why.
 - Use `React.ComponentPropsWithoutRef<>` for prop types that extend native/Radix elements — not `HTMLAttributes` directly.
@@ -256,7 +345,7 @@ Each sub-part has its own CVA function if it has variants. The parent passes con
 
 ---
 
-## 12. What NOT to Do
+## 13. What NOT to Do
 
 - Do not build a component without reading the full Figma spec first.
 - Do not hardcode color values — always trace back to a token.
