@@ -7,6 +7,7 @@ A component library that converts Figma designs — with component tokens — in
 ```bash
 npm install
 npm run dev       # dev server at localhost:5173
+npm run storybook # Storybook at localhost:6006
 npm run build     # production build
 npm run typecheck # type-check without building
 ```
@@ -16,6 +17,9 @@ npm run typecheck # type-check without building
 ```
 src/
 ├── components/ui/{name}/   one folder per component
+│   ├── {name}.tsx           component implementation
+│   ├── {name}.stories.tsx   Storybook stories
+│   └── index.ts             re-exports only
 ├── tokens/
 │   ├── semantic.css        role-based design tokens (colours, spacing, radius…)
 │   └── components/         per-component token overrides, imported as built
@@ -169,6 +173,23 @@ Non-negotiables:
 | Figma "State = Loading" | Can be a CVA variant if it changes structure; otherwise a prop |
 
 Figma boolean properties (e.g. "Has Icon = True") become optional React props (`icon?: React.ReactNode`), not CVA variants.
+
+### Why Figma's State property does not become a `state` prop
+
+Figma has a `State` property (Default, Hover, Pressed, Focused, Disabled, Loading) because Figma cannot simulate browser pseudo-classes natively — it needs explicit variants to show what each state looks like. This is a design tool affordance, not a behavioural API.
+
+In code, the browser manages hover, active, and focus automatically via CSS pseudo-classes. Adding a `state` prop would produce a button that *looks* hovered but isn't — synthetic and misleading for keyboard users, touch users, and assistive tech.
+
+| Figma State | Code mechanism | Why |
+|---|---|---|
+| Default | — (implicit) | CSS base styles |
+| Hover | `:hover` in CSS | Browser-native |
+| Pressed | `:active` in CSS | Browser-native |
+| Focused | `:focus-visible` in CSS | Browser-native |
+| Disabled | `disabled` prop | App-controlled — browser has no way to derive it |
+| Loading | `loading` prop | App-controlled — no CSS pseudo-class exists |
+
+`disabled` and `loading` are the only legitimate props because they represent app-controlled logical state. In Storybook, a `state` select control on the Default story is used to force visual states for design QA — it is a story-only arg, not a component prop.
 
 ---
 
@@ -493,7 +514,7 @@ This makes it immediately clear during review and when migrating to Storybook wh
 
 ## 13. Playground
 
-Every component must have a preview file in `src/playground/previews/`. This is how components are visually reviewed against the Figma design and how Storybook stories will be authored later — the structure is intentionally similar so migration is low effort.
+Every component must have a preview file in `src/playground/previews/`. This is for quick visual review during development — run `npm run dev` and open localhost:5173.
 
 ### Adding a preview
 
@@ -513,24 +534,18 @@ export function ButtonPreview() {
       description="Trigger an action. Maps to the Button component in Figma."
     >
       <Row label="Variants">
-        <Button variant="default">Default</Button>
+        <Button variant="primary">Primary</Button>
+        <Button variant="secondary">Secondary</Button>
         <Button variant="destructive">Destructive</Button>
-        <Button variant="outline">Outline</Button>
-        <Button variant="ghost">Ghost</Button>
       </Row>
-
       <Row label="Sizes">
         <Button size="sm">Small</Button>
         <Button size="md">Medium</Button>
         <Button size="lg">Large</Button>
       </Row>
-
       <Row label="States">
         <Button disabled>Disabled</Button>
-      </Row>
-
-      <Row label="With icon">
-        <Button><PlusIcon /> Add item</Button>
+        <Button loading>Loading</Button>
       </Row>
     </Section>
   )
@@ -541,16 +556,151 @@ Rules:
 - One `Section` per preview file — title matches the Figma component name exactly.
 - One `Row` per Figma variant group (variants, sizes, states, boolean combos).
 - Render every CVA variant value. If a variant isn't shown, it isn't reviewed.
-- Use `dark` prop on `Row` when the component is designed for a dark surface.
 - No logic in preview files — static renders only.
-
-### Storybook migration later
-
-When Storybook is added, each `Row` maps directly to a story. The preview files stay as-is for the playground; stories are written separately using the same grouping structure.
 
 ---
 
-## 14. What NOT to Do
+## 14. Storybook
+
+Storybook runs at localhost:6006 (`npm run storybook`). Every component has a stories file at `src/components/ui/{name}/{name}.stories.tsx`.
+
+### Setup
+
+`.storybook/main.ts` requires these addons:
+
+```ts
+addons: ["@storybook/addon-docs", "@storybook/addon-a11y", "storybook-addon-pseudo-states"],
+docs: { autodocs: "tag" },
+```
+
+`.storybook/preview.ts` sets global defaults:
+
+```ts
+parameters: {
+  controls: { expanded: true },  // show description column in controls panel
+}
+```
+
+### Five-story pattern
+
+Every component gets exactly these five stories, in this order:
+
+| Story | Purpose |
+|---|---|
+| **Default** | Playground — all controls live, mirrors Figma property panel |
+| **Variants** | All variants at MD size, default state |
+| **States** | One variant (primary) at MD, all 6 Figma states |
+| **Sizes** | One variant (primary), all sizes, default state |
+| **AllVariants** | Full matrix — every variant × size × state |
+
+Each story isolates one dimension so design QA can verify each axis against Figma independently.
+
+### Meta pattern
+
+Use `Meta<typeof Component>` — not an intersection type — so autodocs can extract the prop table correctly. Add `tags: ["autodocs"]` to generate the Docs page.
+
+```ts
+const meta: Meta<typeof Button> = {
+  title: "UI/Button",
+  component: Button,
+  tags: ["autodocs"],
+  parameters: {
+    pseudo: {
+      hover:        ".force-hover",
+      active:       ".force-active",
+      focusVisible: ".force-focus",
+    },
+  },
+  argTypes: {
+    children: {
+      control: "text",
+      description: "Button text content — Figma: Label",
+    },
+    variant: {
+      control: "select",
+      options: [...],
+      description: "Visual style — Figma: Variant",
+    },
+    // Hide internal/structural props from the controls panel
+    asChild: { table: { disable: true } },
+  },
+}
+```
+
+### argTypes description convention
+
+Every argType description must include the Figma property name it maps to:
+
+```ts
+description: "Button text content — Figma: Label"
+description: "Visual style — Figma: Variant"
+description: "Height (32/40/48px) — Figma: Size"
+description: "Interactive state — Figma: State"
+```
+
+This is the Figma ↔ code bridge visible in the controls panel and autodocs table.
+
+### state as a story-only arg
+
+The Default story exposes a `state` select control (default / hover / pressed / focused / disabled / loading) that mirrors Figma's State property. This is NOT a component prop — it is a story-only arg that maps to pseudo-state classes and `disabled`/`loading` props at render time.
+
+Keep `state` out of the meta `args` and `argTypes`. Define it only on the Default story to avoid polluting the autodocs prop table.
+
+```ts
+export const Default: Story = {
+  argTypes: {
+    state: {
+      control: "select",
+      options: ["default", "hover", "pressed", "focused", "disabled", "loading"],
+      description: "Interactive state — Figma: State",
+    },
+  },
+  args: { state: "default" } as Record<string, unknown>,
+  render: ({ className, ...args }: React.ComponentProps<typeof Button> & { state?: StoryState }) => {
+    const state = (args as unknown as { state: StoryState }).state ?? "default"
+    return (
+      <Button
+        {...args}
+        disabled={state === "disabled"}
+        loading={state === "loading"}
+        className={[stateClassMap[state], className].filter(Boolean).join(" ")}
+      />
+    )
+  },
+}
+```
+
+### Forcing pseudo-states with storybook-addon-pseudo-states
+
+The addon forces real CSS pseudo-classes via class selectors — no synthetic state prop needed. Declare the mapping in `parameters.pseudo` on the meta so it applies to all stories:
+
+```ts
+parameters: {
+  pseudo: {
+    hover:        ".force-hover",
+    active:       ".force-active",
+    focusVisible: ".force-focus",
+  },
+}
+```
+
+Then apply the class to individual buttons in static stories:
+
+```tsx
+<Button variant="primary" className="force-hover">Button</Button>
+<Button variant="primary" className="force-active">Button</Button>
+<Button variant="primary" className="force-focus">Button</Button>
+```
+
+The addon injects CSS that makes `.button-primary.force-hover` pick up the same styles as `.button-primary:hover` — so you get real visual states without touching the component.
+
+### Static stories
+
+All stories except Default use `parameters: { controls: { disable: true } }` and a custom `render` function. They are purely visual — no controls, no interaction. Variant/state labels use small muted text beneath each button.
+
+---
+
+## 15. What NOT to Do
 
 - Do not build a component without reading the full Figma spec first.
 - Do not hardcode color values — always trace back to a token.
@@ -561,5 +711,8 @@ When Storybook is added, each `Row` maps directly to a story. The preview files 
 - Do not use `@apply` in component token files — raw CSS custom properties only.
 - Do not skip `displayName` — it breaks React DevTools and error messages.
 - Do not use default exports for components — named exports only.
+- Do not add a `state` prop to components — hover/active/focus are browser-native; only `disabled` and `loading` are legitimate props.
+- Do not use `Meta<typeof Component & { extraArg: T }>` intersections — it breaks autodocs prop extraction. Story-only args belong on the individual story, not the meta.
+- Do not use Tailwind `hover:bg-*` or similar colour utilities in Storybook stories to fake states — use `storybook-addon-pseudo-states` class selectors instead.
 
 .

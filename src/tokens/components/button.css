@@ -11,8 +11,35 @@
  */
 
 :root {
-  /* ── Shared ────────────────────────────────────────────────────────────── */
-  --button-radius: var(--radius-lg);
+  /* ── Radius (button/radius → radius/control) ───────────────────────────── */
+  --button-radius: var(--radius-control);
+
+  /* ── Border (button/border-width → border/default) ─────────────────────── */
+  --button-border-width: var(--border-width-default);
+
+  /* ── Shared spacing (button/gap → spacing/inline) ──────────────────────── */
+  --button-gap: var(--spacing-inline);
+
+  /* ── Size — SM (button/space/sm/*) ─────────────────────────────────────── */
+  --button-space-sm-height:    var(--size-control-sm);    /* 32px */
+  --button-space-sm-padding-x: var(--spacing-control-x);  /* 16px */
+  --button-space-sm-padding-y: var(--spacing-control-y);  /*  8px */
+  --button-font-size-sm:       var(--font-size-2xs);      /* 13px — code-only */
+  --button-icon-size-sm:       var(--size-icon-sm);
+
+  /* ── Size — MD (button/space/md/*) ─────────────────────────────────────── */
+  --button-space-md-height:    var(--size-control-md);    /* 40px */
+  --button-space-md-padding-x: var(--spacing-control-x);  /* 16px */
+  --button-space-md-padding-y: var(--spacing-control-y);  /*  8px */
+  --button-font-size-md:       var(--font-size-sm);       /* 14px — code-only */
+  --button-icon-size-md:       var(--size-icon-md);
+
+  /* ── Size — LG (button/space/lg/*) ─────────────────────────────────────── */
+  --button-space-lg-height:    var(--size-control-lg);    /* 48px */
+  --button-space-lg-padding-x: var(--spacing-control-x);  /* 16px */
+  --button-space-lg-padding-y: var(--spacing-control-y);  /*  8px */
+  --button-font-size-lg:       var(--font-size-md);       /* 16px — code-only */
+  --button-icon-size-lg:       var(--size-icon-lg);
 
   /* ── Primary ───────────────────────────────────────────────────────────── */
   --button-color-primary-background:          var(--color-info);
@@ -79,6 +106,7 @@
 .button-primary {
   background-color: var(--button-color-primary-background);
   border-color:     var(--button-color-primary-border);
+  border-width:     var(--button-border-width);
   color:            var(--button-color-primary-foreground);
   border-radius:    var(--button-radius);
 }
@@ -99,6 +127,7 @@
 .button-secondary {
   background-color: var(--button-color-secondary-background);
   border-color:     var(--button-color-secondary-border);
+  border-width:     var(--button-border-width);
   color:            var(--button-color-secondary-foreground);
   border-radius:    var(--button-radius);
 }
@@ -119,6 +148,7 @@
 .button-tertiary {
   background-color: var(--button-color-tertiary-background);
   border-color:     var(--button-color-tertiary-border);
+  border-width:     var(--button-border-width);
   color:            var(--button-color-tertiary-foreground);
   border-radius:    var(--button-radius);
 }
@@ -139,6 +169,7 @@
 .button-utility {
   background-color: var(--button-color-utility-background);
   border-color:     var(--button-color-utility-border);
+  border-width:     var(--button-border-width);
   color:            var(--button-color-utility-foreground);
   border-radius:    var(--button-radius);
 }
@@ -160,6 +191,7 @@
 .button-destructive {
   background-color: var(--button-color-destructive-background);
   border-color:     var(--button-color-destructive-border);
+  border-width:     var(--button-border-width);
   color:            var(--button-color-destructive-foreground);
   border-radius:    var(--button-radius);
 }
@@ -175,4 +207,29 @@
   background-color: var(--button-color-destructive-disabled-background);
   border-color:     var(--button-color-destructive-disabled-border);
   color:            var(--button-color-destructive-disabled-foreground);
+}
+
+/* ── Size classes ────────────────────────────────────────────────────────────
+ * Applied by CVA size variants. Control all spacing and typography via tokens.
+ * ─────────────────────────────────────────────────────────────────────────── */
+
+.button-size-sm {
+  height:         var(--button-space-sm-height);
+  padding-inline: var(--button-space-sm-padding-x);
+  gap:            var(--button-gap);
+  font-size:      var(--button-font-size-sm);
+}
+
+.button-size-md {
+  height:         var(--button-space-md-height);
+  padding-inline: var(--button-space-md-padding-x);
+  gap:            var(--button-gap);
+  font-size:      var(--button-font-size-md);
+}
+
+.button-size-lg {
+  height:         var(--button-space-lg-height);
+  padding-inline: var(--button-space-lg-padding-x);
+  gap:            var(--button-gap);
+  font-size:      var(--button-font-size-lg);
 }
