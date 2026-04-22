@@ -3,6 +3,7 @@ import "../src/index.css"
 
 const preview: Preview = {
   parameters: {
+    controls: { expanded: true },
     backgrounds: {
       default: "light",
       values: [
