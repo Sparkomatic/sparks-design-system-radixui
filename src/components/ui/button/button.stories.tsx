@@ -8,7 +8,7 @@ const meta: Meta<typeof Button> = {
   argTypes: {
     variant: {
       control: "select",
-      options: ["default", "outline", "ghost", "destructive"],
+      options: ["primary", "secondary", "tertiary", "utility", "destructive"],
       description: "Visual style of the button",
     },
     size: {
@@ -16,32 +16,36 @@ const meta: Meta<typeof Button> = {
       options: ["sm", "md", "lg"],
       description: "Height and padding of the button",
     },
-    disabled: {
-      control: "boolean",
-    },
-    asChild: {
-      table: { disable: true },
-    },
+    disabled: { control: "boolean" },
+    loading: { control: "boolean" },
+    asChild: { table: { disable: true } },
+    leadingIcon: { table: { disable: true } },
+    trailingIcon: { table: { disable: true } },
   },
   args: {
     children: "Button",
-    variant: "default",
+    variant: "primary",
     size: "md",
     disabled: false,
+    loading: false,
   },
 }
 
 export default meta
 type Story = StoryObj<typeof Button>
 
-export const Default: Story = {}
+export const Primary: Story = {}
 
-export const Outline: Story = {
-  args: { variant: "outline" },
+export const Secondary: Story = {
+  args: { variant: "secondary" },
 }
 
-export const Ghost: Story = {
-  args: { variant: "ghost" },
+export const Tertiary: Story = {
+  args: { variant: "tertiary" },
+}
+
+export const Utility: Story = {
+  args: { variant: "utility" },
 }
 
 export const Destructive: Story = {
@@ -60,13 +64,18 @@ export const Disabled: Story = {
   args: { disabled: true },
 }
 
+export const Loading: Story = {
+  args: { loading: true },
+}
+
 export const AllVariants: Story = {
   name: "All variants",
   render: () => (
     <div className="flex flex-wrap items-center gap-3">
-      <Button variant="default">Default</Button>
-      <Button variant="outline">Outline</Button>
-      <Button variant="ghost">Ghost</Button>
+      <Button variant="primary">Primary</Button>
+      <Button variant="secondary">Secondary</Button>
+      <Button variant="tertiary">Tertiary</Button>
+      <Button variant="utility">Utility</Button>
       <Button variant="destructive">Destructive</Button>
     </div>
   ),

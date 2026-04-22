@@ -6,6 +6,7 @@
 /* ── Design tokens ───────────────────────────────────────────────────────── */
 @import "@/tokens/semantic.css";
 /* Component token files — add one line per component as it is built */
+@import "@/tokens/components/button.css";
 @import "@/tokens/components/card.css";
 @import "@/tokens/components/combobox.css";
 

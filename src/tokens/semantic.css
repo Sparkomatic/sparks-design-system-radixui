@@ -46,9 +46,28 @@
   --color-accent-hover:      oklch(0.269 0 0);
   --color-accent-foreground: oklch(0.985 0 0);
 
+  /* ── Info / Brand blue ───────────────────────────────────────────────────── */
+  --color-info:              oklch(0.60 0.19 231);   /* #1888db */
+  --color-info-hover:        oklch(0.52 0.17 232);   /* #106cb7 */
+  --color-info-strong:       oklch(0.44 0.14 232);   /* #0c5192 */
+  --color-info-subtle:       oklch(0.97 0.01 218);   /* #eef6fc */
+  --color-info-muted:        oklch(0.91 0.02 228);   /* #dae3ed */
+  --color-info-muted-hover:  oklch(0.81 0.03 225);   /* #b8c9da */
+  --color-info-border:       oklch(0.85 0.06 217);   /* #a8d7f4 */
+  --color-info-border-hover: oklch(0.58 0.05 222);   /* #6789a3 */
+  --color-info-fg:           oklch(0.97 0.01 227);   /* #f0f4f8 — on-brand foreground */
+
+  /* ── Disabled state ──────────────────────────────────────────────────────── */
+  --color-disabled-bg:       oklch(0.91 0.02 228);   /* #dae3ed */
+  --color-disabled-fg:       oklch(0.70 0.04 223);   /* #8faabf */
+
   /* ── Feedback ─────────────────────────────────────────────────────────────── */
-  --color-destructive:       oklch(0.58 0.22 27);
-  --color-destructive-fg:    oklch(0.985 0 0);
+  --color-destructive:        oklch(0.52 0.22 26);   /* #d42431 */
+  --color-destructive-hover:  oklch(0.44 0.20 26);   /* #b01824 */
+  --color-destructive-strong: oklch(0.36 0.17 24);   /* #8b111a */
+  --color-destructive-subtle: oklch(0.96 0.02 14);   /* #feeeef */
+  --color-destructive-border: oklch(0.82 0.08 10);   /* #f8afb4 */
+  --color-destructive-fg:    oklch(0.97 0.01 227);   /* #f0f4f8 */
   --color-success:           oklch(0.6 0.18 145);
   --color-success-fg:        oklch(0.985 0 0);
   --color-warning:           oklch(0.75 0.18 70);

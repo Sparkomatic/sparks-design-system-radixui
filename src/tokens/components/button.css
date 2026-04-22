@@ -1,0 +1,178 @@
+/*
+ * BUTTON COMPONENT TOKENS
+ * ─────────────────────────────────────────────────────────────────────────────
+ * Tier 3 → Tier 2 → Tier 1:
+ *   Component tokens (--button-*)  →  Semantic tokens (--color-*)  →  oklch values
+ *
+ * Token names mirror Figma variable names exactly: slashes → hyphens.
+ * Only the :root block changes when Figma exports update — variant classes
+ * never need to change.
+ * ─────────────────────────────────────────────────────────────────────────────
+ */
+
+:root {
+  /* ── Shared ────────────────────────────────────────────────────────────── */
+  --button-radius: var(--radius-lg);
+
+  /* ── Primary ───────────────────────────────────────────────────────────── */
+  --button-color-primary-background:          var(--color-info);
+  --button-color-primary-border:              var(--color-info);
+  --button-color-primary-foreground:          var(--color-info-fg);
+  --button-color-primary-hover-background:    var(--color-info-hover);
+  --button-color-primary-hover-border:        var(--color-info-strong);
+  --button-color-primary-active-background:   var(--color-info-hover);
+  --button-color-primary-disabled-background: var(--color-info-subtle);
+  --button-color-primary-disabled-border:     var(--color-info-border);
+  --button-color-primary-disabled-foreground: var(--color-info-border);
+
+  /* ── Secondary ─────────────────────────────────────────────────────────── */
+  --button-color-secondary-background:          var(--color-info-muted);
+  --button-color-secondary-border:              var(--color-info-muted);
+  --button-color-secondary-foreground:          var(--color-text-primary);
+  --button-color-secondary-hover-background:    var(--color-info-muted-hover);
+  --button-color-secondary-hover-border:        var(--color-info-border-hover);
+  --button-color-secondary-active-background:   var(--color-info-muted-hover);
+  --button-color-secondary-disabled-background: var(--color-disabled-bg);
+  --button-color-secondary-disabled-border:     var(--color-info-muted-hover);
+  --button-color-secondary-disabled-foreground: var(--color-disabled-fg);
+
+  /* ── Tertiary ──────────────────────────────────────────────────────────── */
+  --button-color-tertiary-background:          var(--color-info-fg);
+  --button-color-tertiary-border:              var(--color-info-muted);
+  --button-color-tertiary-foreground:          var(--color-text-primary);
+  --button-color-tertiary-hover-background:    var(--color-info-muted-hover);
+  --button-color-tertiary-hover-border:        var(--color-info-muted-hover);
+  --button-color-tertiary-active-background:   var(--color-info-muted-hover);
+  --button-color-tertiary-disabled-background: var(--color-disabled-bg);
+  --button-color-tertiary-disabled-border:     var(--color-info-muted-hover);
+  --button-color-tertiary-disabled-foreground: var(--color-disabled-fg);
+
+  /* ── Utility ───────────────────────────────────────────────────────────── */
+  --button-color-utility-background:          var(--color-info-fg);
+  --button-color-utility-border:              var(--color-info-border);
+  --button-color-utility-foreground:          var(--color-info-hover);
+  --button-color-utility-hover-background:    var(--color-info-subtle);
+  --button-color-utility-hover-border:        var(--color-info);
+  --button-color-utility-hover-foreground:    var(--color-info-strong);
+  --button-color-utility-active-background:   var(--color-info-subtle);
+  --button-color-utility-disabled-background: var(--color-disabled-bg);
+  --button-color-utility-disabled-border:     var(--color-info-muted-hover);
+  --button-color-utility-disabled-foreground: var(--color-disabled-fg);
+
+  /* ── Destructive ───────────────────────────────────────────────────────── */
+  --button-color-destructive-background:          var(--color-destructive);
+  --button-color-destructive-border:              var(--color-destructive);
+  --button-color-destructive-foreground:          var(--color-destructive-fg);
+  --button-color-destructive-hover-background:    var(--color-destructive-hover);
+  --button-color-destructive-hover-border:        var(--color-destructive-strong);
+  --button-color-destructive-active-background:   var(--color-destructive-hover);
+  --button-color-destructive-disabled-background: var(--color-destructive-subtle);
+  --button-color-destructive-disabled-border:     var(--color-destructive-border);
+  --button-color-destructive-disabled-foreground: var(--color-disabled-fg);
+}
+
+/* ── Variant classes ─────────────────────────────────────────────────────────
+ * Applied by CVA. Reference only the component tokens above — never raw values.
+ * Colour state changes (hover, active, disabled) live here, not in Tailwind.
+ * ─────────────────────────────────────────────────────────────────────────── */
+
+.button-primary {
+  background-color: var(--button-color-primary-background);
+  border-color:     var(--button-color-primary-border);
+  color:            var(--button-color-primary-foreground);
+  border-radius:    var(--button-radius);
+}
+.button-primary:hover {
+  background-color: var(--button-color-primary-hover-background);
+  border-color:     var(--button-color-primary-hover-border);
+}
+.button-primary:active {
+  background-color: var(--button-color-primary-active-background);
+}
+.button-primary:disabled,
+.button-primary[data-disabled] {
+  background-color: var(--button-color-primary-disabled-background);
+  border-color:     var(--button-color-primary-disabled-border);
+  color:            var(--button-color-primary-disabled-foreground);
+}
+
+.button-secondary {
+  background-color: var(--button-color-secondary-background);
+  border-color:     var(--button-color-secondary-border);
+  color:            var(--button-color-secondary-foreground);
+  border-radius:    var(--button-radius);
+}
+.button-secondary:hover {
+  background-color: var(--button-color-secondary-hover-background);
+  border-color:     var(--button-color-secondary-hover-border);
+}
+.button-secondary:active {
+  background-color: var(--button-color-secondary-active-background);
+}
+.button-secondary:disabled,
+.button-secondary[data-disabled] {
+  background-color: var(--button-color-secondary-disabled-background);
+  border-color:     var(--button-color-secondary-disabled-border);
+  color:            var(--button-color-secondary-disabled-foreground);
+}
+
+.button-tertiary {
+  background-color: var(--button-color-tertiary-background);
+  border-color:     var(--button-color-tertiary-border);
+  color:            var(--button-color-tertiary-foreground);
+  border-radius:    var(--button-radius);
+}
+.button-tertiary:hover {
+  background-color: var(--button-color-tertiary-hover-background);
+  border-color:     var(--button-color-tertiary-hover-border);
+}
+.button-tertiary:active {
+  background-color: var(--button-color-tertiary-active-background);
+}
+.button-tertiary:disabled,
+.button-tertiary[data-disabled] {
+  background-color: var(--button-color-tertiary-disabled-background);
+  border-color:     var(--button-color-tertiary-disabled-border);
+  color:            var(--button-color-tertiary-disabled-foreground);
+}
+
+.button-utility {
+  background-color: var(--button-color-utility-background);
+  border-color:     var(--button-color-utility-border);
+  color:            var(--button-color-utility-foreground);
+  border-radius:    var(--button-radius);
+}
+.button-utility:hover {
+  background-color: var(--button-color-utility-hover-background);
+  border-color:     var(--button-color-utility-hover-border);
+  color:            var(--button-color-utility-hover-foreground);
+}
+.button-utility:active {
+  background-color: var(--button-color-utility-active-background);
+}
+.button-utility:disabled,
+.button-utility[data-disabled] {
+  background-color: var(--button-color-utility-disabled-background);
+  border-color:     var(--button-color-utility-disabled-border);
+  color:            var(--button-color-utility-disabled-foreground);
+}
+
+.button-destructive {
+  background-color: var(--button-color-destructive-background);
+  border-color:     var(--button-color-destructive-border);
+  color:            var(--button-color-destructive-foreground);
+  border-radius:    var(--button-radius);
+}
+.button-destructive:hover {
+  background-color: var(--button-color-destructive-hover-background);
+  border-color:     var(--button-color-destructive-hover-border);
+}
+.button-destructive:active {
+  background-color: var(--button-color-destructive-active-background);
+}
+.button-destructive:disabled,
+.button-destructive[data-disabled] {
+  background-color: var(--button-color-destructive-disabled-background);
+  border-color:     var(--button-color-destructive-disabled-border);
+  color:            var(--button-color-destructive-disabled-foreground);
+}
