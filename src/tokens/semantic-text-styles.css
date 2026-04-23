@@ -1,0 +1,80 @@
+/* auto-generated — do not edit. Regenerate via Figma token export. */
+.ts-title-hero {
+  font-family: var(--title-hero-font-family);
+  font-size: var(--title-hero-font-size);
+  font-weight: var(--title-hero-font-weight);
+  line-height: var(--title-hero-line-height);
+  letter-spacing: var(--title-hero-letter-spacing);
+}
+
+.ts-title-page {
+  font-family: var(--title-page-font-family);
+  font-size: var(--title-page-font-size);
+  font-weight: var(--title-page-font-weight);
+  line-height: var(--title-page-line-height);
+  letter-spacing: var(--title-page-letter-spacing);
+}
+
+.ts-subtitle {
+  font-family: var(--subtitle-font-family);
+  font-size: var(--subtitle-font-size);
+  font-weight: var(--subtitle-font-weight);
+  line-height: var(--subtitle-line-height);
+  letter-spacing: var(--subtitle-letter-spacing);
+}
+
+.ts-heading {
+  font-family: var(--heading-font-family);
+  font-size: var(--heading-font-size);
+  font-weight: var(--heading-font-weight);
+  line-height: var(--heading-line-height);
+  letter-spacing: var(--heading-letter-spacing);
+}
+
+.ts-subheading {
+  font-family: var(--subheading-font-family);
+  font-size: var(--subheading-font-size);
+  font-weight: var(--subheading-font-weight);
+  line-height: var(--subheading-line-height);
+  letter-spacing: var(--subheading-letter-spacing);
+}
+
+.ts-section-title {
+  font-family: var(--section-title-font-family);
+  font-size: var(--section-title-font-size);
+  font-weight: var(--section-title-font-weight);
+  line-height: var(--section-title-line-height);
+  letter-spacing: var(--section-title-letter-spacing);
+}
+
+.ts-body {
+  font-family: var(--body-font-family);
+  font-size: var(--body-font-size);
+  font-weight: var(--body-font-weight);
+  line-height: var(--body-line-height);
+  letter-spacing: var(--body-letter-spacing);
+}
+
+.ts-label {
+  font-family: var(--label-font-family);
+  font-size: var(--label-font-size);
+  font-weight: var(--label-font-weight);
+  line-height: var(--label-line-height);
+  letter-spacing: var(--label-letter-spacing);
+}
+
+.ts-caption {
+  font-family: var(--caption-font-family);
+  font-size: var(--caption-font-size);
+  font-weight: var(--caption-font-weight);
+  line-height: var(--caption-line-height);
+  letter-spacing: var(--caption-letter-spacing);
+}
+
+.ts-code {
+  font-family: var(--code-font-family);
+  font-size: var(--code-font-size);
+  font-weight: var(--code-font-weight);
+  line-height: var(--code-line-height);
+  letter-spacing: var(--code-letter-spacing);
+}

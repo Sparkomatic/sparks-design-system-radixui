@@ -1,6 +1,6 @@
 /// <reference types="@figma/plugin-typings" />
 
-import { OKLCH_PRECISION, FLOAT_UNIT } from "./config";
+import { OKLCH_PRECISION, FLOAT_UNIT, TEXT_STYLES_OUTPUT, TEXT_STYLE_PROPS } from "./config";
 
 declare const __html__: string;
 
@@ -123,10 +123,70 @@ async function handleExport(mappings: ExportMapping[], mode: ExportMode) {
       }));
     }
 
+    // Append text style utility classes if configured
+    if (TEXT_STYLES_OUTPUT) {
+      const textStyleFile = await buildTextStyleClasses();
+      if (textStyleFile) files.push(textStyleFile);
+    }
+
     figma.ui.postMessage({ type: "export-result", files });
   } catch (err) {
     figma.ui.postMessage({ type: "error", message: String(err) });
   }
+}
+
+// ── Text style class generation ────────────────────────────────────────────
+
+/**
+ * Derives the semantic token prefix from a Figma text style name.
+ *
+ * Figma style names use slash hierarchy: "label/default", "title-hero/default".
+ * The first segment is the role; that role is the prefix for semantic vars
+ * e.g. "label" → --label-font-family, --label-font-size, etc.
+ */
+function styleNameToRole(name: string): string {
+  return name.split("/")[0].toLowerCase().replace(/\s+/g, "-");
+}
+
+async function buildTextStyleClasses(): Promise<TokenFile | null> {
+  const styles = await figma.getLocalTextStylesAsync();
+  if (styles.length === 0) return null;
+
+  // Deduplicate by role — one class per role, using the first matching style
+  const seen = new Set<string>();
+  const classes: string[] = [];
+
+  for (const style of styles) {
+    const role = styleNameToRole(style.name);
+    if (seen.has(role)) continue;
+    seen.add(role);
+
+    const props = TEXT_STYLE_PROPS.map((prop) => {
+      const suffix = cssPropertyToTokenSuffix(prop);
+      return `  ${prop}: var(--${role}-${suffix});`;
+    });
+
+    classes.push(`.ts-${role} {\n${props.join("\n")}\n}`);
+  }
+
+  if (classes.length === 0) return null;
+
+  const header = `/* auto-generated — do not edit. Regenerate via Figma token export. */\n`;
+  return {
+    path: TEXT_STYLES_OUTPUT,
+    content: header + classes.join("\n\n") + "\n",
+  };
+}
+
+function cssPropertyToTokenSuffix(prop: typeof TEXT_STYLE_PROPS[number]): string {
+  const map: Record<typeof TEXT_STYLE_PROPS[number], string> = {
+    "font-family":    "font-family",
+    "font-size":      "font-size",
+    "font-weight":    "font-weight",
+    "line-height":    "line-height",
+    "letter-spacing": "letter-spacing",
+  };
+  return map[prop];
 }
 
 // ── Path resolution ────────────────────────────────────────────────────────

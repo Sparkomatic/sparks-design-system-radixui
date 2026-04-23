@@ -5,6 +5,10 @@ import { defineConfig } from "vite"
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  server: {
+    port: process.env.PORT ? parseInt(process.env.PORT) : 5173,
+    strictPort: !!process.env.PORT,
+  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

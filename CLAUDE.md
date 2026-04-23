@@ -39,6 +39,17 @@ src/
 
 Components are built using Radix UI primitives, styled with Tailwind v4 utility classes, and use CVA (class-variance-authority) for variant logic. Tokens flow: primitives → semantic → component variables → CSS class rules.
 
+## Token workflow — Figma is the source of truth
+
+All token work (variables, text styles, component tokens) must originate in Figma, not in the codebase. The correct workflow is:
+
+1. **Make changes in Figma** — create or update variables, text styles, and component token values using the Figma MCP tools.
+2. **Export tokens from Figma** — this drops fresh CSS into `src/tokens/`.
+3. **Run `npm run sync-tokens`** (or just `npm run dev`) — regenerates `src/tokens/index.css` so new files are picked up.
+4. **Write component CSS class rules** in `src/components/ui/{name}/{name}.css` — these consume the tokens and are the only token-related files you should edit directly.
+
+**Never directly edit any file in `src/tokens/`** — they are auto-generated and will be overwritten on the next Figma export. If a token value looks wrong in code, fix it in Figma and re-export; do not patch the CSS by hand.
+
 To add a new component: read the Figma component fully via MCP, then follow the rules below.
 
 ---

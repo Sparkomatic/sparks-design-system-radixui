@@ -7,8 +7,8 @@ import { cn } from "@/lib/utils"
 
 // ── Variants ───────────────────────────────────────────────────────────────
 const buttonVariants = cva(
-  // Layout only — colours, spacing, radius, and border live in button.css classes
-  "inline-flex items-center justify-center whitespace-nowrap font-medium border-solid transition-colors disabled:pointer-events-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current cursor-pointer",
+  // Layout only — colours, spacing, radius, border, and typography live in CSS classes
+  "inline-flex items-center justify-center whitespace-nowrap border-solid transition-colors disabled:pointer-events-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current cursor-pointer",
   {
     variants: {
       variant: {
@@ -19,9 +19,9 @@ const buttonVariants = cva(
         destructive: "button-destructive",
       },
       size: {
-        sm: "button-size-sm",
-        md: "button-size-md",
-        lg: "button-size-lg",
+        sm: "button-size-sm ts-label",
+        md: "button-size-md ts-label",
+        lg: "button-size-lg ts-label",
       },
     },
     defaultVariants: {

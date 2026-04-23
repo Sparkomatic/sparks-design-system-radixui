@@ -1,0 +1,26 @@
+:root {
+  --height-control-sm: var(--size-32);
+  --height-control-md: var(--size-40);
+  --height-control-lg: var(--size-48);
+  --height-icon-sm: var(--size-16);
+  --height-icon-md: var(--size-20);
+  --height-icon-lg: var(--size-24);
+  --height-avatar-sm: var(--size-28);
+  --height-avatar-md: var(--size-36);
+  --height-avatar-lg: var(--size-48);
+  --height-touch-target: var(--size-44);
+  --width-icon-sm: var(--size-16);
+  --width-icon-md: var(--size-20);
+  --width-icon-lg: var(--size-24);
+  --width-avatar-sm: var(--size-28);
+  --width-avatar-md: var(--size-36);
+  --width-avatar-lg: var(--size-48);
+  --width-touch-target: var(--size-44);
+  --max-width-dialog-sm: 400px;
+  --max-width-dialog-md: 560px;
+  --max-width-dialog-lg: 720px;
+  --max-width-popover: 320px;
+  --max-width-tooltip: 240px;
+  --max-height-dropdown: 280px;
+  --max-height-popover: 320px;
+}
