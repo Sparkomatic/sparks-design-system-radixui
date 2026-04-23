@@ -12,6 +12,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
+    "prestorybook": "npm run sync-tokens",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
