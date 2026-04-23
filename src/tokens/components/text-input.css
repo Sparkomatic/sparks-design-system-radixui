@@ -1,16 +1,16 @@
 :root {
-  --text-input-space-sm-height: var(--size-control-sm);
+  --text-input-space-sm-height: var(--height-control-sm);
   --text-input-space-sm-padding-x: var(--spacing-control-x-sm);
   --text-input-space-sm-padding-y: var(--spacing-control-y-sm);
-  --text-input-space-md-height: var(--size-control-md);
+  --text-input-space-md-height: var(--height-control-md);
   --text-input-space-md-padding-x: var(--spacing-control-x-md);
   --text-input-space-md-padding-y: var(--spacing-control-y-md);
-  --text-input-space-lg-height: var(--size-control-lg);
+  --text-input-space-lg-height: var(--height-control-lg);
   --text-input-space-lg-padding-x: var(--spacing-control-x-lg);
   --text-input-space-lg-padding-y: var(--spacing-control-y-lg);
-  --text-input-radius: var(--radius-control);
+  --text-input-radius: var(--radius-control-md);
   --text-input-border-width: var(--border-default);
-  --text-input-icon-size: var(--size-icon-md);
+  --text-input-icon-size: var(--width-icon-md);
   --text-input-icon-gap: var(--spacing-inline);
   --text-input-color-background: var(--background-raised);
   --text-input-color-foreground: var(--foreground-default);

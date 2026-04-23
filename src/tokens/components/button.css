@@ -6,7 +6,7 @@
   --button-color-primary-hover-border: var(--border-primary-strong);
   --button-color-utility-hover-background: var(--background-primary-subtle);
   --button-gap: var(--spacing-inline);
-  --button-radius: var(--radius-control);
+  --button-radius: var(--radius-control-md);
   --button-border-width: var(--border-default);
   --button-color-primary-hover-foreground: var(--foreground-on-primary);
   --button-color-secondary-background: var(--background-secondary-default);
@@ -32,15 +32,15 @@
   --button-color-destructive-hover-foreground: var(--foreground-on-destructive);
   --button-color-destructive-border: var(--border-destructive-default);
   --button-color-destructive-hover-border: var(--border-destructive-strong);
-  --button-space-sm-height: var(--size-control-sm);
-  --button-space-sm-padding-x: var(--spacing-control-x);
-  --button-space-sm-padding-y: var(--spacing-control-y);
-  --button-space-md-height: var(--size-control-md);
-  --button-space-md-padding-x: var(--spacing-control-x);
-  --button-space-md-padding-y: var(--spacing-control-y);
-  --button-space-lg-height: var(--size-control-lg);
-  --button-space-lg-padding-x: var(--spacing-control-x);
-  --button-space-lg-padding-y: var(--spacing-control-y);
+  --button-space-sm-height: var(--height-control-sm);
+  --button-space-sm-padding-x: var(--spacing-control-x-sm);
+  --button-space-sm-padding-y: var(--spacing-control-y-sm);
+  --button-space-md-height: var(--height-control-md);
+  --button-space-md-padding-x: var(--spacing-control-x-md);
+  --button-space-md-padding-y: var(--spacing-control-y-md);
+  --button-space-lg-height: var(--height-control-lg);
+  --button-space-lg-padding-x: var(--spacing-control-x-lg);
+  --button-space-lg-padding-y: var(--spacing-control-y-lg);
   --button-color-primary-disabled-background: var(--background-primary-subtle);
   --button-color-primary-disabled-foreground: var(--foreground-primary-subtle);
   --button-color-primary-disabled-border: var(--border-primary-subtle);
@@ -56,4 +56,10 @@
   --button-color-destructive-disabled-background: var(--background-destructive-subtle);
   --button-color-destructive-disabled-foreground: var(--foreground-disabled);
   --button-color-destructive-disabled-border: var(--border-destructive-subtle);
+  --button-size-sm-height: var(--height-control-sm);
+  --button-size-md-height: var(--height-control-md);
+  --button-size-lg-height: var(--height-control-lg);
+  --button-size-sm-icon: var(--height-icon-sm);
+  --button-size-md-icon: var(--height-icon-md);
+  --button-size-lg-icon: var(--height-icon-lg);
 }

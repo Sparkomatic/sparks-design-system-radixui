@@ -13,8 +13,27 @@ export const COLLECTION_MAP: Record<string, string | null> = {
   "Semantic Colours": "src/tokens/semantic.css",
   "Semantic Typography": "src/tokens/semantic.css",
   "Semantic Space": "src/tokens/semantic.css",
+  "Semantic Size": "src/tokens/semantic.css",
   Components: null, // auto-splits: button/* → components/button.css, etc.
 };
+
+/**
+ * Output path for the generated text-style utility classes.
+ * Set to null to skip text style export.
+ */
+export const TEXT_STYLES_OUTPUT = "src/tokens/semantic-text-styles.css";
+
+/**
+ * CSS properties emitted per text style class, in order.
+ * Values reference semantic typography CSS custom properties.
+ */
+export const TEXT_STYLE_PROPS = [
+  "font-family",
+  "font-size",
+  "font-weight",
+  "line-height",
+  "letter-spacing",
+] as const;
 
 /**
  * Unit appended to raw float values (spacing, sizing, radius…).
