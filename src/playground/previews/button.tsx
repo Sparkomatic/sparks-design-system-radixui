@@ -5,7 +5,7 @@ export function ButtonPreview() {
   return (
     <Section
       title="Button"
-      description="Matches RadixButton in Figma. Placeholder styles only — tokens not yet wired."
+      description="Matches RadixButton in Figma. Tokens live from Figma variables."
     >
       <Row label="Variants">
         <Button variant="primary">Primary</Button>

@@ -1,0 +1,30 @@
+:root {
+  --text-input-space-sm-height: var(--size-control-sm);
+  --text-input-space-sm-padding-x: var(--spacing-control-x-sm);
+  --text-input-space-sm-padding-y: var(--spacing-control-y-sm);
+  --text-input-space-md-height: var(--size-control-md);
+  --text-input-space-md-padding-x: var(--spacing-control-x-md);
+  --text-input-space-md-padding-y: var(--spacing-control-y-md);
+  --text-input-space-lg-height: var(--size-control-lg);
+  --text-input-space-lg-padding-x: var(--spacing-control-x-lg);
+  --text-input-space-lg-padding-y: var(--spacing-control-y-lg);
+  --text-input-radius: var(--radius-control);
+  --text-input-border-width: var(--border-default);
+  --text-input-icon-size: var(--size-icon-md);
+  --text-input-icon-gap: var(--spacing-inline);
+  --text-input-color-background: var(--background-raised);
+  --text-input-color-foreground: var(--foreground-default);
+  --text-input-color-placeholder: var(--border-focus);
+  --text-input-color-border: var(--border-default);
+  --text-input-color-icon: var(--border-focus);
+  --text-input-color-hover-border: var(--border-strong);
+  --text-input-color-focus-border: var(--border-primary-default);
+  --text-input-color-error-border: var(--border-destructive-default);
+  --text-input-color-error-foreground: var(--foreground-destructive-default);
+  --text-input-color-success-border: var(--border-success-default);
+  --text-input-color-success-foreground: var(--foreground-success-default);
+  --text-input-color-disabled-background: var(--background-disabled);
+  --text-input-color-disabled-foreground: var(--foreground-disabled);
+  --text-input-color-disabled-placeholder: var(--foreground-disabled);
+  --text-input-color-disabled-border: var(--border-disabled);
+}

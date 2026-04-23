@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <script src="https://unpkg.com/jszip@3.10.1/dist/jszip.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
+      font-size: 12px;
+      color: #1a1a1a;
+      background: #fff;
+      padding: 16px;
+      line-height: 1.4;
+    }
+
+    h1 { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+    .subtitle { color: #888; margin-bottom: 16px; }
+
+    /* Status */
+    .status { padding: 9px 12px; border-radius: 6px; font-size: 12px; display: none; margin-bottom: 12px; }
+    .status.info    { background: #eef5ff; color: #1a73e8; display: block; }
+    .status.success { background: #e6f4ea; color: #1e7e34; display: block; }
+    .status.error   { background: #fce8e6; color: #c5221f; display: block; }
+
+    /* Top action */
+    .top-action { margin-bottom: 14px; }
+    button {
+      padding: 7px 14px;
+      border-radius: 6px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 500;
+      transition: background 0.1s;
+    }
+    .btn-ghost { background: transparent; color: #444; border-color: #ddd; }
+    .btn-ghost:hover { background: #f5f5f5; }
+
+    /* Collections list */
+    .collections {
+      display: flex;
+      flex-direction: column;
+      border: 1px solid #e8e8e8;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 14px;
+    }
+    .col-row {
+      display: grid;
+      grid-template-columns: 16px 1fr;
+      gap: 10px;
+      padding: 10px 12px;
+      background: #fafafa;
+      border-bottom: 1px solid #e8e8e8;
+      border-left: 3px solid transparent;
+      transition: border-color 0.1s, background 0.1s;
+    }
+    .col-row:last-child { border-bottom: none; }
+    .col-row.selected { background: #fff; border-left-color: #0d99ff; }
+
+    .col-check { margin-top: 2px; cursor: pointer; accent-color: #0d99ff; width: 13px; height: 13px; }
+
+    .col-body { display: flex; flex-direction: column; gap: 5px; }
+    .col-header { display: flex; align-items: center; gap: 8px; }
+    .col-name { font-weight: 500; }
+    .col-name.muted { color: #bbb; font-weight: 400; }
+    .col-count { color: #aaa; font-size: 11px; }
+
+    .col-path-row { display: flex; align-items: center; gap: 6px; }
+    .col-path {
+      flex: 1;
+      font-family: "SF Mono", "Fira Code", monospace;
+      font-size: 10px;
+      padding: 3px 7px;
+      border: 1px solid #e0e0e0;
+      border-radius: 4px;
+      color: #333;
+      background: #f7f7f7;
+      outline: none;
+    }
+    .col-path:focus { border-color: #0d99ff; background: #fff; }
+    .col-path:disabled { color: #ccc; background: #f7f7f7; border-color: transparent; }
+
+    .split-label {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 10px;
+      color: #888;
+      cursor: pointer;
+      white-space: nowrap;
+      user-select: none;
+    }
+    .split-label.muted { color: #ccc; pointer-events: none; }
+    .split-label input { accent-color: #0d99ff; width: 11px; height: 11px; cursor: pointer; }
+
+    .split-hint {
+      font-size: 10px;
+      color: #aaa;
+      font-family: "SF Mono", "Fira Code", monospace;
+      padding-left: 1px;
+    }
+
+    /* Export mode */
+    .export-section { margin-bottom: 14px; }
+    .export-label { font-size: 11px; font-weight: 500; color: #666; margin-bottom: 6px; }
+    .mode-options { display: flex; gap: 6px; }
+    .mode-btn {
+      flex: 1;
+      padding: 7px 10px;
+      border-radius: 6px;
+      border: 1px solid #ddd;
+      background: #fafafa;
+      color: #555;
+      font-size: 11px;
+      font-weight: 500;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.1s;
+    }
+    .mode-btn:hover { background: #f0f0f0; }
+    .mode-btn.active { background: #fff; border-color: #0d99ff; color: #0d99ff; }
+
+    .export-btn {
+      width: 100%;
+      padding: 9px;
+      border-radius: 6px;
+      border: none;
+      background: #0d99ff;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.1s;
+    }
+    .export-btn:hover:not(:disabled) { background: #0a85e0; }
+    .export-btn:disabled { opacity: 0.4; cursor: default; }
+
+    .empty { color: #bbb; text-align: center; padding: 32px 0; }
+
+    /* Results — file tree */
+    .file-tree {
+      border: 1px solid #e8e8e8;
+      border-radius: 8px;
+      overflow: hidden;
+      font-family: "SF Mono", "Fira Code", monospace;
+      font-size: 11px;
+    }
+    .tree-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 7px 12px;
+      border-bottom: 1px solid #f0f0f0;
+      background: #fff;
+      gap: 8px;
+    }
+    .tree-row:last-child { border-bottom: none; }
+    .tree-row.folder {
+      background: #f7f7f7;
+      color: #888;
+      font-size: 10px;
+      padding: 5px 12px;
+    }
+    .tree-file { display: flex; align-items: center; gap: 6px; overflow: hidden; }
+    .tree-icon { flex-shrink: 0; color: #aaa; }
+    .tree-path { color: #333; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .tree-count { color: #bbb; font-size: 10px; white-space: nowrap; }
+    .tree-btns { display: flex; gap: 5px; flex-shrink: 0; }
+    .btn-xs {
+      padding: 3px 8px;
+      font-size: 10px;
+      border-radius: 4px;
+      border: 1px solid #ddd;
+      background: #fff;
+      cursor: pointer;
+      font-weight: 500;
+      font-family: inherit;
+    }
+    .btn-xs:hover { background: #f0f0f0; }
+    .btn-xs.copied { background: #e6f4ea; border-color: #a8d5b5; color: #1e7e34; }
+  </style>
+</head>
+<body>
+  <h1>Token Exporter</h1>
+  <p class="subtitle">Exports Figma variables → CSS custom properties</p>
+
+  <div id="status" class="status"></div>
+
+  <div class="top-action">
+    <button class="btn-ghost" id="scan-btn">Scan collections</button>
+  </div>
+
+  <div id="collections-wrap" style="display:none">
+    <div id="collections-list" class="collections"></div>
+
+    <div class="export-section">
+      <div class="export-label">Download as</div>
+      <div class="mode-options" id="mode-options">
+        <button class="mode-btn active" data-mode="separate">Separate files</button>
+        <button class="mode-btn" data-mode="single">Single combined file</button>
+      </div>
+    </div>
+
+    <button class="export-btn" id="export-btn">Export tokens</button>
+  </div>
+
+  <div id="results-wrap" style="display:none">
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
+      <span style="font-size:11px; font-weight:500; color:#666;" id="results-title"></span>
+      <div style="display:flex; gap:6px; align-items:center;">
+        <button class="btn-xs" id="dl-all-btn">Download all</button>
+        <button class="btn-ghost" id="back-btn" style="font-size:11px; padding:4px 10px;">← Back</button>
+      </div>
+    </div>
+    <div id="file-list" class="file-tree"></div>
+  </div>
+
+  <div id="empty-state">
+    <p class="empty">Click "Scan collections" to get started</p>
+  </div>
+
+  <script>
+    const scanBtn      = document.getElementById("scan-btn");
+    const exportBtn    = document.getElementById("export-btn");
+    const backBtn      = document.getElementById("back-btn");
+    const dlAllBtn     = document.getElementById("dl-all-btn");
+    const statusEl     = document.getElementById("status");
+    const collectWrap  = document.getElementById("collections-wrap");
+    const collectList  = document.getElementById("collections-list");
+    const resultsWrap  = document.getElementById("results-wrap");
+    const resultsTitle = document.getElementById("results-title");
+    const fileListEl   = document.getElementById("file-list");
+    const emptyState   = document.getElementById("empty-state");
+    const modeOptions  = document.getElementById("mode-options");
+
+    let collectionState = {}; // id → { name, path, autoSplit, checked }
+    let exportMode = "separate";
+    let exportedFiles = [];
+
+    // ── Mode toggle ──────────────────────────────────────────────────────
+    modeOptions.addEventListener("click", (e) => {
+      const btn = e.target.closest(".mode-btn");
+      if (!btn) return;
+      exportMode = btn.dataset.mode;
+      modeOptions.querySelectorAll(".mode-btn").forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+    });
+
+    // ── Status ───────────────────────────────────────────────────────────
+    function setStatus(msg, type) {
+      statusEl.textContent = msg;
+      statusEl.className = "status " + type;
+    }
+    function clearStatus() { statusEl.className = "status"; }
+
+    // ── Views ────────────────────────────────────────────────────────────
+    function showCollections() {
+      emptyState.style.display = "none";
+      resultsWrap.style.display = "none";
+      collectWrap.style.display = "block";
+    }
+    function showResults() {
+      collectWrap.style.display = "none";
+      resultsWrap.style.display = "block";
+    }
+
+    dlAllBtn.addEventListener("click", async () => {
+      const zip = new JSZip();
+      exportedFiles.forEach(({ path, content }) => {
+        // Strip leading src/ if present, so paths become tokens/*, components/*, etc.
+        const zipPath = path.replace(/^src\//, "");
+        zip.file(zipPath, content);
+      });
+      const blob = await zip.generateAsync({ type: "blob" });
+      const url  = URL.createObjectURL(blob);
+      const a    = Object.assign(document.createElement("a"), { href: url, download: "tokens.zip" });
+      document.body.appendChild(a); a.click();
+      document.body.removeChild(a); URL.revokeObjectURL(url);
+    });
+
+    backBtn.addEventListener("click", () => {
+      clearStatus();
+      showCollections();
+    });
+
+    // ── Scan ─────────────────────────────────────────────────────────────
+    scanBtn.addEventListener("click", () => {
+      setStatus("Scanning…", "info");
+      emptyState.style.display = "none";
+      collectionState = {};
+      parent.postMessage({ pluginMessage: { type: "scan" } }, "*");
+    });
+
+    // ── Export ───────────────────────────────────────────────────────────
+    exportBtn.addEventListener("click", () => {
+      const mappings = Object.entries(collectionState)
+        .filter(([, s]) => s.checked && s.path.trim())
+        .map(([id, s]) => ({
+          collectionId: id,
+          collectionName: s.name,
+          path: s.path.trim(),
+          autoSplit: s.autoSplit,
+        }));
+
+      if (!mappings.length) { setStatus("No collections selected", "error"); return; }
+      setStatus("Generating CSS…", "info");
+      parent.postMessage({ pluginMessage: { type: "export", mappings, mode: exportMode } }, "*");
+    });
+
+    // ── Messages ─────────────────────────────────────────────────────────
+    window.onmessage = (event) => {
+      const msg = event.data.pluginMessage;
+      if (!msg) return;
+
+      if (msg.type === "scan-result") {
+        clearStatus();
+        if (!msg.collections.length) {
+          emptyState.innerHTML = '<p class="empty">No variable collections found</p>';
+          emptyState.style.display = "block";
+          return;
+        }
+        msg.collections.forEach((c) => {
+          collectionState[c.id] = { name: c.name, path: c.suggestedPath, autoSplit: c.autoSplit, checked: true };
+        });
+        renderCollections(msg.collections);
+        showCollections();
+      }
+
+      if (msg.type === "export-result") {
+        const files = msg.files;
+        clearStatus();
+        if (!files.length) { setStatus("Nothing exported — check paths and selections", "error"); return; }
+
+        exportedFiles = files;
+        fileListEl.innerHTML = "";
+        fileListEl.className = "file-tree";
+        resultsTitle.textContent = `${files.length} file${files.length !== 1 ? "s" : ""} ready`;
+
+        // Group by folder for display
+        const folders = new Map(); // folder → [{ filename, path, content }]
+        files.forEach(({ path, content }) => {
+          const parts = path.split("/");
+          const filename = parts.pop();
+          const folder = parts.join("/") || ".";
+          if (!folders.has(folder)) folders.set(folder, []);
+          folders.get(folder).push({ filename, path, content });
+        });
+
+        const lineCount = (s) => s.split("\n").filter(l => l.trim().startsWith("--")).length;
+
+        folders.forEach((fileGroup, folder) => {
+          // Folder header row (skip for single-file export)
+          if (folders.size > 1) {
+            const folderRow = document.createElement("div");
+            folderRow.className = "tree-row folder";
+            folderRow.textContent = folder + "/";
+            fileListEl.appendChild(folderRow);
+          }
+
+          fileGroup.forEach(({ filename, path, content }) => {
+            const vars = lineCount(content);
+            const row = document.createElement("div");
+            row.className = "tree-row";
+            row.innerHTML = `
+              <div class="tree-file">
+                <span class="tree-icon">◆</span>
+                <span class="tree-path">${filename}</span>
+                <span class="tree-count">${vars} vars</span>
+              </div>
+              <div class="tree-btns">
+                <button class="btn-xs copy-btn">Copy</button>
+                <button class="btn-xs dl-btn">Download</button>
+              </div>
+            `;
+            row.querySelector(".copy-btn").addEventListener("click", function () {
+              navigator.clipboard.writeText(content).then(() => {
+                this.textContent = "Copied!";
+                this.classList.add("copied");
+                setTimeout(() => { this.textContent = "Copy"; this.classList.remove("copied"); }, 1500);
+              });
+            });
+            row.querySelector(".dl-btn").addEventListener("click", () => {
+              const blob = new Blob([content], { type: "text/css" });
+              const url  = URL.createObjectURL(blob);
+              const a    = Object.assign(document.createElement("a"), { href: url, download: filename });
+              document.body.appendChild(a); a.click();
+              document.body.removeChild(a); URL.revokeObjectURL(url);
+            });
+            fileListEl.appendChild(row);
+          });
+        });
+
+        showResults();
+      }
+
+      if (msg.type === "error") setStatus("Error: " + msg.message, "error");
+    };
+
+    // ── Render collections ────────────────────────────────────────────────
+    function renderCollections(collections) {
+      collectList.innerHTML = "";
+      collections.forEach((c) => {
+        const state = collectionState[c.id];
+        const row = document.createElement("div");
+        row.className = "col-row" + (state.checked ? " selected" : "");
+
+        const splitHint = state.autoSplit && state.checked
+          ? `<span class="split-hint">→ ${state.path}/button.css, ${state.path}/input.css…</span>`
+          : "";
+
+        row.innerHTML = `
+          <input type="checkbox" class="col-check" ${state.checked ? "checked" : ""} />
+          <div class="col-body">
+            <div class="col-header">
+              <span class="col-name ${state.checked ? "" : "muted"}">${c.name}</span>
+              <span class="col-count">${c.count} vars</span>
+            </div>
+            <div class="col-path-row">
+              <input type="text" class="col-path" value="${escAttr(state.path)}"
+                placeholder="src/tokens/..." ${state.checked ? "" : "disabled"} />
+              <label class="split-label ${state.checked ? "" : "muted"}">
+                <input type="checkbox" class="split-check" ${state.autoSplit ? "checked" : ""}
+                  ${state.checked ? "" : "disabled"} />
+                split
+              </label>
+            </div>
+            ${splitHint}
+          </div>
+        `;
+
+        const checkbox  = row.querySelector(".col-check");
+        const pathInput = row.querySelector(".col-path");
+        const splitChk  = row.querySelector(".split-check");
+        const nameEl    = row.querySelector(".col-name");
+        const splitLbl  = row.querySelector(".split-label");
+
+        checkbox.addEventListener("change", () => {
+          state.checked = checkbox.checked;
+          row.className = "col-row" + (state.checked ? " selected" : "");
+          nameEl.className  = "col-name" + (state.checked ? "" : " muted");
+          splitLbl.className = "split-label" + (state.checked ? "" : " muted");
+          pathInput.disabled = !state.checked;
+          splitChk.disabled  = !state.checked;
+          refreshHint(row, state);
+        });
+
+        pathInput.addEventListener("input", () => {
+          state.path = pathInput.value;
+          refreshHint(row, state);
+        });
+
+        splitChk.addEventListener("change", () => {
+          state.autoSplit = splitChk.checked;
+          refreshHint(row, state);
+        });
+
+        collectList.appendChild(row);
+      });
+    }
+
+    function refreshHint(row, state) {
+      const existing = row.querySelector(".split-hint");
+      if (existing) existing.remove();
+      if (state.autoSplit && state.checked && state.path) {
+        const hint = document.createElement("span");
+        hint.className = "split-hint";
+        hint.textContent = `→ ${state.path}/button.css, ${state.path}/input.css…`;
+        row.querySelector(".col-body").appendChild(hint);
+      }
+    }
+
+    function escHtml(s) {
+      return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+    function escAttr(s) { return s.replace(/"/g, "&quot;"); }
+  </script>
+</body>
+</html>

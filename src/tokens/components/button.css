@@ -1,235 +1,59 @@
-/*
- * BUTTON COMPONENT TOKENS
- * ─────────────────────────────────────────────────────────────────────────────
- * Tier 3 → Tier 2 → Tier 1:
- *   Component tokens (--button-*)  →  Semantic tokens (--color-*)  →  oklch values
- *
- * Token names mirror Figma variable names exactly: slashes → hyphens.
- * Only the :root block changes when Figma exports update — variant classes
- * never need to change.
- * ─────────────────────────────────────────────────────────────────────────────
- */
-
 :root {
-  /* ── Radius (button/radius → radius/control) ───────────────────────────── */
-  --button-radius: var(--radius-control);
-
-  /* ── Border (button/border-width → border/default) ─────────────────────── */
-  --button-border-width: var(--border-width-default);
-
-  /* ── Shared spacing (button/gap → spacing/inline) ──────────────────────── */
+  --button-color-primary-background: var(--background-primary-default);
+  --button-color-primary-hover-background: var(--background-primary-strong);
+  --button-color-primary-foreground: var(--foreground-on-primary);
+  --button-color-primary-border: var(--border-primary-default);
+  --button-color-primary-hover-border: var(--border-primary-strong);
+  --button-color-utility-hover-background: var(--background-primary-subtle);
   --button-gap: var(--spacing-inline);
-
-  /* ── Size — SM (button/space/sm/*) ─────────────────────────────────────── */
-  --button-space-sm-height:    var(--size-control-sm);    /* 32px */
-  --button-space-sm-padding-x: var(--spacing-control-x);  /* 16px */
-  --button-space-sm-padding-y: var(--spacing-control-y);  /*  8px */
-  --button-font-size-sm:       var(--font-size-2xs);      /* 13px — code-only */
-  --button-icon-size-sm:       var(--size-icon-sm);
-
-  /* ── Size — MD (button/space/md/*) ─────────────────────────────────────── */
-  --button-space-md-height:    var(--size-control-md);    /* 40px */
-  --button-space-md-padding-x: var(--spacing-control-x);  /* 16px */
-  --button-space-md-padding-y: var(--spacing-control-y);  /*  8px */
-  --button-font-size-md:       var(--font-size-sm);       /* 14px — code-only */
-  --button-icon-size-md:       var(--size-icon-md);
-
-  /* ── Size — LG (button/space/lg/*) ─────────────────────────────────────── */
-  --button-space-lg-height:    var(--size-control-lg);    /* 48px */
-  --button-space-lg-padding-x: var(--spacing-control-x);  /* 16px */
-  --button-space-lg-padding-y: var(--spacing-control-y);  /*  8px */
-  --button-font-size-lg:       var(--font-size-md);       /* 16px — code-only */
-  --button-icon-size-lg:       var(--size-icon-lg);
-
-  /* ── Primary ───────────────────────────────────────────────────────────── */
-  --button-color-primary-background:          var(--color-info);
-  --button-color-primary-border:              var(--color-info);
-  --button-color-primary-foreground:          var(--color-info-fg);
-  --button-color-primary-hover-background:    var(--color-info-hover);
-  --button-color-primary-hover-border:        var(--color-info-strong);
-  --button-color-primary-active-background:   var(--color-info-hover);
-  --button-color-primary-disabled-background: var(--color-info-subtle);
-  --button-color-primary-disabled-border:     var(--color-info-border);
-  --button-color-primary-disabled-foreground: var(--color-info-border);
-
-  /* ── Secondary ─────────────────────────────────────────────────────────── */
-  --button-color-secondary-background:          var(--color-info-muted);
-  --button-color-secondary-border:              var(--color-info-muted);
-  --button-color-secondary-foreground:          var(--color-text-primary);
-  --button-color-secondary-hover-background:    var(--color-info-muted-hover);
-  --button-color-secondary-hover-border:        var(--color-info-border-hover);
-  --button-color-secondary-active-background:   var(--color-info-muted-hover);
-  --button-color-secondary-disabled-background: var(--color-disabled-bg);
-  --button-color-secondary-disabled-border:     var(--color-info-muted-hover);
-  --button-color-secondary-disabled-foreground: var(--color-disabled-fg);
-
-  /* ── Tertiary ──────────────────────────────────────────────────────────── */
-  --button-color-tertiary-background:          var(--color-info-fg);
-  --button-color-tertiary-border:              var(--color-info-muted);
-  --button-color-tertiary-foreground:          var(--color-text-primary);
-  --button-color-tertiary-hover-background:    var(--color-info-muted-hover);
-  --button-color-tertiary-hover-border:        var(--color-info-muted-hover);
-  --button-color-tertiary-active-background:   var(--color-info-muted-hover);
-  --button-color-tertiary-disabled-background: var(--color-disabled-bg);
-  --button-color-tertiary-disabled-border:     var(--color-info-muted-hover);
-  --button-color-tertiary-disabled-foreground: var(--color-disabled-fg);
-
-  /* ── Utility ───────────────────────────────────────────────────────────── */
-  --button-color-utility-background:          var(--color-info-fg);
-  --button-color-utility-border:              var(--color-info-border);
-  --button-color-utility-foreground:          var(--color-info-hover);
-  --button-color-utility-hover-background:    var(--color-info-subtle);
-  --button-color-utility-hover-border:        var(--color-info);
-  --button-color-utility-hover-foreground:    var(--color-info-strong);
-  --button-color-utility-active-background:   var(--color-info-subtle);
-  --button-color-utility-disabled-background: var(--color-disabled-bg);
-  --button-color-utility-disabled-border:     var(--color-info-muted-hover);
-  --button-color-utility-disabled-foreground: var(--color-disabled-fg);
-
-  /* ── Destructive ───────────────────────────────────────────────────────── */
-  --button-color-destructive-background:          var(--color-destructive);
-  --button-color-destructive-border:              var(--color-destructive);
-  --button-color-destructive-foreground:          var(--color-destructive-fg);
-  --button-color-destructive-hover-background:    var(--color-destructive-hover);
-  --button-color-destructive-hover-border:        var(--color-destructive-strong);
-  --button-color-destructive-active-background:   var(--color-destructive-hover);
-  --button-color-destructive-disabled-background: var(--color-destructive-subtle);
-  --button-color-destructive-disabled-border:     var(--color-destructive-border);
-  --button-color-destructive-disabled-foreground: var(--color-disabled-fg);
-}
-
-/* ── Variant classes ─────────────────────────────────────────────────────────
- * Applied by CVA. Reference only the component tokens above — never raw values.
- * Colour state changes (hover, active, disabled) live here, not in Tailwind.
- * ─────────────────────────────────────────────────────────────────────────── */
-
-.button-primary {
-  background-color: var(--button-color-primary-background);
-  border-color:     var(--button-color-primary-border);
-  border-width:     var(--button-border-width);
-  color:            var(--button-color-primary-foreground);
-  border-radius:    var(--button-radius);
-}
-.button-primary:hover {
-  background-color: var(--button-color-primary-hover-background);
-  border-color:     var(--button-color-primary-hover-border);
-}
-.button-primary:active {
-  background-color: var(--button-color-primary-active-background);
-}
-.button-primary:disabled,
-.button-primary[data-disabled] {
-  background-color: var(--button-color-primary-disabled-background);
-  border-color:     var(--button-color-primary-disabled-border);
-  color:            var(--button-color-primary-disabled-foreground);
-}
-
-.button-secondary {
-  background-color: var(--button-color-secondary-background);
-  border-color:     var(--button-color-secondary-border);
-  border-width:     var(--button-border-width);
-  color:            var(--button-color-secondary-foreground);
-  border-radius:    var(--button-radius);
-}
-.button-secondary:hover {
-  background-color: var(--button-color-secondary-hover-background);
-  border-color:     var(--button-color-secondary-hover-border);
-}
-.button-secondary:active {
-  background-color: var(--button-color-secondary-active-background);
-}
-.button-secondary:disabled,
-.button-secondary[data-disabled] {
-  background-color: var(--button-color-secondary-disabled-background);
-  border-color:     var(--button-color-secondary-disabled-border);
-  color:            var(--button-color-secondary-disabled-foreground);
-}
-
-.button-tertiary {
-  background-color: var(--button-color-tertiary-background);
-  border-color:     var(--button-color-tertiary-border);
-  border-width:     var(--button-border-width);
-  color:            var(--button-color-tertiary-foreground);
-  border-radius:    var(--button-radius);
-}
-.button-tertiary:hover {
-  background-color: var(--button-color-tertiary-hover-background);
-  border-color:     var(--button-color-tertiary-hover-border);
-}
-.button-tertiary:active {
-  background-color: var(--button-color-tertiary-active-background);
-}
-.button-tertiary:disabled,
-.button-tertiary[data-disabled] {
-  background-color: var(--button-color-tertiary-disabled-background);
-  border-color:     var(--button-color-tertiary-disabled-border);
-  color:            var(--button-color-tertiary-disabled-foreground);
-}
-
-.button-utility {
-  background-color: var(--button-color-utility-background);
-  border-color:     var(--button-color-utility-border);
-  border-width:     var(--button-border-width);
-  color:            var(--button-color-utility-foreground);
-  border-radius:    var(--button-radius);
-}
-.button-utility:hover {
-  background-color: var(--button-color-utility-hover-background);
-  border-color:     var(--button-color-utility-hover-border);
-  color:            var(--button-color-utility-hover-foreground);
-}
-.button-utility:active {
-  background-color: var(--button-color-utility-active-background);
-}
-.button-utility:disabled,
-.button-utility[data-disabled] {
-  background-color: var(--button-color-utility-disabled-background);
-  border-color:     var(--button-color-utility-disabled-border);
-  color:            var(--button-color-utility-disabled-foreground);
-}
-
-.button-destructive {
-  background-color: var(--button-color-destructive-background);
-  border-color:     var(--button-color-destructive-border);
-  border-width:     var(--button-border-width);
-  color:            var(--button-color-destructive-foreground);
-  border-radius:    var(--button-radius);
-}
-.button-destructive:hover {
-  background-color: var(--button-color-destructive-hover-background);
-  border-color:     var(--button-color-destructive-hover-border);
-}
-.button-destructive:active {
-  background-color: var(--button-color-destructive-active-background);
-}
-.button-destructive:disabled,
-.button-destructive[data-disabled] {
-  background-color: var(--button-color-destructive-disabled-background);
-  border-color:     var(--button-color-destructive-disabled-border);
-  color:            var(--button-color-destructive-disabled-foreground);
-}
-
-/* ── Size classes ────────────────────────────────────────────────────────────
- * Applied by CVA size variants. Control all spacing and typography via tokens.
- * ─────────────────────────────────────────────────────────────────────────── */
-
-.button-size-sm {
-  height:         var(--button-space-sm-height);
-  padding-inline: var(--button-space-sm-padding-x);
-  gap:            var(--button-gap);
-  font-size:      var(--button-font-size-sm);
-}
-
-.button-size-md {
-  height:         var(--button-space-md-height);
-  padding-inline: var(--button-space-md-padding-x);
-  gap:            var(--button-gap);
-  font-size:      var(--button-font-size-md);
-}
-
-.button-size-lg {
-  height:         var(--button-space-lg-height);
-  padding-inline: var(--button-space-lg-padding-x);
-  gap:            var(--button-gap);
-  font-size:      var(--button-font-size-lg);
+  --button-radius: var(--radius-control);
+  --button-border-width: var(--border-default);
+  --button-color-primary-hover-foreground: var(--foreground-on-primary);
+  --button-color-secondary-background: var(--background-secondary-default);
+  --button-color-secondary-hover-background: var(--background-secondary-strong);
+  --button-color-secondary-foreground: var(--foreground-on-secondary);
+  --button-color-secondary-hover-foreground: var(--foreground-on-secondary);
+  --button-color-secondary-border: var(--border-secondary-default);
+  --button-color-secondary-hover-border: var(--border-strong);
+  --button-color-tertiary-background: var(--background-tertiary-default);
+  --button-color-tertiary-hover-background: var(--background-secondary-strong);
+  --button-color-tertiary-foreground: var(--foreground-default);
+  --button-color-tertiary-hover-foreground: var(--foreground-default);
+  --button-color-tertiary-border: var(--border-subtle);
+  --button-color-tertiary-hover-border: var(--border-default);
+  --button-color-utility-background: var(--background-tertiary-default);
+  --button-color-utility-foreground: var(--foreground-primary-default);
+  --button-color-utility-hover-foreground: var(--foreground-primary-strong);
+  --button-color-utility-border: var(--border-primary-subtle);
+  --button-color-utility-hover-border: var(--border-primary-default);
+  --button-color-destructive-background: var(--background-destructive-default);
+  --button-color-destructive-hover-background: var(--background-destructive-strong);
+  --button-color-destructive-foreground: var(--foreground-on-destructive);
+  --button-color-destructive-hover-foreground: var(--foreground-on-destructive);
+  --button-color-destructive-border: var(--border-destructive-default);
+  --button-color-destructive-hover-border: var(--border-destructive-strong);
+  --button-space-sm-height: var(--size-control-sm);
+  --button-space-sm-padding-x: var(--spacing-control-x);
+  --button-space-sm-padding-y: var(--spacing-control-y);
+  --button-space-md-height: var(--size-control-md);
+  --button-space-md-padding-x: var(--spacing-control-x);
+  --button-space-md-padding-y: var(--spacing-control-y);
+  --button-space-lg-height: var(--size-control-lg);
+  --button-space-lg-padding-x: var(--spacing-control-x);
+  --button-space-lg-padding-y: var(--spacing-control-y);
+  --button-color-primary-disabled-background: var(--background-primary-subtle);
+  --button-color-primary-disabled-foreground: var(--foreground-primary-subtle);
+  --button-color-primary-disabled-border: var(--border-primary-subtle);
+  --button-color-secondary-disabled-background: var(--background-disabled);
+  --button-color-secondary-disabled-foreground: var(--foreground-disabled);
+  --button-color-secondary-disabled-border: var(--border-disabled);
+  --button-color-tertiary-disabled-background: var(--background-disabled);
+  --button-color-tertiary-disabled-foreground: var(--foreground-disabled);
+  --button-color-tertiary-disabled-border: var(--border-disabled);
+  --button-color-utility-disabled-background: var(--background-disabled);
+  --button-color-utility-disabled-foreground: var(--foreground-disabled);
+  --button-color-utility-disabled-border: var(--border-disabled);
+  --button-color-destructive-disabled-background: var(--background-destructive-subtle);
+  --button-color-destructive-disabled-foreground: var(--foreground-disabled);
+  --button-color-destructive-disabled-border: var(--border-destructive-subtle);
 }

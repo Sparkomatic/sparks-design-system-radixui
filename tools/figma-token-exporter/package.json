@@ -1,0 +1,14 @@
+{
+  "name": "sparks-token-exporter",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "node esbuild.config.js",
+    "dev": "node esbuild.config.js --watch"
+  },
+  "devDependencies": {
+    "@figma/plugin-typings": "^1.96.0",
+    "esbuild": "^0.25.0",
+    "typescript": "^5.8.0"
+  }
+}

@@ -1,0 +1,118 @@
+/* ── Variant classes ─────────────────────────────────────────────────────────
+ * Applied by CVA. References component tokens from src/tokens/components/button.css.
+ * Colour state changes (hover, active, disabled) live here — never in Tailwind.
+ * ─────────────────────────────────────────────────────────────────────────── */
+
+.button-primary,
+.button-secondary,
+.button-tertiary,
+.button-utility,
+.button-destructive {
+  border-width:  var(--button-border-width);
+  border-radius: var(--button-radius);
+}
+
+.button-primary {
+  background-color: var(--button-color-primary-background);
+  border-color:     var(--button-color-primary-border);
+  color:            var(--button-color-primary-foreground);
+}
+.button-primary:hover {
+  background-color: var(--button-color-primary-hover-background);
+  border-color:     var(--button-color-primary-hover-border);
+  color:            var(--button-color-primary-hover-foreground);
+}
+.button-primary:disabled,
+.button-primary[data-disabled] {
+  background-color: var(--button-color-primary-disabled-background);
+  border-color:     var(--button-color-primary-disabled-border);
+  color:            var(--button-color-primary-disabled-foreground);
+}
+
+.button-secondary {
+  background-color: var(--button-color-secondary-background);
+  border-color:     var(--button-color-secondary-border);
+  color:            var(--button-color-secondary-foreground);
+}
+.button-secondary:hover {
+  background-color: var(--button-color-secondary-hover-background);
+  border-color:     var(--button-color-secondary-hover-border);
+  color:            var(--button-color-secondary-hover-foreground);
+}
+.button-secondary:disabled,
+.button-secondary[data-disabled] {
+  background-color: var(--button-color-secondary-disabled-background);
+  border-color:     var(--button-color-secondary-disabled-border);
+  color:            var(--button-color-secondary-disabled-foreground);
+}
+
+.button-tertiary {
+  background-color: var(--button-color-tertiary-background);
+  border-color:     var(--button-color-tertiary-border);
+  color:            var(--button-color-tertiary-foreground);
+}
+.button-tertiary:hover {
+  background-color: var(--button-color-tertiary-hover-background);
+  border-color:     var(--button-color-tertiary-hover-border);
+  color:            var(--button-color-tertiary-hover-foreground);
+}
+.button-tertiary:disabled,
+.button-tertiary[data-disabled] {
+  background-color: var(--button-color-tertiary-disabled-background);
+  border-color:     var(--button-color-tertiary-disabled-border);
+  color:            var(--button-color-tertiary-disabled-foreground);
+}
+
+.button-utility {
+  background-color: var(--button-color-utility-background);
+  border-color:     var(--button-color-utility-border);
+  color:            var(--button-color-utility-foreground);
+}
+.button-utility:hover {
+  background-color: var(--button-color-utility-hover-background);
+  border-color:     var(--button-color-utility-hover-border);
+  color:            var(--button-color-utility-hover-foreground);
+}
+.button-utility:disabled,
+.button-utility[data-disabled] {
+  background-color: var(--button-color-utility-disabled-background);
+  border-color:     var(--button-color-utility-disabled-border);
+  color:            var(--button-color-utility-disabled-foreground);
+}
+
+.button-destructive {
+  background-color: var(--button-color-destructive-background);
+  border-color:     var(--button-color-destructive-border);
+  color:            var(--button-color-destructive-foreground);
+}
+.button-destructive:hover {
+  background-color: var(--button-color-destructive-hover-background);
+  border-color:     var(--button-color-destructive-hover-border);
+  color:            var(--button-color-destructive-hover-foreground);
+}
+.button-destructive:disabled,
+.button-destructive[data-disabled] {
+  background-color: var(--button-color-destructive-disabled-background);
+  border-color:     var(--button-color-destructive-disabled-border);
+  color:            var(--button-color-destructive-disabled-foreground);
+}
+
+/* ── Size classes ────────────────────────────────────────────────────────────
+ * Applied by CVA size variants.
+ * ─────────────────────────────────────────────────────────────────────────── */
+
+.button-size-sm {
+  height:         var(--button-space-sm-height);
+  padding-inline: var(--button-space-sm-padding-x);
+  gap:            var(--button-gap);
+}
+.button-size-md {
+  height:         var(--button-space-md-height);
+  padding-inline: var(--button-space-md-padding-x);
+  gap:            var(--button-gap);
+}
+.button-size-lg {
+  height:         var(--button-space-lg-height);
+  padding-inline: var(--button-space-lg-padding-x);
+  gap:            var(--button-gap);
+}
