@@ -1,0 +1,30 @@
+:root {
+  --dropdown-menu-content-color-background: var(--background-raised);
+  --dropdown-menu-content-color-border: var(--border-muted);
+  --dropdown-menu-separator-color: var(--border-emphasis);
+  --dropdown-menu-label-color-foreground: var(--foreground-muted);
+  --dropdown-menu-item-color-background: var(--background-raised);
+  --dropdown-menu-item-color-hover-background: var(--background-tertiary-subtle);
+  --dropdown-menu-item-color-foreground: var(--foreground-default);
+  --dropdown-menu-item-color-hover-foreground: var(--foreground-emphasis);
+  --dropdown-menu-item-color-icon: var(--foreground-muted);
+  --dropdown-menu-item-color-hover-icon: var(--foreground-default);
+  --dropdown-menu-item-color-shortcut: var(--foreground-muted);
+  --dropdown-menu-item-color-checked-indicator: var(--foreground-primary-default);
+  --dropdown-menu-item-color-disabled-foreground: var(--foreground-disabled);
+  --dropdown-menu-item-color-disabled-icon: var(--foreground-disabled);
+  --dropdown-menu-item-color-destructive-background: var(--background-raised);
+  --dropdown-menu-item-color-destructive-hover-background: var(--background-destructive-subtle);
+  --dropdown-menu-item-color-destructive-foreground: var(--foreground-destructive-default);
+  --dropdown-menu-item-color-destructive-hover-foreground: var(--foreground-destructive-default);
+  --dropdown-menu-item-color-destructive-icon: var(--foreground-destructive-default);
+  --dropdown-menu-content-radius: var(--radius-popover);
+  --dropdown-menu-content-border-width: var(--border-hairline);
+  --dropdown-menu-content-padding: var(--spacing-stack);
+  --dropdown-menu-item-padding-x: var(--spacing-control-x-md);
+  --dropdown-menu-item-padding-y: var(--spacing-control-y-md);
+  --dropdown-menu-item-gap: var(--spacing-inline);
+  --dropdown-menu-label-padding-x: var(--spacing-control-x-md);
+  --dropdown-menu-label-padding-y: var(--spacing-stack);
+  --dropdown-menu-separator-gap-y: var(--spacing-stack);
+}
