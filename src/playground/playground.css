@@ -1,0 +1,35 @@
+/* Visual styles for the playground shell — all colour via semantic tokens */
+
+.pg-root {
+  background-color: var(--background-default);
+  color:            var(--foreground-default);
+}
+
+.pg-sidebar {
+  background-color: var(--background-raised);
+  border-color:     var(--border-subtle);
+}
+
+.pg-section-label {
+  color: var(--foreground-muted);
+}
+
+.pg-nav-btn {
+  color: var(--foreground-default);
+}
+.pg-nav-btn:hover {
+  background-color: var(--background-secondary-default);
+}
+
+.pg-nav-btn--active {
+  background-color: var(--background-primary-default);
+  color:            var(--foreground-on-primary);
+}
+
+.pg-theme-toggle {
+  color: var(--foreground-muted);
+}
+.pg-theme-toggle:hover {
+  background-color: var(--background-secondary-default);
+  color:            var(--foreground-default);
+}

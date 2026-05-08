@@ -7,3 +7,11 @@
 @import "./semantic-typography.css";
 @import "./components/button.css";
 @import "./components/text-input.css";
+
+/* Font name corrections — Figma names → CSS/npm @fontsource-variable names */
+/* Auto-generated from FONT_FAMILY_MAP in scripts/sync-token-imports.mjs   */
+:root {
+  --typography-font-family-sans: 'Inter Variable', sans-serif;
+  --typography-font-family-serif: 'Playfair Display Variable', serif;
+  --typography-font-family-mono: 'Roboto Mono Variable', monospace;
+}
