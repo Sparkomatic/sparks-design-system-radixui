@@ -11,6 +11,7 @@ npm run storybook    # Storybook at localhost:6006
 npm run build        # production build
 npm run typecheck    # type-check without building
 npm run sync-tokens  # regenerate src/tokens/index.css after a Figma token export
+npm run test-storybook  # run a11y + visual tests against a running Storybook
 ```
 
 ## Structure
@@ -50,7 +51,68 @@ All token work (variables, text styles, component tokens) must originate in Figm
 
 **Never directly edit any file in `src/tokens/`** — they are auto-generated and will be overwritten on the next Figma export. If a token value looks wrong in code, fix it in Figma and re-export; do not patch the CSS by hand.
 
+### Font name translation
+
+Figma uses short display names for font families ("Inter", "Playfair Display"). The `@fontsource-variable` npm packages register font faces with a "Variable" suffix ("Inter Variable"). These are different CSS `font-family` names — the browser will silently fall back to the system font if they don't match.
+
+`scripts/sync-token-imports.mjs` maintains a `FONT_FAMILY_MAP` that auto-corrects this on every `npm run sync-tokens`. The script scans all token CSS files for font-family values matching a Figma name and appends a `:root {}` correction block to `src/tokens/index.css`.
+
+To add a new variable font:
+1. Install the package: `npm install @fontsource-variable/{name}`
+2. Import it in `src/index.css`: `@import "@fontsource-variable/{name}"`
+3. Add an entry to `FONT_FAMILY_MAP` in `scripts/sync-token-imports.mjs`:
+   ```js
+   "Figma Name": "'Figma Name Variable', fallback-stack",
+   ```
+4. Run `npm run sync-tokens` — the correction will appear in `src/tokens/index.css`
+
+Never add a manual `:root` override for font names to `src/index.css` — the sync script owns this.
+
 To add a new component: read the Figma component fully via MCP, then follow the rules below.
+
+## Light/dark mode
+
+Theme switching is driven entirely by a single HTML attribute: `data-theme="dark"` on `<html>`. No class toggling, no JavaScript token swaps.
+
+### How the cascade works
+
+```
+primitives.css          — raw oklch values, never change between themes
+semantic-colours.css    — :root { --background-default: var(--colors-steel-grey-50) }
+src/index.css           — [data-theme="dark"] { --background-default: var(--colors-steel-grey-950) }
+components/*.css        — references semantic tokens, unaware of theme
+CSS class rules         — .button-primary { background-color: var(--button-color-...) }
+```
+
+Setting `data-theme="dark"` on `<html>` makes the `[data-theme="dark"]` block in `src/index.css` override the semantic tokens. Every component token and CSS class that references a semantic token updates automatically — no component code changes needed.
+
+### Adding dark mode overrides for a new semantic token
+
+Add the override to the `[data-theme="dark"]` block in `src/index.css`:
+
+```css
+[data-theme="dark"] {
+  --your-new-semantic-token: var(--colors-something-dark);
+}
+```
+
+The goal is to keep this block temporary. Once the Figma token export plugin generates `[data-theme="dark"]` blocks natively inside `semantic-colours.css`, this block in `src/index.css` can be deleted — the plugin output takes over.
+
+### Toggling theme in code
+
+**Playground** (`src/playground/index.tsx`): maintains a `theme` state, sets/deletes `document.documentElement.dataset.theme` in a `useEffect`.
+
+**Storybook** (`.storybook/preview.ts`): a `globalTypes.theme` toolbar entry (sun/moon icons) drives a decorator that sets/deletes `document.documentElement.dataset.theme` before each story renders.
+
+Both use the identical mechanism — setting the attribute — so the token cascade behaves the same in both environments.
+
+### The `@custom-variant dark` line
+
+```css
+@custom-variant dark (&:is([data-theme="dark"] *));
+```
+
+This is in `src/index.css` to enable a `dark:` Tailwind prefix if needed for layout-level dark mode changes (e.g. `dark:hidden`). It is **not** used for colour — colour always goes through token variables, never Tailwind colour utilities.
 
 ---
 
@@ -750,6 +812,30 @@ The addon injects CSS that makes `.button-primary.force-hover` pick up the same 
 ### Static stories
 
 All stories except Default use `parameters: { controls: { disable: true } }` and a custom `render` function. They are purely visual — no controls, no interaction. Variant/state labels use small muted text beneath each button.
+
+### Theme toggle
+
+The Storybook toolbar has a sun/moon toggle (defined in `.storybook/preview.ts` via `globalTypes.theme`). It sets `data-theme="dark"` on `<html>` via a global decorator — the same mechanism as the playground. Stories do not need any per-story dark mode wiring; the decorator handles it globally.
+
+### Accessibility panel
+
+`@storybook/addon-a11y` runs axe-core automatically on every story (`manual: false` in `preview.ts`). Check the **Accessibility** tab in the addons panel at the bottom — it only appears when viewing a Story, not the Docs page.
+
+### Automated testing with test-runner
+
+`@storybook/test-runner` + `axe-playwright` runs all stories headlessly and fails the suite on any axe violation. Configuration lives in `.storybook/test-runner.ts`.
+
+Requires Storybook to be running first:
+
+```bash
+# Terminal 1
+npm run storybook
+
+# Terminal 2
+npm run test-storybook
+```
+
+Each story is visited by Playwright, axe is injected, and violations produce a detailed HTML report. This is the CI gate for accessibility — the in-browser panel is for development feedback, the test-runner is for pass/fail enforcement.
 
 ---
 
