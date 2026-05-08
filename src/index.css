@@ -13,61 +13,21 @@
 /* ── Tailwind dark mode — triggers on [data-theme="dark"] on <html> ──────── */
 @custom-variant dark (&:is([data-theme="dark"] *));
 
-/* ── Bridge: semantic tokens → Tailwind utility classes ─────────────────── */
+/* ── Tailwind theme — layout & typography only, no colour utilities ───────── */
 /*
- * Maps the actual Figma-exported token names to the Tailwind CSS variable
- * names that generate bg-*, text-*, border-* utilities.
- *
- * Because these are var() references, they automatically update when
- * [data-theme="dark"] overrides the underlying semantic tokens — no
- * Tailwind rebuild needed for theme switching.
- *
- * Note: --border-default is shadowed by semantic-space.css (border width 2px).
- * --border-strong is used as the border colour alias instead.
- * Fix the naming collision in Figma by renaming the border-width token.
+ * Tailwind handles layout, spacing, and type scale only.
+ * All colour values come from CSS custom properties in src/tokens/.
+ * Never add colour entries here — use var(--token-name) in component CSS files.
  */
 @theme inline {
-  /* Font */
   --font-sans: var(--typography-font-family-sans);
-
-  /* Colours */
-  --color-background:             var(--background-default);
-  --color-foreground:             var(--foreground-default);
-  --color-muted:                  var(--background-raised);
-  --color-muted-foreground:       var(--foreground-muted);
-  --color-border:                 var(--border-strong);
-  --color-ring:                   var(--border-focus);
-  --color-input:                  var(--border-strong);
-
-  --color-primary:                var(--background-primary-default);
-  --color-primary-foreground:     var(--foreground-on-primary);
-
-  --color-secondary:              var(--background-secondary-default);
-  --color-secondary-foreground:   var(--foreground-on-secondary);
-
-  --color-destructive:            var(--background-destructive-default);
-  --color-destructive-foreground: var(--foreground-on-destructive);
-
-  --color-card:                   var(--background-raised);
-  --color-card-foreground:        var(--foreground-default);
-
-  --color-popover:                var(--background-overlay);
-  --color-popover-foreground:     var(--foreground-default);
-
-  /* Radius */
-  --radius-sm:   var(--radius-control-sm);
-  --radius-md:   var(--radius-control-md);
-  --radius-lg:   var(--radius-popover);
-  --radius-xl:   var(--radius-card-md);
-  --radius-2xl:  var(--radius-card-lg);
-  --radius-full: var(--radius-full);
 }
 
 /* ── Dark mode semantic colour overrides ─────────────────────────────────── */
 /*
- * Temporary: hand-authored dark mode values until the updated Figma plugin
- * generates a [data-theme="dark"] block inside src/tokens/semantic-colours.css.
- * Once the plugin export includes dark mode, remove this block.
+ * Temporary placeholder until the Figma plugin re-exports semantic-colours.css
+ * with [data-theme="dark"] built in. Once that export lands, remove this block —
+ * the plugin output will contain both :root and [data-theme="dark"] in one file.
  */
 [data-theme="dark"] {
   /* Page surfaces */
@@ -160,10 +120,7 @@
 
 /* ── Base layer ──────────────────────────────────────────────────────────── */
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
-    box-sizing: border-box;
-  }
+  * { box-sizing: border-box; }
 
   html {
     font-family: var(--typography-font-family-sans);
@@ -172,10 +129,10 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    background-color: var(--background-default);
+    color: var(--foreground-default);
   }
 
-  /* Respect reduced-motion preferences across all transitions */
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
       animation-duration: 0.01ms !important;

@@ -1,6 +1,7 @@
 import * as React from "react"
 import { Moon, Sun } from "lucide-react"
 
+import "./playground.css"
 import { ButtonPreview } from "./previews/button"
 import { CardPreview } from "./previews/card"
 import { ComboboxPreview } from "./previews/combobox"
@@ -28,24 +29,24 @@ export function Playground() {
   const ActivePreview = previews.find((p) => p.name === active)?.component
 
   return (
-    <div className="flex min-h-screen bg-background">
+    <div className="flex min-h-screen pg-root">
       {/* Sidebar */}
-      <aside className="w-52 shrink-0 border-r border-border bg-muted p-4">
+      <aside className="w-52 shrink-0 border-r p-4 pg-sidebar">
         <div className="mb-4 flex items-center justify-between">
-          <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+          <p className="text-xs font-semibold uppercase tracking-widest pg-section-label">
             Components
           </p>
           <button
             onClick={() => setTheme(t => t === "light" ? "dark" : "light")}
             aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
-            className="rounded-md p-1 text-muted-foreground transition-colors hover:bg-background hover:text-foreground"
+            className="rounded-md p-1 transition-colors pg-theme-toggle"
           >
             {theme === "dark" ? <Sun size={14} /> : <Moon size={14} />}
           </button>
         </div>
 
         {previews.length === 0 ? (
-          <p className="text-xs text-muted-foreground">No components yet.</p>
+          <p className="text-xs pg-section-label">No components yet.</p>
         ) : (
           <nav className="space-y-1">
             {previews.map((p) => (
@@ -54,9 +55,7 @@ export function Playground() {
                 onClick={() => setActive(p.name)}
                 className={[
                   "w-full rounded-md px-3 py-1.5 text-left text-sm transition-colors",
-                  active === p.name
-                    ? "bg-primary text-primary-foreground"
-                    : "text-foreground hover:bg-background",
+                  active === p.name ? "pg-nav-btn--active" : "pg-nav-btn",
                 ].join(" ")}
               >
                 {p.name}
@@ -71,7 +70,7 @@ export function Playground() {
         {ActivePreview ? (
           <ActivePreview />
         ) : (
-          <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
+          <div className="flex h-full items-center justify-center text-sm pg-section-label">
             Build a component, add its preview file, then import it above.
           </div>
         )}
