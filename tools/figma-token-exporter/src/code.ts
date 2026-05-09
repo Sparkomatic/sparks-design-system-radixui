@@ -10,6 +10,8 @@ interface CollectionInfo {
   id: string;
   name: string;
   count: number;
+  modesCount: number;
+  modeNames: string[];
   suggestedPath: string;
   autoSplit: boolean;
 }
@@ -57,6 +59,8 @@ async function handleScan() {
       id: c.id,
       name: c.name,
       count: variables.filter((v) => v.variableCollectionId === c.id).length,
+      modesCount: c.modes.length,
+      modeNames: c.modes.map((m) => m.name),
       suggestedPath: suggestPath(c.name),
       autoSplit: isAutoSplit(c.name),
     }));
@@ -77,53 +81,99 @@ async function handleExport(mappings: ExportMapping[], mode: ExportMode) {
     const variableMap = new Map(variables.map((v) => [v.id, v]));
     const mappingById = new Map(mappings.map((m) => [m.collectionId, m]));
 
-    // Detect base-path collisions among auto-split collections
-    const autoSplitBases = mappings.filter((m) => m.autoSplit).map((m) => m.path);
+    // Detect base-path collisions among auto-split component collections
+    const autoSplitBases = mappings
+      .filter((m) => m.autoSplit && isAutoSplit(m.collectionName))
+      .map((m) => m.path);
     const collidingBases = new Set(
       autoSplitBases.filter((p, i) => autoSplitBases.indexOf(p) !== i)
     );
 
-    // file path → variable lines
-    const fileMap = new Map<string, string[]>();
+    // file path → CSS selector → variable lines
+    const fileMap = new Map<string, Map<string, string[]>>();
+
+    function addLine(filePath: string, selector: string, line: string) {
+      if (!fileMap.has(filePath)) fileMap.set(filePath, new Map());
+      const sm = fileMap.get(filePath)!;
+      if (!sm.has(selector)) sm.set(selector, []);
+      sm.get(selector)!.push(line);
+    }
 
     for (const collection of collections) {
       const mapping = mappingById.get(collection.id);
       if (!mapping) continue;
 
       const vars = variables.filter((v) => v.variableCollectionId === collection.id);
-      const modeId = collection.defaultModeId;
+      const isComponentCollection = isAutoSplit(collection.name);
+      const hasMultipleModes = collection.modes.length > 1;
 
-      for (const variable of vars) {
-        const value = variable.valuesByMode[modeId];
-        if (value === undefined) continue;
+      if (isComponentCollection) {
+        // Component collection — split by component name prefix, single mode only
+        const modeId = collection.defaultModeId;
+        for (const variable of vars) {
+          const value = variable.valuesByMode[modeId];
+          if (value === undefined) continue;
+          const cssValue = toCssValue(value, variableMap);
+          if (cssValue === null) continue;
+          const filePath = resolveOutputPath(variable.name, mapping, collidingBases);
+          addLine(filePath, ":root", `  ${toCssName(variable.name)}: ${cssValue};`);
+        }
+      } else if (hasMultipleModes && mapping.autoSplit) {
+        // Multi-mode, split by mode — one file per mode, each as :root
+        for (const modeObj of collection.modes) {
+          const modeSlug = modeObj.name.toLowerCase().replace(/\s+/g, "-");
+          const filePath = mapping.path.replace(/\.css$/, "") + `-${modeSlug}.css`;
+          for (const variable of vars) {
+            const value = variable.valuesByMode[modeObj.modeId];
+            if (value === undefined) continue;
+            const cssValue = toCssValue(value, variableMap);
+            if (cssValue === null) continue;
+            addLine(filePath, ":root", `  ${toCssName(variable.name)}: ${cssValue};`);
+          }
+        }
+      } else {
+        // Default: all modes in one file
+        // First mode → :root  |  subsequent modes → [data-theme="<name>"]
+        const modes = hasMultipleModes
+          ? collection.modes
+          : [{ modeId: collection.defaultModeId, name: "default" }];
 
-        const cssValue = toCssValue(value, variableMap);
-        if (cssValue === null) continue;
+        for (let i = 0; i < modes.length; i++) {
+          const modeObj = modes[i];
+          const selector = i === 0
+            ? ":root"
+            : `[data-theme="${modeObj.name.toLowerCase().replace(/\s+/g, "-")}"]`;
 
-        const filePath = resolveOutputPath(variable.name, mapping, collidingBases);
-        const cssName = toCssName(variable.name);
-
-        if (!fileMap.has(filePath)) fileMap.set(filePath, []);
-        fileMap.get(filePath)!.push(`  ${cssName}: ${cssValue};`);
+          for (const variable of vars) {
+            const value = variable.valuesByMode[modeObj.modeId];
+            if (value === undefined) continue;
+            const cssValue = toCssValue(value, variableMap);
+            if (cssValue === null) continue;
+            addLine(mapping.path, selector, `  ${toCssName(variable.name)}: ${cssValue};`);
+          }
+        }
       }
     }
 
     let files: TokenFile[];
 
     if (mode === "single") {
-      // Merge everything into one file with path comments
-      const sections = Array.from(fileMap.entries()).map(
-        ([path, lines]) => `/* ${path} */\n:root {\n${lines.join("\n")}\n}`
-      );
+      const sections: string[] = [];
+      fileMap.forEach((selectorMap, path) => {
+        selectorMap.forEach((lines, selector) => {
+          sections.push(`/* ${path} */\n${selector} {\n${lines.join("\n")}\n}`);
+        });
+      });
       files = [{ path: "tokens.css", content: sections.join("\n\n") + "\n" }];
     } else {
-      files = Array.from(fileMap.entries()).map(([path, lines]) => ({
-        path,
-        content: `:root {\n${lines.join("\n")}\n}\n`,
-      }));
+      files = Array.from(fileMap.entries()).map(([path, selectorMap]) => {
+        const blocks = Array.from(selectorMap.entries()).map(
+          ([selector, lines]) => `${selector} {\n${lines.join("\n")}\n}`
+        );
+        return { path, content: blocks.join("\n\n") + "\n" };
+      });
     }
 
-    // Append text style utility classes if configured
     if (TEXT_STYLES_OUTPUT) {
       const textStyleFile = await buildTextStyleClasses();
       if (textStyleFile) files.push(textStyleFile);
@@ -137,13 +187,6 @@ async function handleExport(mappings: ExportMapping[], mode: ExportMode) {
 
 // ── Text style class generation ────────────────────────────────────────────
 
-/**
- * Derives the semantic token prefix from a Figma text style name.
- *
- * Figma style names use slash hierarchy: "label/default", "title-hero/default".
- * The first segment is the role; that role is the prefix for semantic vars
- * e.g. "label" → --label-font-family, --label-font-size, etc.
- */
 function styleNameToRole(name: string): string {
   return name.split("/")[0].toLowerCase().replace(/\s+/g, "-");
 }
@@ -152,7 +195,6 @@ async function buildTextStyleClasses(): Promise<TokenFile | null> {
   const styles = await figma.getLocalTextStylesAsync();
   if (styles.length === 0) return null;
 
-  // Deduplicate by role — one class per role, using the first matching style
   const seen = new Set<string>();
   const classes: string[] = [];
 
@@ -201,7 +243,6 @@ function resolveOutputPath(
   const segment = variableName.split("/")[0].toLowerCase().replace(/\s+/g, "-");
   const base = mapping.path;
 
-  // Collision: two collections share the same base folder → add collection slug subfolder
   if (collidingBases.has(base)) {
     const slug = mapping.collectionName.toLowerCase().replace(/\s+/g, "-");
     return `${base}/${slug}/${segment}.css`;

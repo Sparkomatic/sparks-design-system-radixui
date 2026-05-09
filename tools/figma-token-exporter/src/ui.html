@@ -236,7 +236,7 @@
     const emptyState   = document.getElementById("empty-state");
     const modeOptions  = document.getElementById("mode-options");
 
-    let collectionState = {}; // id → { name, path, autoSplit, checked }
+    let collectionState = {}; // id → { name, path, autoSplit, modesCount, modeNames, checked }
     let exportMode = "separate";
     let exportedFiles = [];
 
@@ -323,7 +323,14 @@
           return;
         }
         msg.collections.forEach((c) => {
-          collectionState[c.id] = { name: c.name, path: c.suggestedPath, autoSplit: c.autoSplit, checked: true };
+          collectionState[c.id] = {
+            name: c.name,
+            path: c.suggestedPath,
+            autoSplit: c.autoSplit,
+            modesCount: c.modesCount,
+            modeNames: c.modeNames,
+            checked: true,
+          };
         });
         renderCollections(msg.collections);
         showCollections();
@@ -400,6 +407,43 @@
     };
 
     // ── Render collections ────────────────────────────────────────────────
+    // Returns true if this collection should show a "split" option at all
+    function hasSplitOption(state) {
+      const isComponent = state.name.toLowerCase().includes("component");
+      return isComponent || state.modesCount > 1;
+    }
+
+    // Returns the label text and hint for the split checkbox
+    function splitMeta(state) {
+      const isComponent = state.name.toLowerCase().includes("component");
+      if (isComponent) {
+        return {
+          label: "one file per component",
+          hint: state.autoSplit && state.path
+            ? `→ ${state.path}/button.css, ${state.path}/input.css…`
+            : null,
+        };
+      }
+      // Multi-mode collection
+      const [first, ...rest] = state.modeNames || [];
+      if (state.autoSplit) {
+        const slug = (state.path || "").replace(/\.css$/, "");
+        const examples = (state.modeNames || [])
+          .map((m) => `${slug}-${m.toLowerCase().replace(/\s+/g, "-")}.css`)
+          .join(", ");
+        return { label: "one file per mode", hint: `→ ${examples}` };
+      }
+      const darkSelector = rest.length
+        ? `[data-theme="${rest[0].toLowerCase().replace(/\s+/g, "-")}"]`
+        : null;
+      return {
+        label: "one file per mode",
+        hint: darkSelector
+          ? `→ :root { } + ${darkSelector} { } in one file`
+          : null,
+      };
+    }
+
     function renderCollections(collections) {
       collectList.innerHTML = "";
       collections.forEach((c) => {
@@ -407,27 +451,27 @@
         const row = document.createElement("div");
         row.className = "col-row" + (state.checked ? " selected" : "");
 
-        const splitHint = state.autoSplit && state.checked
-          ? `<span class="split-hint">→ ${state.path}/button.css, ${state.path}/input.css…</span>`
-          : "";
+        const showSplit = hasSplitOption(state);
+        const meta = splitMeta(state);
 
         row.innerHTML = `
           <input type="checkbox" class="col-check" ${state.checked ? "checked" : ""} />
           <div class="col-body">
             <div class="col-header">
-              <span class="col-name ${state.checked ? "" : "muted"}">${c.name}</span>
-              <span class="col-count">${c.count} vars</span>
+              <span class="col-name ${state.checked ? "" : "muted"}">${escHtml(c.name)}</span>
+              <span class="col-count">${c.count} vars${c.modesCount > 1 ? ` · ${c.modesCount} modes` : ""}</span>
             </div>
             <div class="col-path-row">
               <input type="text" class="col-path" value="${escAttr(state.path)}"
                 placeholder="src/tokens/..." ${state.checked ? "" : "disabled"} />
+              ${showSplit ? `
               <label class="split-label ${state.checked ? "" : "muted"}">
                 <input type="checkbox" class="split-check" ${state.autoSplit ? "checked" : ""}
                   ${state.checked ? "" : "disabled"} />
-                split
-              </label>
+                ${escHtml(meta.label)}
+              </label>` : ""}
             </div>
-            ${splitHint}
+            ${meta.hint ? `<span class="split-hint">${escHtml(meta.hint)}</span>` : ""}
           </div>
         `;
 
@@ -440,10 +484,10 @@
         checkbox.addEventListener("change", () => {
           state.checked = checkbox.checked;
           row.className = "col-row" + (state.checked ? " selected" : "");
-          nameEl.className  = "col-name" + (state.checked ? "" : " muted");
-          splitLbl.className = "split-label" + (state.checked ? "" : " muted");
+          nameEl.className = "col-name" + (state.checked ? "" : " muted");
+          if (splitLbl) splitLbl.className = "split-label" + (state.checked ? "" : " muted");
           pathInput.disabled = !state.checked;
-          splitChk.disabled  = !state.checked;
+          if (splitChk) splitChk.disabled = !state.checked;
           refreshHint(row, state);
         });
 
@@ -452,10 +496,12 @@
           refreshHint(row, state);
         });
 
-        splitChk.addEventListener("change", () => {
-          state.autoSplit = splitChk.checked;
-          refreshHint(row, state);
-        });
+        if (splitChk) {
+          splitChk.addEventListener("change", () => {
+            state.autoSplit = splitChk.checked;
+            refreshHint(row, state);
+          });
+        }
 
         collectList.appendChild(row);
       });
@@ -464,10 +510,11 @@
     function refreshHint(row, state) {
       const existing = row.querySelector(".split-hint");
       if (existing) existing.remove();
-      if (state.autoSplit && state.checked && state.path) {
+      const meta = splitMeta(state);
+      if (meta.hint && state.checked) {
         const hint = document.createElement("span");
         hint.className = "split-hint";
-        hint.textContent = `→ ${state.path}/button.css, ${state.path}/input.css…`;
+        hint.textContent = meta.hint;
         row.querySelector(".col-body").appendChild(hint);
       }
     }
