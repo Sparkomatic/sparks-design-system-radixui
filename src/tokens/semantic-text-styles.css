@@ -78,3 +78,11 @@
   line-height: var(--code-line-height);
   letter-spacing: var(--code-letter-spacing);
 }
+
+.ts-ui {
+  font-family: var(--ui-font-family);
+  font-size: var(--ui-font-size);
+  font-weight: var(--ui-font-weight);
+  line-height: var(--ui-line-height);
+  letter-spacing: var(--ui-letter-spacing);
+}

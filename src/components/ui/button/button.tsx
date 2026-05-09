@@ -19,9 +19,9 @@ const buttonVariants = cva(
         destructive: "button-destructive",
       },
       size: {
-        sm: "button-size-sm ts-label",
-        md: "button-size-md ts-label",
-        lg: "button-size-lg ts-label",
+        sm: "button-size-sm ts-ui",
+        md: "button-size-md ts-ui",
+        lg: "button-size-lg ts-ui",
       },
     },
     defaultVariants: {

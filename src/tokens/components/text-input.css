@@ -17,7 +17,7 @@
   --text-input-color-placeholder: var(--border-focus);
   --text-input-color-border: var(--border-default);
   --text-input-color-icon: var(--border-focus);
-  --text-input-color-hover-border: var(--border-strong);
+  --text-input-color-hover-border: var(--border-emphasis);
   --text-input-color-focus-border: var(--border-primary-default);
   --text-input-color-error-border: var(--border-destructive-default);
   --text-input-color-error-foreground: var(--foreground-destructive-default);

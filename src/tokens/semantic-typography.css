@@ -37,10 +37,10 @@
   --body-line-height: var(--typography-line-height-24);
   --body-letter-spacing: var(--typography-letter-spacing-0);
   --label-font-family: var(--typography-font-family-sans);
-  --label-font-size: var(--typography-font-size-14);
+  --label-font-size: var(--typography-font-size-12);
   --label-font-weight: var(--typography-font-style-regular);
   --label-font-weight-strong: var(--typography-font-style-bold);
-  --label-line-height: var(--typography-line-height-18);
+  --label-line-height: var(--typography-line-height-16);
   --label-letter-spacing: var(--typography-letter-spacing-1);
   --caption-font-family: var(--typography-font-family-sans);
   --caption-font-size: var(--typography-font-size-12);
@@ -59,4 +59,10 @@
   --section-title-font-weight-strong: var(--typography-font-style-bold);
   --section-title-line-height: var(--typography-line-height-20);
   --section-title-letter-spacing: var(--typography-letter-spacing-2);
+  --ui-font-family: var(--typography-font-family-sans);
+  --ui-font-size: var(--typography-font-size-14);
+  --ui-font-weight: var(--typography-font-style-regular);
+  --ui-font-weight-strong: var(--typography-font-style-bold);
+  --ui-line-height: var(--typography-line-height-18);
+  --ui-letter-spacing: var(--typography-letter-spacing-1);
 }
