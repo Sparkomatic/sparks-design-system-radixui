@@ -1,0 +1,108 @@
+/* ── Content panel ───────────────────────────────────────────────────────────
+ * Applied to DropdownMenuContent and DropdownMenuSubContent.
+ * ─────────────────────────────────────────────────────────────────────────── */
+
+.dropdown-menu-content {
+  background-color: var(--dropdown-menu-content-color-background);
+  border:           var(--dropdown-menu-content-border-width) solid var(--dropdown-menu-content-color-border);
+  border-radius:    var(--dropdown-menu-content-radius);
+  padding:          var(--dropdown-menu-content-padding);
+  /* shadow not in token system — matches Figma drop-shadow (y:4 blur:12 12% opacity) */
+  box-shadow: 0 4px 12px rgb(0 0 0 / 0.12);
+}
+
+/* ── Item base ───────────────────────────────────────────────────────────────
+ * Layout and default-state colours for all menu items.
+ * ─────────────────────────────────────────────────────────────────────────── */
+
+.dropdown-menu-item {
+  color:          var(--dropdown-menu-item-color-foreground);
+  padding-inline: var(--dropdown-menu-item-padding-x);
+  padding-block:  var(--dropdown-menu-item-padding-y);
+  gap:            var(--dropdown-menu-item-gap);
+  border-radius:  4px;
+}
+
+.dropdown-menu-item[data-highlighted] {
+  background-color: var(--dropdown-menu-item-color-hover-background);
+  color:            var(--dropdown-menu-item-color-hover-foreground);
+}
+
+/* data-state=open covers SubTrigger when its submenu is open — same visual as highlighted */
+.dropdown-menu-item[data-state="open"] {
+  background-color: var(--dropdown-menu-item-color-hover-background);
+  color:            var(--dropdown-menu-item-color-hover-foreground);
+}
+
+.dropdown-menu-item[data-disabled] {
+  color: var(--dropdown-menu-item-color-disabled-foreground);
+}
+
+/* ── Destructive item ────────────────────────────────────────────────────────
+ * Extends .dropdown-menu-item — overrides colour tokens only.
+ * ─────────────────────────────────────────────────────────────────────────── */
+
+.dropdown-menu-item-destructive {
+  color: var(--dropdown-menu-item-color-destructive-foreground);
+}
+
+.dropdown-menu-item-destructive[data-highlighted] {
+  background-color: var(--dropdown-menu-item-color-destructive-hover-background);
+  color:            var(--dropdown-menu-item-color-destructive-hover-foreground);
+}
+
+.dropdown-menu-item-destructive[data-disabled] {
+  color: var(--dropdown-menu-item-color-disabled-foreground);
+}
+
+/* ── Icon slot ───────────────────────────────────────────────────────────────
+ * Icon colour tracks the item state. Applied to the icon wrapper span.
+ * ─────────────────────────────────────────────────────────────────────────── */
+
+.dropdown-menu-item-icon {
+  color: var(--dropdown-menu-item-color-icon);
+  flex-shrink: 0;
+}
+
+.dropdown-menu-item[data-highlighted] .dropdown-menu-item-icon,
+.dropdown-menu-item[data-state="open"] .dropdown-menu-item-icon {
+  color: var(--dropdown-menu-item-color-hover-icon);
+}
+
+.dropdown-menu-item[data-disabled] .dropdown-menu-item-icon {
+  color: var(--dropdown-menu-item-color-disabled-icon);
+}
+
+.dropdown-menu-item-destructive .dropdown-menu-item-icon {
+  color: var(--dropdown-menu-item-color-destructive-icon);
+}
+
+/* ── Shortcut hint ───────────────────────────────────────────────────────────
+ * Trailing keyboard shortcut text (e.g. ⌘K). Pushed to the right by flex.
+ * ─────────────────────────────────────────────────────────────────────────── */
+
+.dropdown-menu-shortcut {
+  color:       var(--dropdown-menu-item-color-shortcut);
+  margin-left: auto;
+}
+
+/* ── Section label ───────────────────────────────────────────────────────────
+ * Uppercase group label — maps to Figma .Label component.
+ * ─────────────────────────────────────────────────────────────────────────── */
+
+.dropdown-menu-label {
+  color:          var(--dropdown-menu-label-color-foreground);
+  padding-inline: var(--dropdown-menu-label-padding-x);
+  padding-block:  var(--dropdown-menu-label-padding-y);
+  text-transform: uppercase;
+}
+
+/* ── Separator ───────────────────────────────────────────────────────────────
+ * 1px divider line. margin-block provides the gap-y spacing from the token.
+ * ─────────────────────────────────────────────────────────────────────────── */
+
+.dropdown-menu-separator {
+  height:           1px;
+  background-color: var(--dropdown-menu-separator-color);
+  margin-block:     var(--dropdown-menu-separator-gap-y);
+}
