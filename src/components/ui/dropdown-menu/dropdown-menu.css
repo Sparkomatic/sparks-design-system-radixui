@@ -3,6 +3,9 @@
  * ─────────────────────────────────────────────────────────────────────────── */
 
 .dropdown-menu-content {
+  display:          flex;
+  flex-direction:   column;
+  gap:              var(--dropdown-menu-content-gap);
   background-color: var(--dropdown-menu-content-color-background);
   border:           var(--dropdown-menu-content-border-width) solid var(--dropdown-menu-content-color-border);
   border-radius:    var(--dropdown-menu-content-radius);
@@ -16,11 +19,12 @@
  * ─────────────────────────────────────────────────────────────────────────── */
 
 .dropdown-menu-item {
-  color:          var(--dropdown-menu-item-color-foreground);
-  padding-inline: var(--dropdown-menu-item-padding-x);
-  padding-block:  var(--dropdown-menu-item-padding-y);
-  gap:            var(--dropdown-menu-item-gap);
-  border-radius:  4px;
+  background-color: var(--dropdown-menu-item-color-background);
+  color:            var(--dropdown-menu-item-color-foreground);
+  padding-inline:   var(--dropdown-menu-item-padding-x);
+  padding-block:    var(--dropdown-menu-item-padding-y);
+  gap:              var(--dropdown-menu-item-gap);
+  border-radius:    4px;
 }
 
 .dropdown-menu-item[data-highlighted] {
@@ -43,7 +47,8 @@
  * ─────────────────────────────────────────────────────────────────────────── */
 
 .dropdown-menu-item-destructive {
-  color: var(--dropdown-menu-item-color-destructive-foreground);
+  background-color: var(--dropdown-menu-item-color-destructive-background);
+  color:            var(--dropdown-menu-item-color-destructive-foreground);
 }
 
 .dropdown-menu-item-destructive[data-highlighted] {
