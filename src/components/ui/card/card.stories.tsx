@@ -23,10 +23,10 @@ type Story = StoryObj<typeof meta>
 
 function ImageSlot() {
   return (
-    <div
-      className="w-full h-full"
-      style={{ background: "var(--border-default)" }}
-      aria-label="Image placeholder"
+    <img
+      src="https://placehold.co/320x160"
+      alt=""
+      className="w-full h-full object-cover"
     />
   )
 }
