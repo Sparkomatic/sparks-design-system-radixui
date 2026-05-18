@@ -157,7 +157,7 @@ export const Minimal: Story = {
 export const AllCombinations: Story = {
   parameters: { controls: { disable: true } },
   render: () => (
-    <div className="flex flex-wrap gap-6 p-8">
+    <div className="flex flex-wrap items-start gap-6 p-8">
       <ComposedCard showImage={false} showSubtitle showDescription showCTA />
       <ComposedCard showImage showSubtitle showDescription showCTA />
       <ComposedCard showImage={false} showSubtitle={false} showDescription showCTA />
