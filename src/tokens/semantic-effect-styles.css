@@ -1,16 +1,16 @@
 /* auto-generated — do not edit. Regenerate via Figma token export. */
 .es-shadow-raised {
-  box-shadow: 0px 2px 8px 0px oklch(16.9690% 0.0254 250.5273 / 0.1200);
+  box-shadow: 0px 2px 8px 0px var(--shadow-raised-color);
 }
 
 .es-shadow-overlay {
-  box-shadow: 0px 8px 32px 0px oklch(16.9690% 0.0254 250.5273 / 0.2400);
+  box-shadow: 0px 8px 32px 0px var(--shadow-overlay-color);
 }
 
 .es-shadow-sticky {
-  box-shadow: 0px 1px 4px 0px oklch(16.9690% 0.0254 250.5273 / 0.1400);
+  box-shadow: 0px 1px 4px 0px var(--shadow-sticky-color);
 }
 
 .es-shadow-focus {
-  box-shadow: 0px 0px 0px 3px oklch(61.0658% 0.1559 247.8566 / 0.4000);
+  box-shadow: 0px 0px 0px 3px var(--shadow-focus-color);
 }

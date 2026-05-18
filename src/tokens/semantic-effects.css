@@ -1,8 +1,8 @@
 :root {
-  --shadow-raised-color: oklch(16.9690% 0.0254 250.5273 / 0.1200);
-  --shadow-overlay-color: oklch(16.9690% 0.0254 250.5273 / 0.2400);
-  --shadow-sticky-color: oklch(16.9690% 0.0254 250.5273 / 0.1400);
-  --shadow-focus-color: oklch(61.0658% 0.1559 247.8566 / 0.4000);
+  --shadow-raised-color: var(--shadow-raised);
+  --shadow-overlay-color: var(--shadow-overlay);
+  --shadow-sticky-color: var(--shadow-sticky);
+  --shadow-focus-color: var(--shadow-focus);
   --shadow-raised-y: 2px;
   --shadow-raised-blur: 8px;
   --shadow-raised-spread: 0px;

@@ -90,6 +90,10 @@
   --border-error-default: var(--colors-crimson-rose-500);
   --border-error-emphasis: var(--colors-crimson-rose-700);
   --foreground-on-error: var(--colors-steel-grey-50);
+  --shadow-raised: oklch(16.9690% 0.0254 250.5273 / 0.1200);
+  --shadow-overlay: oklch(16.9690% 0.0254 250.5273 / 0.2400);
+  --shadow-sticky: oklch(16.9690% 0.0254 250.5273 / 0.1400);
+  --shadow-focus: oklch(61.0658% 0.1559 247.8566 / 0.4000);
 }
 
 [data-theme="dark"] {
@@ -184,4 +188,8 @@
   --border-error-default: var(--colors-crimson-rose-400);
   --border-error-emphasis: var(--colors-crimson-rose-300);
   --foreground-on-error: var(--colors-steel-grey-50);
+  --shadow-raised: oklch(100.0000% 0.0000 0 / 0.0800);
+  --shadow-overlay: oklch(100.0000% 0.0000 0 / 0.1600);
+  --shadow-sticky: oklch(100.0000% 0.0000 0 / 0.1000);
+  --shadow-focus: oklch(61.0658% 0.1559 247.8566 / 0.5000);
 }
