@@ -27,5 +27,6 @@ node_modules/.tmp
 .env.local
 .env.*.local
 
-# Claude Code worktrees
+# Claude Code
 .claude/worktrees/
+.claude/settings.json
