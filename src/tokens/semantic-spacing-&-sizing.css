@@ -49,4 +49,10 @@
   --max-width-tooltip: 240px;
   --max-height-dropdown: 280px;
   --max-height-popover: 320px;
+  --height-media-sm: 120px;
+  --height-media-md: 180px;
+  --height-media-lg: 240px;
+  --spacing-tight: var(--spacing-4);
+  --spacing-type-pair-tight: var(--spacing-4);
+  --spacing-type-pair-loose: var(--spacing-12);
 }

@@ -65,4 +65,16 @@
   --ui-font-weight-strong: var(--typography-font-style-bold);
   --ui-line-height: var(--typography-line-height-18);
   --ui-letter-spacing: var(--typography-letter-spacing-1);
+  --title-font-family: var(--typography-font-family-sans);
+  --title-font-size: var(--typography-font-size-16);
+  --title-font-weight: var(--typography-font-style-regular);
+  --title-font-weight-strong: var(--typography-font-style-semi-bold);
+  --title-line-height: var(--typography-line-height-20);
+  --title-letter-spacing: var(--typography-letter-spacing-0);
+  --detail-font-family: var(--typography-font-family-sans);
+  --detail-font-size: var(--typography-font-size-14);
+  --detail-font-weight: var(--typography-font-style-regular);
+  --detail-font-weight-strong: var(--typography-font-style-semi-bold);
+  --detail-line-height: var(--typography-line-height-18);
+  --detail-letter-spacing: var(--typography-letter-spacing-0);
 }

@@ -27,4 +27,5 @@
   --dropdown-menu-label-padding-x: var(--spacing-control-x-md);
   --dropdown-menu-label-padding-y: var(--spacing-stack);
   --dropdown-menu-separator-gap-y: var(--spacing-stack);
+  --dropdown-menu-content-gap: var(--spacing-0);
 }

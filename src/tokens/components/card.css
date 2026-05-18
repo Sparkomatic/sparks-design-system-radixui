@@ -1,0 +1,13 @@
+:root {
+  --card-color-background: var(--background-raised);
+  --card-color-border: var(--border-default);
+  --card-title-color-foreground: var(--foreground-default);
+  --card-subtitle-color-foreground: var(--foreground-default);
+  --card-description-color-foreground: var(--foreground-muted);
+  --card-border-width: var(--border-hairline);
+  --card-padding: var(--spacing-layout-gap);
+  --card-gap: var(--spacing-content-gap);
+  --card-radius: var(--radius-card-md);
+  --card-image-height: var(--height-media-md);
+  --card-header-gap: var(--spacing-tight);
+}

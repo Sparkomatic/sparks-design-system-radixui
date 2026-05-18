@@ -1,0 +1,69 @@
+/* ── Card root ─────────────────────────────────────────────────────────────
+ * Applied to Card. Colour, shape via component tokens from
+ * src/tokens/components/card.css. Shadow via .es-shadow-raised from
+ * src/tokens/semantic-effect-styles.css.
+ * ───────────────────────────────────────────────────────────────────────── */
+
+.card {
+  background-color: var(--card-color-background);
+  border:           var(--card-border-width) solid var(--card-color-border);
+  border-radius:    var(--card-radius);
+}
+
+/* ── Image slot ─────────────────────────────────────────────────────────── */
+
+.card-image {
+  height: var(--card-image-height);
+}
+
+/* ── Content area ───────────────────────────────────────────────────────── */
+
+.card-content {
+  padding: var(--card-padding);
+  gap:     var(--card-gap);
+}
+
+/* ── Header ─────────────────────────────────────────────────────────────── */
+
+.card-header {
+  gap: var(--card-header-gap);
+}
+
+/* ── Title ──────────────────────────────────────────────────────────────── */
+
+.card-title {
+  color:          var(--card-title-color-foreground);
+  font-family:    var(--heading-font-family);
+  font-size:      var(--heading-font-size);
+  font-weight:    var(--heading-font-weight-strong);
+  line-height:    var(--heading-line-height);
+  letter-spacing: var(--heading-letter-spacing);
+}
+
+/* ── Subtitle ───────────────────────────────────────────────────────────── */
+
+.card-subtitle {
+  color:          var(--card-subtitle-color-foreground);
+  font-family:    var(--body-font-family);
+  font-size:      var(--body-font-size);
+  font-weight:    var(--body-font-weight);
+  line-height:    var(--body-line-height);
+  letter-spacing: var(--body-letter-spacing);
+}
+
+/* ── Description ────────────────────────────────────────────────────────── */
+
+.card-description {
+  color:          var(--card-description-color-foreground);
+  font-family:    var(--body-font-family);
+  font-size:      var(--body-font-size);
+  font-weight:    var(--body-font-weight);
+  line-height:    var(--body-line-height);
+  letter-spacing: var(--body-letter-spacing);
+}
+
+/* ── Footer (CTA slot) ──────────────────────────────────────────────────── */
+
+.card-footer > * {
+  width: 100%;
+}

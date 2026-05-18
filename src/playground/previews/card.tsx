@@ -1,23 +1,50 @@
 import { Section, Row } from "@/playground/components"
-import { Card, CardHeader, CardTitle, CardDescription, CardBody, CardFooter } from "@/components/ui/card"
+import {
+  Card, CardImage, CardContent, CardHeader,
+  CardTitle, CardSubtitle, CardDescription, CardFooter,
+} from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 
-function SampleCard({ variant }: { variant?: "default" | "ghost" | "elevated" }) {
+function ImagePlaceholder() {
   return (
-    <Card variant={variant} className="w-72">
-      <CardHeader>
-        <CardTitle>Card title</CardTitle>
-        <CardDescription>Supporting description text for this card.</CardDescription>
-      </CardHeader>
-      <CardBody>
-        <p className="text-sm text-muted-foreground">
-          Card body content goes here. This area holds the main information.
-        </p>
-      </CardBody>
-      <CardFooter>
-        <Button size="sm">Action</Button>
-        <Button size="sm" variant="ghost">Cancel</Button>
-      </CardFooter>
+    <div
+      className="w-full h-full"
+      style={{ background: "var(--border-default)" }}
+      aria-hidden
+    />
+  )
+}
+
+function SampleCard({
+  showImage = false,
+  showSubtitle = true,
+  showDescription = true,
+  showCTA = true,
+}: {
+  showImage?: boolean
+  showSubtitle?: boolean
+  showDescription?: boolean
+  showCTA?: boolean
+}) {
+  return (
+    <Card className="w-72">
+      {showImage && <CardImage><ImagePlaceholder /></CardImage>}
+      <CardContent>
+        <CardHeader>
+          <CardTitle>Card Title</CardTitle>
+          {showSubtitle && <CardSubtitle>Card subtitle text</CardSubtitle>}
+        </CardHeader>
+        {showDescription && (
+          <CardDescription>
+            A short description of this card content goes here.
+          </CardDescription>
+        )}
+        {showCTA && (
+          <CardFooter>
+            <Button variant="primary" size="md">Learn More</Button>
+          </CardFooter>
+        )}
+      </CardContent>
     </Card>
   )
 }
@@ -26,28 +53,20 @@ export function CardPreview() {
   return (
     <Section
       title="Card"
-      description="Unstyled skeleton — no design tokens yet. Compound parts and variants are wired; styles will come from Figma."
+      description="Layout component with optional image, subtitle, description, and CTA slots. Maps to Card in Figma."
     >
-      <Row label="Variants">
-        <SampleCard variant="default" />
-        <SampleCard variant="elevated" />
-        <SampleCard variant="ghost" />
+      <Row label="Full card">
+        <SampleCard showSubtitle showDescription showCTA />
       </Row>
-
-      <Row label="Parts in isolation">
-        <Card className="w-72">
-          <CardHeader>
-            <CardTitle>Title only</CardTitle>
-          </CardHeader>
-          <CardBody>Body only, no footer.</CardBody>
-        </Card>
-
-        <Card className="w-72">
-          <CardBody>Body + footer, no header.</CardBody>
-          <CardFooter>
-            <Button size="sm">Go</Button>
-          </CardFooter>
-        </Card>
+      <Row label="With image">
+        <SampleCard showImage showSubtitle showDescription showCTA />
+      </Row>
+      <Row label="Content options">
+        <SampleCard showSubtitle={false} showDescription showCTA />
+        <SampleCard showSubtitle showDescription={false} showCTA={false} />
+      </Row>
+      <Row label="Minimal">
+        <SampleCard showSubtitle={false} showDescription={false} showCTA={false} />
       </Row>
     </Section>
   )

@@ -86,3 +86,19 @@
   line-height: var(--ui-line-height);
   letter-spacing: var(--ui-letter-spacing);
 }
+
+.ts-title {
+  font-family: var(--title-font-family);
+  font-size: var(--title-font-size);
+  font-weight: var(--title-font-weight);
+  line-height: var(--title-line-height);
+  letter-spacing: var(--title-letter-spacing);
+}
+
+.ts-detail {
+  font-family: var(--detail-font-family);
+  font-size: var(--detail-font-size);
+  font-weight: var(--detail-font-weight);
+  line-height: var(--detail-line-height);
+  letter-spacing: var(--detail-letter-spacing);
+}
