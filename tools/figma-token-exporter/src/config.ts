@@ -24,6 +24,12 @@ export const COLLECTION_MAP: Record<string, string | null> = {
 export const TEXT_STYLES_OUTPUT = "src/tokens/semantic-text-styles.css";
 
 /**
+ * Output path for the generated effect-style utility classes.
+ * Set to null to skip effect style export.
+ */
+export const EFFECT_STYLES_OUTPUT: string | null = "src/tokens/semantic-effect-styles.css";
+
+/**
  * CSS properties emitted per text style class, in order.
  * Values reference semantic typography CSS custom properties.
  */

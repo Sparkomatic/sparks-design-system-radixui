@@ -1,6 +1,6 @@
 /// <reference types="@figma/plugin-typings" />
 
-import { OKLCH_PRECISION, FLOAT_UNIT, TEXT_STYLES_OUTPUT, TEXT_STYLE_PROPS } from "./config";
+import { OKLCH_PRECISION, FLOAT_UNIT, TEXT_STYLES_OUTPUT, TEXT_STYLE_PROPS, EFFECT_STYLES_OUTPUT } from "./config";
 
 declare const __html__: string;
 
@@ -179,6 +179,11 @@ async function handleExport(mappings: ExportMapping[], mode: ExportMode) {
       if (textStyleFile) files.push(textStyleFile);
     }
 
+    if (EFFECT_STYLES_OUTPUT) {
+      const effectStyleFile = await buildEffectStyleClasses(variableMap);
+      if (effectStyleFile) files.push(effectStyleFile);
+    }
+
     figma.ui.postMessage({ type: "export-result", files });
   } catch (err) {
     figma.ui.postMessage({ type: "error", message: String(err) });
@@ -218,6 +223,80 @@ async function buildTextStyleClasses(): Promise<TokenFile | null> {
     path: TEXT_STYLES_OUTPUT,
     content: header + classes.join("\n\n") + "\n",
   };
+}
+
+// ── Effect style class generation ──────────────────────────────────────────
+
+async function buildEffectStyleClasses(
+  variableMap: Map<string, Variable>
+): Promise<TokenFile | null> {
+  const styles = await figma.getLocalEffectStylesAsync();
+  if (styles.length === 0) return null;
+
+  const classes: string[] = [];
+
+  for (const style of styles) {
+    const className = styleNameToClass(style.name);
+    const props: string[] = [];
+
+    const shadows = style.effects.filter(
+      (e): e is DropShadowEffect | InnerShadowEffect =>
+        e.visible && (e.type === "DROP_SHADOW" || e.type === "INNER_SHADOW")
+    );
+    const layerBlurs = style.effects.filter(
+      (e): e is BlurEffect => e.visible && e.type === "LAYER_BLUR"
+    );
+    const bgBlurs = style.effects.filter(
+      (e): e is BlurEffect => e.visible && e.type === "BACKGROUND_BLUR"
+    );
+
+    if (shadows.length > 0) {
+      const parts = shadows.map((e) => shadowEffectToCss(e, variableMap));
+      props.push(`  box-shadow: ${parts.join(", ")};`);
+    }
+    if (layerBlurs.length > 0) {
+      props.push(`  filter: ${layerBlurs.map((e) => `blur(${e.radius}px)`).join(" ")};`);
+    }
+    if (bgBlurs.length > 0) {
+      props.push(`  backdrop-filter: ${bgBlurs.map((e) => `blur(${e.radius}px)`).join(" ")};`);
+    }
+
+    if (props.length === 0) continue;
+    classes.push(`.es-${className} {\n${props.join("\n")}\n}`);
+  }
+
+  if (classes.length === 0) return null;
+
+  const header = `/* auto-generated — do not edit. Regenerate via Figma token export. */\n`;
+  return {
+    path: EFFECT_STYLES_OUTPUT!,
+    content: header + classes.join("\n\n") + "\n",
+  };
+}
+
+function styleNameToClass(name: string): string {
+  return name.toLowerCase().replace(/\s+/g, "-").replace(/\//g, "-");
+}
+
+function shadowEffectToCss(
+  effect: DropShadowEffect | InnerShadowEffect,
+  variableMap: Map<string, Variable>
+): string {
+  const inset = effect.type === "INNER_SHADOW" ? "inset " : "";
+  const x = effect.offset.x;
+  const y = effect.offset.y;
+  const blur = effect.radius;
+  const spread = effect.spread ?? 0;
+
+  const colorAlias = effect.boundVariables?.color as VariableAlias | undefined;
+  const colorStr = colorAlias
+    ? (() => {
+        const ref = variableMap.get(colorAlias.id);
+        return ref ? `var(${toCssName(ref.name)})` : colorToOklch(effect.color);
+      })()
+    : colorToOklch(effect.color);
+
+  return `${inset}${x}px ${y}px ${blur}px ${spread}px ${colorStr}`;
 }
 
 function cssPropertyToTokenSuffix(prop: typeof TEXT_STYLE_PROPS[number]): string {
