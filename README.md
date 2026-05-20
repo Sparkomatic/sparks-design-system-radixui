@@ -46,7 +46,26 @@ Analyse the current state and produce the system overview.
 
 ### Start the component
 
-Open a new Claude Code session and use the appropriate starter phrase from `CLAUDE.md` — there are two: one for when the Figma design doesn't exist yet, one for when it already exists on the canvas (e.g. imported from a UI library). Replace `[ComponentName]` with the component name exactly as it should appear in Figma and code (e.g. `Button`, `Badge`, `Select`).
+Open a new Claude Code session and use the appropriate starter phrase below. Replace `[ComponentName]` with the component name exactly as it appears in Figma and code (e.g. `Button`, `Badge`, `Select`).
+
+**Design does not yet exist — create it from scratch:**
+
+```
+Using AI-DLC Lite, create a [ComponentName] component: design it on the Figma
+canvas with all variants and states bound to existing tokens, then once approved
+implement it as a Radix UI code component.
+```
+
+**Design already exists on the Figma canvas** (e.g. imported from a UI library):
+
+```
+Using AI-DLC Lite, implement the [ComponentName] component from the existing Figma
+design: the component is already on the canvas, audit it for token compliance and
+rebind any hardcoded values to system tokens, then once approved implement it as a
+Radix UI code component.
+```
+
+In the second case, Pass 1 shifts from creation to audit-and-retrofit. Everything else (Gate 1, Pass 2, Gate 2, Definition of Done) is identical.
 
 **What happens automatically (you wait):**
 
