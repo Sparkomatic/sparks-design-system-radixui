@@ -16,7 +16,7 @@ The library is built on Radix UI primitives (behaviour + accessibility), styled 
 
 | # | Transaction | Description |
 |---|---|---|
-| T1 | Export tokens from Figma | Designer exports variables/styles from Figma using the embedded figma-token-exporter plugin, producing CSS files in src/tokens/ |
+| T1 | Export tokens from Figma | Designer exports variables/styles from Figma using the figma-token-exporter plugin (lives in the separate figma-tools repo), producing CSS files in src/tokens/ |
 | T2 | Sync token imports | `npm run sync-tokens` regenerates src/tokens/index.css to pick up newly exported files and corrects font-family names for variable fonts |
 | T3 | Build a component | Developer implements a React component in src/components/ui/{name}/ using Radix primitives, CVA, and the exported component tokens |
 | T4 | QA component in Playground during build | While building a component, the developer runs `npm run dev` and opens localhost:5173 to visually verify all variants, sizes, and states before the component is considered done — an internal build-time check, not end-use |
@@ -54,7 +54,7 @@ The library is built on Radix UI primitives (behaviour + accessibility), styled 
 |   FIGMA (source of truth)                                              |
 |   Primitives -> Semantic Variables -> Component Variables              |
 |        |                                                               |
-|        | figma-token-exporter plugin (tools/)                         |
+|        | figma-token-exporter plugin (figma-tools repo)               |
 |        v                                                               |
 |   src/tokens/                                                          |
 |   primitives.css   semantic-*.css   components/*.css                  |
@@ -81,7 +81,7 @@ The library is built on Radix UI primitives (behaviour + accessibility), styled 
 ```mermaid
 graph TD
     Figma["Figma File\n(Variables + Styles)"]
-    FigmaPlugin["figma-token-exporter\n(tools/figma-token-exporter)"]
+    FigmaPlugin["figma-token-exporter\n(figma-tools repo)"]
     PrimCSS["primitives.css\n(oklch palette)"]
     SemCSS["semantic-*.css\n(purpose aliases)"]
     CompCSS["components/*.css\n(component token vars)"]
@@ -116,7 +116,7 @@ graph TD
 |---|---|---|---|
 | src/tokens/ | Token layer | CSS custom property cascade — primitives → semantic → component | Figma token exporter |
 | scripts/sync-token-imports.mjs | Build script | Regenerates src/tokens/index.css, corrects variable font names | Node.js ESM |
-| tools/figma-token-exporter | Figma plugin | Exports Figma variables and text styles as CSS to src/tokens/ | Figma Plugin API |
+| figma-tools/figma-token-exporter | Figma plugin | Exports Figma variables and text styles as CSS to src/tokens/ — lives in the separate figma-tools repo | Figma Plugin API |
 | src/components/ui/ | UI component layer | React components built on Radix primitives, styled by tokens | Radix UI, CVA, Tailwind |
 | src/playground/ | Dev review app | Vite SPA for quick visual review of all components and themes | Vite, React |
 | .storybook/ | Documentation | Storybook config: a11y addon, pseudo-states, theme toggle | Storybook 10, axe |
@@ -208,8 +208,6 @@ sparks-design-system-radixui/
 |   +-- test-runner.ts           axe-playwright config
 +-- scripts/
 |   +-- sync-token-imports.mjs   Generates tokens/index.css, fixes font names
-+-- tools/
-|   +-- figma-token-exporter/    Figma plugin source (code.ts, ui.html, config.ts)
 +-- .aidlc-lite-rule-details/    AI-DLC Lite workflow rule files
 +-- aidlc-docs/                  AI-DLC documentation artifacts
 +-- vite.config.ts
