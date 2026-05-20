@@ -46,13 +46,26 @@ Analyse the current state and produce the system overview.
 
 ### Start the component
 
-Open a new Claude Code session and type:
+Open a new Claude Code session and type one of the following depending on whether the Figma design already exists.
+
+**Design does not yet exist — create it from scratch:**
 
 ```
 Using AI-DLC Lite, create a [ComponentName] component: design it on the Figma
 canvas with all variants and states bound to existing tokens, then once approved
 implement it as a Radix UI code component.
 ```
+
+**Design already exists on the Figma canvas** (e.g. imported from a UI library):
+
+```
+Using AI-DLC Lite, implement the [ComponentName] component from the existing Figma
+design: the component is already on the canvas, audit it for token compliance and
+rebind any hardcoded values to system tokens, then once approved implement it as a
+Radix UI code component.
+```
+
+In the second case Pass 1 shifts from creation to audit-and-retrofit — Claude checks the existing component, rebinds any hardcoded values to system tokens, and presents for approval before touching code. Everything else (Gate 1, Pass 2, Gate 2, Definition of Done) is identical.
 
 Replace `[ComponentName]` with the component name exactly as it should appear in Figma and code (e.g. `Button`, `Badge`, `Select`).
 
@@ -139,7 +152,7 @@ The disabled state text colour is too dark -- check the token, it should be colo
 **What happens automatically:**
 
 6. Definition of Done checklist runs -- Claude works through every item
-7. `aidlc-docs/inception/system-overview.md` is updated to reflect the new component
+7. `aidlc-docs/inception/reverse-engineering/system-overview.md` and `aidlc-docs/inception/reverse-engineering/api-and-dependencies.md` are updated to reflect the new component
 8. `aidlc-docs/audit.md` is updated with the completion entry
 
 Claude presents a completion message listing all DoD items checked. **Commit everything** -- component files and `aidlc-docs/` together.
@@ -209,7 +222,7 @@ A component is not complete -- and should not be merged -- until every item pass
 - [ ] TypeScript: `npm run typecheck` passes clean
 - [ ] Accessibility: Storybook a11y panel shows no violations on the Default story
 - [ ] Audit trail: `aidlc-docs/audit.md` updated with completion entry
-- [ ] Knowledge synthesis: `aidlc-docs/inception/system-overview.md` updated to reflect the new component
+- [ ] Knowledge synthesis: `aidlc-docs/inception/reverse-engineering/system-overview.md` and `aidlc-docs/inception/reverse-engineering/api-and-dependencies.md` updated to reflect the new component
 
 The last item is mandatory. It keeps the system context current so the next component starts with an accurate picture of what already exists.
 

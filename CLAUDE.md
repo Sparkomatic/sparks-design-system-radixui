@@ -35,10 +35,21 @@ This project follows AI-DLC Lite for all component work. For design system compo
 
 **How to start a component intent:**
 
+Design does not yet exist — create it from scratch:
+
 ```
 Using AI-DLC Lite, create a [ComponentName] component: design it on the Figma canvas
 with all variants and states bound to existing tokens, then once approved implement it
 as a Radix UI code component.
+```
+
+Design already exists on the Figma canvas (e.g. imported from a UI library) — audit and retrofit tokens, then implement:
+
+```
+Using AI-DLC Lite, implement the [ComponentName] component from the existing Figma
+design: the component is already on the canvas, audit it for token compliance and
+rebind any hardcoded values to system tokens, then once approved implement it as a
+Radix UI code component.
 ```
 
 ### Definition of Done
