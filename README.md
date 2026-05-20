@@ -2,69 +2,205 @@
 
 A component library built on Radix UI primitives, styled with design tokens exported from Figma. Each component is built directly from a Figma source -- no manual interpretation, full token parity, full variant coverage.
 
-## Getting started
+This project follows [AI-DLC Lite](https://github.com/aws-samples/sample-aidlc-lite): AI plans and executes, humans decide and validate at each gate.
+
+---
+
+## Dev commands
 
 ```bash
 npm install
 npm run dev          # dev server at localhost:5173
 npm run storybook    # Storybook at localhost:6006
 npm run sync-tokens  # regenerate tokens after a Figma export
+npm run typecheck    # type-check without building
+npm run test-storybook  # run a11y + visual tests (requires Storybook running)
 ```
 
-## How components are built
+---
 
-Every component goes through a two-pass workflow with a human approval gate at each pass:
+## Step 1 — Do this once before building any components
 
-1. **Figma pass** -- the component is designed on the Figma canvas with all variants, states, and token bindings
-2. **Approval gate 1** -- you review the Figma component before any code is written
-3. **Code pass** -- the component is implemented in code from the approved Figma design
-4. **Approval gate 2** -- you review the code before the component is marked done
-5. **Definition of Done** -- checklist runs, knowledge synthesis is updated, component is complete
+AI-DLC Lite was added to this project mid-build. Before starting the first component under this workflow, you need to run Inception once. This analyses the existing codebase, tokens, and components to create a baseline context file that every subsequent component build will load.
 
-Figma is the source of truth. The code is derived from it, not the other way around.
+**You only ever do this once.** After that, Inception is skipped automatically.
 
-## Working with AI-DLC Lite
-
-This repo follows [AI-DLC Lite](https://github.com/aws-samples/sample-aidlc-lite) -- a structured human-AI collaboration methodology. AI plans and executes; humans decide and validate at each approval gate.
-
-### Starting a component
-
-Kick off a new component with:
+Open a new Claude Code session and type:
 
 ```
-Using AI-DLC Lite, create a [ComponentName] component: design it on the Figma canvas
-with all variants and states bound to existing tokens, then once approved implement it
-as a Radix UI code component.
+Using AI-DLC Lite, run project inception for the Sparks Design System.
+This is a brownfield project -- components and tokens already exist.
+Analyse the current state and produce the system overview.
 ```
 
-That single prompt covers the full lifecycle. The workflow will:
-- Run a fast Inception (detecting existing tokens, patterns, and components)
-- Execute the Figma design pass
-- Pause for your approval before writing any code
-- Execute the code pass from the approved design
+**What happens:**
+- Claude scans the existing components, tokens, and patterns
+- Produces `aidlc-docs/inception/reverse-engineering/system-overview.md`
+- Establishes the baseline that all future component builds load at the start
 
-### Approval gates
+**When it's done:** Claude presents an approval message summarising what it found. Review it, confirm it looks accurate, and approve. Commit the `aidlc-docs/` folder.
 
-There are two mandatory approval gates per component. At each gate you receive the work plus a structured audit report -- review both before approving.
+---
 
-1. **After Figma, before code** -- you receive the Figma component and three audit reports (component structure, three-tier token architecture, Subatomic token principles). Review variants, states, token bindings, and any audit findings. If audits flagged issues, Claude will have already repaired and re-audited before presenting -- you should see a clean report. Only approve once you're satisfied the design is correct.
-2. **After code, before done** -- you receive the implementation and two audit reports (design-to-code parity, raw value check). Review in Storybook and the playground: all variants render correctly, states behave as expected, no accessibility violations, no audit findings. Only once you approve does the Definition of Done checklist run and the knowledge synthesis update.
+## Step 2 — Building a component (repeat for every component)
 
-Neither gate can be skipped. This is the "humans validate" principle from AI-DLC Lite.
+### Start the component
 
-### Resuming after a break
+Open a new Claude Code session and type:
 
-If you close the session after approving the Figma design, start the next session with:
+```
+Using AI-DLC Lite, create a [ComponentName] component: design it on the Figma
+canvas with all variants and states bound to existing tokens, then once approved
+implement it as a Radix UI code component.
+```
+
+Replace `[ComponentName]` with the component name exactly as it should appear in Figma and code (e.g. `Button`, `Badge`, `Select`).
+
+**What happens automatically (you wait):**
+
+1. Fast Inception runs -- detects existing system-overview, skips re-analysis, loads current context
+2. Figma design pass begins -- the orchestrator searches the connected library, creates any missing tokens, builds the component with all variants and states, audits and repairs until clean
+3. Two final audits run independently (component structure + token architecture)
+
+### Gate 1 -- Review the Figma design
+
+Claude pauses and presents:
+- The completed Figma component (link or screenshot)
+- Audit report from `figma-component-audit` -- structure, variants, states
+- Audit report from `figma-token-audit` -- token naming, tier compliance, completeness
+
+**What to check in Figma:**
+- All variants are present and correctly named
+- All states exist (Default, Hover, Focus, Active, Disabled at minimum)
+- Every fill, stroke, spacing, and radius value is bound to a variable -- no raw values
+- The component looks correct against the design intent
+
+**If the audit reports flag anything**, Claude will have already attempted to repair and re-audit. If unresolved issues remain, decide whether they are blockers before approving.
+
+**To approve**, reply:
+
+```
+Approved. Proceed to the code pass.
+```
+
+**To request changes**, reply with what needs fixing:
+
+```
+The hover state background is using the wrong token -- it should use the secondary variant. Fix and re-present.
+```
+
+Do not proceed to code until you are satisfied. The code is generated directly from this Figma design.
+
+### After Gate 1 (you wait again)
+
+**What happens automatically:**
+
+4. Code pass begins -- the orchestrator reads the Figma component in full, implements the Radix UI component with CVA variants, CSS token rules, Storybook stories, and playground preview, then audits parity and repairs until clean
+5. Two final audits run independently (design-to-code parity + raw value check)
+
+### Gate 2 -- Review the code
+
+Claude pauses and presents:
+- Summary of files created or changed
+- Audit report from `design-to-code-parity` -- does the code match the Figma design
+- Audit report from `token-auditor` -- no raw values in CSS token files
+
+**What to check:**
+
+```bash
+npm run storybook
+```
+
+Open localhost:6006 and check:
+- All variants render correctly in the Variants story
+- All states render correctly in the States story (hover, focus, active, disabled)
+- No accessibility violations in the Accessibility panel on the Default story
+- Dark mode works via the sun/moon toggle in the Storybook toolbar
+
+Also check:
+```bash
+npm run typecheck   # must pass clean
+```
+
+**To approve**, reply:
+
+```
+Approved.
+```
+
+**To request changes**, describe what needs fixing:
+
+```
+The disabled state text colour is too dark -- check the token, it should be color/text/disabled.
+```
+
+### After Gate 2 (you wait one more time)
+
+**What happens automatically:**
+
+6. Definition of Done checklist runs -- Claude works through every item
+7. `aidlc-docs/inception/system-overview.md` is updated to reflect the new component
+8. `aidlc-docs/audit.md` is updated with the completion entry
+
+Claude presents a completion message listing all DoD items checked. **Commit everything** -- component files and `aidlc-docs/` together.
+
+---
+
+## Resuming after a break
+
+If you close the session mid-component (e.g. after Gate 1 but before Gate 2), resume with:
 
 ```
 Using AI-DLC Lite, resume the [ComponentName] component -- Figma is approved, proceed to the code pass.
 ```
 
-The workflow detects the existing `aidlc-state.md` and picks up from where it left off.
+Claude detects the existing `aidlc-state.md` and picks up where it left off.
 
-### Definition of Done
+---
 
-A component is not complete -- and should not be merged -- until every item below passes:
+## Token work (no component build)
+
+For standalone token tasks -- creating a new semantic token, renaming a collection, adding a text style -- do **not** use `Using AI-DLC Lite`. Use the skill directly:
+
+```
+Using the figma-variables-and-styles skill, add a new semantic colour token
+for error border states.
+```
+
+```
+Using the figma-variables-and-styles skill, rename the spacing collection
+from "Spacing & Sizing" to "Semantic Spacing & Sizing".
+```
+
+Token changes in Figma still need to be exported and synced to code:
+
+```bash
+# after exporting tokens from Figma
+npm run sync-tokens
+```
+
+---
+
+## Fixes and non-component work
+
+For anything that isn't building a new component from scratch -- fixing a bug, updating a story, adjusting a token value -- do **not** use `Using AI-DLC Lite`. Just describe the task:
+
+```
+The Button component hover state is using --button-color-primary-background
+instead of --button-color-primary-hover-background. Fix it.
+```
+
+```
+Add a missing AllVariants story to the Badge component.
+```
+
+AI-DLC Lite is for structured new-component work only. Using it for quick fixes adds unnecessary overhead.
+
+---
+
+## Definition of Done
+
+A component is not complete -- and should not be merged -- until every item passes:
 
 - [ ] Figma component: all variants present, all states covered, every token bound (no raw values)
 - [ ] Code component: all CVA variants implemented, all states handled via CSS/Radix data attributes
@@ -77,34 +213,41 @@ A component is not complete -- and should not be merged -- until every item belo
 
 The last item is mandatory. It keeps the system context current so the next component starts with an accurate picture of what already exists.
 
-### Audit trail
+---
 
-Each component intent produces two files in `aidlc-docs/`:
-- `audit.md` -- a complete log of every prompt, decision, and approval
-- `aidlc-state.md` -- current workflow state (used for session resumption)
+## Audit trail
 
-These are the paper trail for the methodology. Commit them alongside the component files.
+Every component intent writes to `aidlc-docs/`:
+- `audit.md` -- complete log of every prompt, decision, and approval
+- `aidlc-state.md` -- current workflow state, used for session resumption
+
+Commit these alongside the component files. They are the paper trail for the methodology.
+
+---
 
 ## Token workflow
 
-All token work originates in Figma. Never edit files in `src/tokens/` by hand.
+All token values originate in Figma. Never edit files in `src/tokens/` by hand -- they are overwritten on every export.
 
 1. Make changes in Figma (variables, text styles, component tokens)
-2. Export tokens -- this drops fresh CSS into `src/tokens/`
-3. Run `npm run sync-tokens` to regenerate the import index
-4. Write component CSS class rules in `src/components/ui/{name}/{name}.css`
+2. Export tokens -- drops fresh CSS into `src/tokens/`
+3. Run `npm run sync-tokens` -- regenerates `src/tokens/index.css`
+4. Write component CSS class rules in `src/components/ui/{name}/{name}.css` -- this file is yours, never overwritten
+
+---
 
 ## Structure
 
 ```
 src/
-├── components/ui/{name}/   one folder per component
-│   ├── {name}.tsx
-│   ├── {name}.css          developer-owned, never overwritten by token exports
-│   ├── {name}.stories.tsx
-│   └── index.ts
-├── tokens/                 Figma-owned -- safe to replace entirely on export
+├── components/ui/{name}/
+│   ├── {name}.tsx           component implementation
+│   ├── {name}.css           CSS class rules -- developer-owned, never overwritten
+│   ├── {name}.stories.tsx   Storybook stories
+│   └── index.ts             re-exports only
+├── tokens/                  Figma-owned -- safe to replace entirely on export
 └── index.css
-aidlc-docs/                 AI-DLC Lite audit trail and state files
-.aidlc-lite-rule-details/   AI-DLC Lite workflow rule detail files
+aidlc-docs/                  AI-DLC Lite audit trail and state files
+.aidlc-lite-rule-details/    AI-DLC Lite workflow rule detail files
+.claude/aidlc-lite-workflow.md  AI-DLC Lite core workflow (loaded automatically)
 ```
