@@ -1,5 +1,59 @@
 # Sparks Design System
 
+See @.claude/aidlc-lite-workflow.md for the AI-DLC Lite workflow.
+
+## AI-DLC Lite: Design System Workflow
+
+This project follows AI-DLC Lite for all component work. For design system components, the Construction phase always follows a two-pass pattern. Each pass uses an orchestrator that autonomously loops through build, audit, and repair until clean before surfacing for human review.
+
+**Pass 1 — Figma design (invoke `design-systems:figma-create-component-orchestrator`):**
+- Autonomous loop: creates missing tokens, builds the component, audits, repairs, re-audits until clean (max 3 passes)
+- Internally calls `figma-variables-and-styles`, `figma-components`, `figma-component-audit`, and `figma-repair`
+- Before presenting for approval, run final independent audits and include all results in the approval message:
+  - `design-systems:figma-component-audit` — final check on variants, states, and structure
+  - `design-systems:figma-token-audit` — final check on three-tier token architecture
+  - `design-systems:figma-token-audit-brad-frost` — final check on Subatomic token principles
+- If any final audit finds issues: invoke `design-systems:figma-repair` with the issue report, then re-run the failed audit before presenting for approval
+
+**Approval gate 1 — human reviews the Figma component and all audit results. Do not proceed to code until explicitly approved.**
+
+**Pass 2 — Code implementation (invoke `design-systems:figma-to-code-orchestrator`):**
+- Autonomous loop: implements the component in code, audits parity, repairs, re-audits until clean (max 3 passes)
+- Internally calls `design-systems:code-build-component` and `design-systems:design-to-code-parity`
+- All values must reference design tokens — never hardcode
+- Follow the component rules in this file
+- Before presenting for approval, run final independent audits and include all results in the approval message:
+  - `design-systems:design-to-code-parity` — final check that implementation matches the Figma design
+  - `token-auditor` — final check that no raw values appear in CSS token files
+- If any final audit finds issues: fix via `design-systems:code-build-component` or direct edits, then re-run the failed audit before presenting for approval
+
+**Approval gate 2 — human reviews the code implementation and all audit results. Do not run the Definition of Done checklist or update knowledge synthesis until explicitly approved.**
+
+**Token and style work outside a component build (invoke `design-systems:figma-variables-and-styles`):**
+- Use for any standalone token or style task: creating a new semantic token, renaming a collection, adding a text style, updating a variable value
+- This is not part of the component build flow — invoke it directly when the task is token- or style-specific
+
+**How to start a component intent:**
+
+```
+Using AI-DLC Lite, create a [ComponentName] component: design it on the Figma canvas
+with all variants and states bound to existing tokens, then once approved implement it
+as a Radix UI code component.
+```
+
+### Definition of Done
+
+A component is not complete until every item below is checked. Do not close the Construction phase or mark the intent complete until all pass.
+
+- [ ] Figma component: all variants present, all states covered, every token bound (no raw values)
+- [ ] Code component: all CVA variants implemented, all states handled via CSS/Radix data attributes
+- [ ] Storybook stories: five-story pattern complete (Default, Variants, States, Sizes, AllVariants)
+- [ ] Playground preview: added to `src/playground/previews/` and registered in `src/playground/index.tsx`
+- [ ] TypeScript: `npm run typecheck` passes clean
+- [ ] Accessibility: Storybook a11y panel shows no violations on the Default story
+- [ ] Audit trail: `aidlc-docs/audit.md` updated with completion entry
+- [ ] **Knowledge synthesis: `aidlc-docs/inception/system-overview.md` updated to reflect the new component** — this is the last step and must not be skipped
+
 A component library that converts Figma designs — with component tokens — into production-ready React components built on Radix UI primitives. Each component is built directly from a Figma source: no manual interpretation, full token parity, full variant coverage.
 
 ## Getting started
