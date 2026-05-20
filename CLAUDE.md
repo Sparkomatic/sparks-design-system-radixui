@@ -1,6 +1,7 @@
 # Sparks Design System
 
 See @.claude/aidlc-lite-workflow.md for the AI-DLC Lite workflow.
+See @FIGMA.md for project-specific Figma conventions.
 
 ## AI-DLC Lite: Design System Workflow
 
