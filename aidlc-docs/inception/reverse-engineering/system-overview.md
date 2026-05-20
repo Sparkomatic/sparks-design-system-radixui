@@ -266,12 +266,7 @@ sparks-design-system-radixui/
 | Card | src/components/ui/card/ | Complete | None (layout only) | default | — | Compound: Card, CardImage, CardContent, CardHeader, CardTitle, CardSubtitle, CardDescription, CardFooter |
 | Combobox | src/components/ui/combobox/ | Partial | @radix-ui/react-popover | — | — | No dedicated .css file; complex open-state management via Popover.Anchor pattern |
 | Dropdown Menu | src/components/ui/dropdown-menu/ | Complete | @radix-ui/react-dropdown-menu | — | — | Full Radix DropdownMenu wrapping with token-driven CSS |
-
-### Token-Only Components (no React component yet)
-
-| Token File | Path | Notes |
-|---|---|---|
-| text-input | src/tokens/components/text-input.css | Component tokens exported from Figma; React component not yet built |
+| Text Input | src/components/ui/text-input/ | Complete | None (layout component — native `<input>`) | status: default, error, success | sm, md, lg | Supports leadingIcon, trailingIcon; CSS classes use `ti-` prefix to avoid tailwind-merge collision |
 
 ### Playground Previews
 
@@ -281,6 +276,7 @@ sparks-design-system-radixui/
 | Card | src/playground/previews/card.tsx | Card composite |
 | Combobox | src/playground/previews/combobox.tsx | Combobox usage |
 | Dropdown Menu | src/playground/previews/dropdown-menu.tsx | Dropdown usage |
+| Text Input | src/playground/previews/text-input.tsx | 3 sizes, 3 statuses, icon slots, disabled |
 
 ---
 

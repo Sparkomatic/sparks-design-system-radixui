@@ -19,7 +19,7 @@
   --dropdown-menu-item-color-destructive-hover-foreground: var(--foreground-destructive-default);
   --dropdown-menu-item-color-destructive-icon: var(--foreground-destructive-default);
   --dropdown-menu-content-radius: var(--radius-popover);
-  --dropdown-menu-content-border-width: var(--border-hairline);
+  --dropdown-menu-content-border-width: var(--border-width-hairline);
   --dropdown-menu-content-padding: var(--spacing-stack);
   --dropdown-menu-item-padding-x: var(--spacing-control-x-md);
   --dropdown-menu-item-padding-y: var(--spacing-control-y-md);

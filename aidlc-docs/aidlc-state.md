@@ -17,14 +17,22 @@
 - **Application Code**: workspace root (src/, scripts/, tools/, .storybook/)
 - **Documentation**: aidlc-docs/ only
 
+## Current Intent
+
+- **Component**: Text Input
+- **Intent started**: 2026-05-20
+- **Current pass**: Pass 1 — Figma design (pending approval)
+
 ## Stage Progress
 
 | Stage | Status | Completed |
 |---|---|---|
 | Workspace Detection | COMPLETED | 2026-05-20 |
 | Reverse Engineering | COMPLETED | 2026-05-20 |
-| Requirements Analysis | PENDING | — |
-| Workflow Planning | PENDING | — |
+| Requirements Analysis | COMPLETED | 2026-05-20 |
+| Workflow Planning | COMPLETED | 2026-05-20 |
+| Pass 1: Figma Design | PENDING | — |
+| Pass 2: Code Implementation | PENDING | — |
 
 ## Reverse Engineering Status
 - [x] Reverse Engineering — Completed 2026-05-20

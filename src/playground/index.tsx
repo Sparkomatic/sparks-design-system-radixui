@@ -6,12 +6,14 @@ import { ButtonPreview } from "./previews/button"
 import { CardPreview } from "./previews/card"
 import { ComboboxPreview } from "./previews/combobox"
 import { DropdownMenuPreview } from "./previews/dropdown-menu"
+import { TextInputPreview } from "./previews/text-input"
 
 const previews: { name: string; component: React.ComponentType }[] = [
   { name: "Button", component: ButtonPreview },
   { name: "Card", component: CardPreview },
   { name: "Combobox", component: ComboboxPreview },
   { name: "Dropdown Menu", component: DropdownMenuPreview },
+  { name: "Text Input", component: TextInputPreview },
 ]
 
 export function Playground() {

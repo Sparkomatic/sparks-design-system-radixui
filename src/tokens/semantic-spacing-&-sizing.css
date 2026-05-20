@@ -1,16 +1,13 @@
 :root {
   --border-width-none: var(--border-0);
-  --border-width-sm: var(--border-1);
-  --border-width-md: var(--border-2);
-  --border-width-lg: var(--border-4);
   --spacing-inline: var(--spacing-4);
   --spacing-stack: var(--spacing-8);
   --spacing-content-gap: var(--spacing-16);
   --spacing-layout-gap: var(--spacing-24);
   --spacing-section: var(--spacing-48);
-  --border-hairline: var(--border-1);
-  --border-default: var(--border-2);
-  --border-thick: var(--border-4);
+  --border-width-hairline: var(--border-1);
+  --border-width-default: var(--border-2);
+  --border-width-thick: var(--border-4);
   --radius-none: var(--radius-0);
   --radius-control-sm: var(--radius-4);
   --radius-control-md: var(--radius-8);

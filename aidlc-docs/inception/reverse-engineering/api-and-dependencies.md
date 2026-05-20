@@ -168,7 +168,7 @@ Defined in `src/tokens/semantic-spacing-&-sizing.css`:
 |---|---|---|
 | Control heights | `--size-control-{scale}` | `--size-control-sm`, `--size-control-md`, `--size-control-lg` |
 | Radii | `--radius-{scale}` | `--radius-control`, `--radius-card` |
-| Border widths | `--border-width-{type}` | `--border-width-default` |
+| Border widths | `--border-width-{type}` | `--border-width-none`, `--border-width-hairline`, `--border-width-default`, `--border-width-thick` |
 | Touch targets | `--size-touch-target-*` | `--size-touch-target-min` |
 
 ### Semantic Typography Tokens
@@ -318,4 +318,4 @@ The following Radix packages are installed as dependencies but have no correspon
 | @radix-ui/react-tooltip | Tooltip |
 | @radix-ui/react-dialog | Dialog / Modal |
 
-Additionally, `src/tokens/components/text-input.css` exists with component tokens exported from Figma, but no TextInput React component has been implemented yet.
+TextInput (`src/components/ui/text-input/`) is a layout component with no Radix primitive — it uses a native `<input>` wrapped in a flex div. CSS class names use the `ti-` prefix (not `text-input-`) to avoid tailwind-merge treating them as Tailwind `text-*` utilities. Component tokens live in `src/tokens/components/text-input.css`. `--text-input-color-border` aliases `--border-default` (the semantic colour token) and `--text-input-color-focus-border` aliases `--border-focus`.

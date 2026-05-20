@@ -4,7 +4,7 @@
   --card-title-color-foreground: var(--foreground-default);
   --card-subtitle-color-foreground: var(--foreground-default);
   --card-description-color-foreground: var(--foreground-muted);
-  --card-border-width: var(--border-hairline);
+  --card-border-width: var(--border-width-hairline);
   --card-padding: var(--spacing-layout-gap);
   --card-gap: var(--spacing-content-gap);
   --card-radius: var(--radius-card-md);

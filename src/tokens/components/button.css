@@ -7,7 +7,7 @@
   --button-color-utility-hover-background: var(--background-primary-subtle);
   --button-gap: var(--spacing-inline);
   --button-radius: var(--radius-control-md);
-  --button-border-width: var(--border-hairline);
+  --button-border-width: var(--border-width-hairline);
   --button-color-primary-hover-foreground: var(--foreground-on-primary);
   --button-color-secondary-background: var(--background-secondary-default);
   --button-color-secondary-hover-background: var(--background-secondary-strong);

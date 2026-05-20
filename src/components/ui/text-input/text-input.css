@@ -1,0 +1,105 @@
+/* ── Wrapper — base ──────────────────────────────────────────────────────────
+ * Applied by CVA base class. Colour state changes live here — never Tailwind.
+ * ─────────────────────────────────────────────────────────────────────────── */
+
+.ti-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  background-color: var(--text-input-color-background);
+  border: var(--text-input-border-width) solid var(--text-input-color-border);
+  border-radius: var(--text-input-radius);
+  gap: var(--text-input-icon-gap);
+  cursor: text;
+}
+
+.ti-wrapper:hover:not([data-disabled]) {
+  border-color: var(--text-input-color-hover-border);
+}
+
+.ti-wrapper:has(input:focus-visible),
+.ti-wrapper.force-focus {
+  border-color: var(--text-input-color-focus-border);
+}
+
+.ti-wrapper[data-disabled] {
+  background-color: var(--text-input-color-disabled-background);
+  border-color:     var(--text-input-color-disabled-border);
+  cursor: not-allowed;
+}
+
+/* ── Status classes ──────────────────────────────────────────────────────────
+ * Applied by CVA status variants. Override border — including on hover.
+ * ─────────────────────────────────────────────────────────────────────────── */
+
+.ti-wrapper-error {
+  border-color: var(--text-input-color-error-border);
+}
+.ti-wrapper-error:hover:not([data-disabled]) {
+  border-color: var(--text-input-color-error-border);
+}
+
+.ti-wrapper-success {
+  border-color: var(--text-input-color-success-border);
+}
+.ti-wrapper-success:hover:not([data-disabled]) {
+  border-color: var(--text-input-color-success-border);
+}
+
+/* ── Size classes ────────────────────────────────────────────────────────────
+ * Applied by CVA size variants. Height + horizontal padding only — vertical
+ * centering handled by flexbox.
+ * ─────────────────────────────────────────────────────────────────────────── */
+
+.ti-sm {
+  height:         var(--text-input-space-sm-height);
+  padding-inline: var(--text-input-space-sm-padding-x);
+}
+.ti-md {
+  height:         var(--text-input-space-md-height);
+  padding-inline: var(--text-input-space-md-padding-x);
+}
+.ti-lg {
+  height:         var(--text-input-space-lg-height);
+  padding-inline: var(--text-input-space-lg-padding-x);
+}
+
+/* ── Input field ─────────────────────────────────────────────────────────────
+ * The native <input>. No border, no background — wrapper owns all visual chrome.
+ * ─────────────────────────────────────────────────────────────────────────── */
+
+.ti-field {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-input-color-foreground);
+  font: inherit;
+}
+.ti-field::placeholder {
+  color: var(--text-input-color-placeholder);
+}
+.ti-field:disabled {
+  color: var(--text-input-color-disabled-foreground);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+.ti-field:disabled::placeholder {
+  color: var(--text-input-color-disabled-placeholder);
+}
+
+/* ── Icon slot ───────────────────────────────────────────────────────────────
+ * Wraps leading/trailing icon nodes. Size and colour from component tokens.
+ * ─────────────────────────────────────────────────────────────────────────── */
+
+.ti-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width:      var(--text-input-icon-size);
+  height:     var(--text-input-icon-size);
+  flex-shrink: 0;
+  color: var(--text-input-color-icon);
+}
