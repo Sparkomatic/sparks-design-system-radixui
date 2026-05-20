@@ -11,8 +11,7 @@ This project follows AI-DLC Lite for all component work. For design system compo
 - Internally calls `figma-variables-and-styles`, `figma-components`, `figma-component-audit`, and `figma-repair`
 - Before presenting for approval, run final independent audits and include all results in the approval message:
   - `design-systems:figma-component-audit` — final check on variants, states, and structure
-  - `design-systems:figma-token-audit` — final check on three-tier token architecture
-  - `design-systems:figma-token-audit-brad-frost` — final check on Subatomic token principles
+  - `design-systems:figma-token-audit` — final check on token architecture, naming, completeness, hardcoded values, and composite gaps
 - If any final audit finds issues: invoke `design-systems:figma-repair` with the issue report, then re-run the failed audit before presenting for approval
 
 **Approval gate 1 — human reviews the Figma component and all audit results. Do not proceed to code until explicitly approved.**
