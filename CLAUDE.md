@@ -52,7 +52,7 @@ A component is not complete until every item below is checked. Do not close the 
 - [ ] TypeScript: `npm run typecheck` passes clean
 - [ ] Accessibility: Storybook a11y panel shows no violations on the Default story
 - [ ] Audit trail: `aidlc-docs/audit.md` updated with completion entry
-- [ ] **Knowledge synthesis: `aidlc-docs/inception/reverse-engineering/system-overview.md` updated to reflect the new component** — this is the last step and must not be skipped
+- [ ] **Knowledge synthesis: `aidlc-docs/inception/reverse-engineering/system-overview.md` and `aidlc-docs/inception/reverse-engineering/api-and-dependencies.md` updated to reflect the new component** — this is the last step and must not be skipped
 
 A component library that converts Figma designs — with component tokens — into production-ready React components built on Radix UI primitives. Each component is built directly from a Figma source: no manual interpretation, full token parity, full variant coverage.
 
