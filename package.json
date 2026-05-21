@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "sync-tokens": "node scripts/sync-token-imports.mjs",
+    "receive-tokens": "node scripts/token-receiver.mjs",
     "predev": "npm run sync-tokens",
     "prebuild": "npm run sync-tokens",
     "dev": "vite",
