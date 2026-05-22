@@ -43,13 +43,14 @@ with all variants and states bound to existing tokens, then once approved implem
 as a Radix UI code component.
 ```
 
-Design already exists on the Figma canvas (e.g. imported from a UI library) — audit and retrofit tokens, then implement:
+Reference component on the Figma canvas (e.g. imported from a UI library) — use as visual reference to build a new native component, then implement:
 
 ```
-Using AI-DLC Lite, implement the [ComponentName] component from the existing Figma
-design: the component is already on the canvas, audit it for token compliance and
-rebind any hardcoded values to system tokens, then once approved implement it as a
-Radix UI code component.
+Using AI-DLC Lite, implement the [ComponentName] component using the reference
+component on the canvas as a visual spec: read its structure and layout as
+inspiration only, then build a new native component from scratch using our local
+tokens and Radix UI conventions. Do not modify the reference node. Once the new
+Figma component is approved, implement it as a Radix UI code component.
 ```
 
 ### Definition of Done
