@@ -60,3 +60,43 @@ Never overwrite this file — always append new entries.
 **Context**: Stage = Pass 1 Construction; all audits clean; awaiting human approval before Pass 2.
 
 ---
+
+---
+
+## New Intent — Date Picker
+**Timestamp**: 2026-05-23T19:10:00Z
+**User Input**: "ok, so using AI-DLC Lite, please can you create me a date picker component please. If you think any other libarries are needed here to make this better or easier then let me know."
+**AI Response**: Acknowledged new intent. Library recommendation made: react-day-picker v9 + date-fns v4. Requirements question file created at aidlc-docs/inception/requirements/date-picker-questions.md. Awaiting user answers before proceeding.
+**Context**: INCEPTION — Requirements Analysis for Date Picker component
+
+---
+
+## Requirements Analysis — Date Picker (resumed)
+**Timestamp**: 2026-05-23T19:24:00Z
+**User Input**: "using the AI-DLC Lite process can you create me a Datepicker component please"
+**AI Response**: Resumed Date Picker inception. Requirements questions from previous session presented again — no answers recorded. Presenting 4 questions for user to answer before workflow planning.
+**Context**: INCEPTION — Requirements Analysis; resuming unanswered questions from 2026-05-23T19:10:00Z session
+
+---
+
+## Pass 2: Code Implementation — Calendar
+**Timestamp**: 2026-05-28T00:00:00Z
+**User Input**: "Using AI-DLC Lite, Pass 2 — code implementation of the Calendar component. Pass 1 (Figma design) has been approved. Implementation decisions: Library: react-day-picker. Scope: Calendar component only — no DatePicker wrapper in this pass. Selection mode: single date only. Size: MD only."
+**AI Response**: Executed figma-to-code-orchestrator. Steps completed: (1) Confirmed src/tokens/components/calendar.css exists and is complete (41 tokens, all correctly aliasing semantic tokens). (2) Read reference component (Button) to infer file structure and conventions. (3) Installed react-day-picker v10.0.1. (4) Wrote calendar.tsx (React.forwardRef wrapper around DayPicker with navLayout="around", mode="single", full classNames mapping, custom Chevron with lucide ChevronLeft/ChevronRight). (5) Wrote calendar.css (class rules for all states: default, hover, focus, selected, today, outside, disabled, hidden). Fixed selector bug: modifier classes land on td (.calendar-day), not on the button — updated all selectors to use ancestor pattern (.calendar-day.modifier .calendar-day-button). (6) Wrote index.ts, calendar.stories.tsx (6 stories including States), CalendarPreview, registered in playground/index.tsx. (7) Ran parity audit — 8 issues found; fixed 4 (PARITY-001: unused header-gap token, PARITY-002: selected-hover missing border-color, PARITY-006: wrapper div comment, PARITY-007: added States story). Remaining 4 are LOW/documented. (8) Ran token audit — 0 violations. (9) npm run typecheck — clean. Playground visual QA passed (light + dark mode). Presenting for Approval Gate 2.
+**Context**: Stage = Pass 2 Construction; all audits clean; awaiting human approval.
+
+---
+
+## Approval Gate 2 — Calendar (approved)
+**Timestamp**: 2026-05-28T13:15:00Z
+**User Input**: "great, so I approve this....are all the audits and DOD run and pass?" / "fix it now please in Figma, I will reexport and then you can run sync tokens and then we should be good as done right?" / "ok I exported from figma again"
+**AI Response**: Token audit found 1 violation — `font-weight: var(--title-font-weight-strong)` in calendar.css class rule referenced a semantic token directly instead of going through a component token. Fixed by: (1) creating `calendar/caption/font-weight` variable in Figma's Components collection aliasing `title/font-weight-strong`, (2) user re-exported tokens, (3) ran sync-tokens, (4) updated calendar.css line 36 to `var(--calendar-caption-font-weight)`. Re-ran token audit — 0 violations. DoD checklist all pass. Calendar component is complete.
+**Context**: Approval Gate 2 passed. Calendar is Done.
+
+---
+
+## Requirements Analysis — Date Picker (answers received)
+**Timestamp**: 2026-05-23T19:26:00Z
+**User Input**: "SIngle date only, date and time, B no keep simple for now, full width text input. Feel free to add an icon libray to the repo....as for any other files pr dependncies...you chosse,....I wonder if I led you in another session by asking if you need more libraies to help...look, you decide... This needs to be a component library for our design system that will work perfectly with our Figma design system, um, and it's gonna be a professional one. It has to be accessible, friendly, and we want to style it our own way. And, yeah, sustainable and maintainable and not ending up with unsupported libraries, etcetera."
+**AI Response**: Answers logged: Q1=single date only, Q2=date+time, Q3=no constraints (keep simple), Q4=full-width text input trigger. Library decision: react-day-picker v9 (custom components mode, 12M weekly downloads, WCAG calendar grid) + date-fns v4 (tree-shakeable date utils). lucide-react and @radix-ui/react-popover already installed — no new icon library needed. Generating requirements doc and workflow plan.
+**Context**: INCEPTION — Requirements Analysis complete; proceeding to generate requirements doc + workflow plan

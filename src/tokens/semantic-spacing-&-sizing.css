@@ -15,7 +15,7 @@
   --radius-card-md: var(--radius-16);
   --radius-card-lg: var(--radius-24);
   --radius-image: var(--radius-8);
-  --radius-full: var(--radius-full);
+  --radius-full: var(--radius-9999);
   --spacing-control-x-sm: var(--spacing-12);
   --spacing-control-y-sm: var(--spacing-4);
   --spacing-control-x-md: var(--spacing-16);
@@ -52,4 +52,5 @@
   --spacing-tight: var(--spacing-4);
   --spacing-type-pair-tight: var(--spacing-4);
   --spacing-type-pair-loose: var(--spacing-12);
+  --spacing-subsection: var(--spacing-12);
 }

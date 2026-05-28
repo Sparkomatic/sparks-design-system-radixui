@@ -38,6 +38,41 @@ Generated: 2026-05-20
 
 ---
 
+### Calendar
+
+**Import**: `import { Calendar } from "@/components/ui/calendar"`
+
+**Props**:
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `selected` | `Date \| undefined` | — | The currently selected date (controlled) |
+| `onSelect` | `(date: Date \| undefined) => void` | — | Callback when a day is clicked |
+| `defaultMonth` | `Date` | current month | Month shown on initial render |
+| `disabled` | `Matcher \| Matcher[]` | — | Days to disable (e.g. `{ before: new Date() }`, `{ dayOfWeek: [0,6] }`) |
+| `numberOfMonths` | `number` | `1` | Months displayed side by side |
+| `showOutsideDays` | `boolean` | `true` | Show days from adjacent months |
+| `className` | `string` | — | Additional classes merged onto the DayPicker root |
+| `ref` | `React.Ref<HTMLDivElement>` | — | Forwarded to a thin wrapper div (DayPicker v10 does not accept a ref) |
+
+**Exported**: `Calendar`, `CalendarProps`
+
+**Radix primitive**: None. Wraps `react-day-picker` v10 (DayPicker) for all interaction and accessibility.
+
+**Key DayPicker settings**: `mode="single"`, `navLayout="around"` (nav buttons absolutely positioned flanking the month label), `showOutsideDays`.
+
+**Token file**: `src/tokens/components/calendar.css` (41 tokens)
+
+**CSS class rules**: `src/components/ui/calendar/calendar.css`
+- Root: `.calendar-root` (background, border, radius, padding)
+- Month structure: `.calendar-month`, `.calendar-month-caption`, `.calendar-caption-label`
+- Nav buttons: `.calendar-nav-button`, `.calendar-nav-button--prev`, `.calendar-nav-button--next`
+- Grid: `.calendar-month-grid`, `.calendar-weekday`, `.calendar-day`, `.calendar-day-button`
+- Day state selectors: `.calendar-day.calendar-day--{modifier} .calendar-day-button` (selected, today, outside, disabled, focused)
+- Nav disabled: `[aria-disabled="true"]` (react-day-picker uses aria-disabled, not native disabled)
+
+---
+
 ### Card
 
 **Import**: `import { Card, CardImage, CardContent, CardHeader, CardTitle, CardSubtitle, CardDescription, CardFooter } from "@/components/ui/card"`
@@ -271,6 +306,7 @@ graph TD
 | tailwindcss | ^4.1.17 | Utility CSS framework (layout only) | MIT |
 | tw-animate-css | ^1.4.0 | CSS animation utilities | MIT |
 | lucide-react | ^0.563.0 | SVG icon components | ISC |
+| react-day-picker | ^10.0.1 | Accessible calendar grid (used by Calendar component) | MIT |
 | @fontsource-variable/inter | ^5.2.8 | Self-hosted Inter Variable font | OFL-1.1 |
 | @fontsource/inter | ^5.2.8 | Self-hosted Inter static font | OFL-1.1 |
 

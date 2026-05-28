@@ -174,6 +174,7 @@ sparks-design-system-radixui/
 |   +-- components/
 |   |   +-- ui/
 |   |       +-- button/          button.tsx  button.css  button.stories.tsx  index.ts
+|   |       +-- calendar/        calendar.tsx  calendar.css  calendar.stories.tsx  index.ts
 |   |       +-- card/            card.tsx  card.css  card.stories.tsx  index.ts
 |   |       +-- combobox/        combobox.tsx  combobox.stories.tsx  index.ts
 |   |       +-- dropdown-menu/   dropdown-menu.tsx  dropdown-menu.css  dropdown-menu.stories.tsx  index.ts
@@ -188,9 +189,10 @@ sparks-design-system-radixui/
 |   |   +-- semantic-typography.css
 |   |   +-- components/
 |   |       +-- button.css
+|   |       +-- calendar.css
 |   |       +-- card.css
 |   |       +-- dropdown-menu.css
-|   |       +-- text-input.css   (token file exists -- no component yet)
+|   |       +-- text-input.css
 |   +-- lib/
 |   |   +-- utils.ts             cn() helper (clsx + tailwind-merge)
 |   +-- playground/
@@ -243,6 +245,7 @@ sparks-design-system-radixui/
 | clsx | ^2.1.1 | Conditional class names |
 | tailwind-merge | ^3.4.0 | Deduplicates conflicting Tailwind classes |
 | lucide-react | ^0.563.0 | SVG icon set |
+| react-day-picker | ^10.0.1 | Accessible calendar grid (used by Calendar) |
 | @fontsource-variable/inter | ^5.2.8 | Self-hosted Inter Variable font |
 | vite | ^7.2.4 | Dev server and bundler |
 | typescript | ~5.9.3 | Type system (strict mode) |
@@ -261,6 +264,7 @@ sparks-design-system-radixui/
 | Component | Folder | Status | Radix Primitive | Variants | Sizes | Notes |
 |---|---|---|---|---|---|---|
 | Button | src/components/ui/button/ | Complete | @radix-ui/react-slot (Slot) | primary, secondary, tertiary, utility, destructive | sm, md, lg | Supports leadingIcon, trailingIcon, loading, asChild |
+| Calendar | src/components/ui/calendar/ | Complete | None (wraps react-day-picker v10) | — | md only | Single-date selection; navLayout="around"; custom Chevron via lucide; ref-forwarded via thin div wrapper |
 | Card | src/components/ui/card/ | Complete | None (layout only) | default | — | Compound: Card, CardImage, CardContent, CardHeader, CardTitle, CardSubtitle, CardDescription, CardFooter |
 | Combobox | src/components/ui/combobox/ | Partial | @radix-ui/react-popover | — | — | No dedicated .css file; complex open-state management via Popover.Anchor pattern |
 | Dropdown Menu | src/components/ui/dropdown-menu/ | Complete | @radix-ui/react-dropdown-menu | — | — | Full Radix DropdownMenu wrapping with token-driven CSS |
@@ -271,6 +275,7 @@ sparks-design-system-radixui/
 | Preview | File | Components Shown |
 |---|---|---|
 | Button | src/playground/previews/button.tsx | All 5 variants, 3 sizes, disabled + loading states |
+| Calendar | src/playground/previews/calendar.tsx | Interactive, pre-selected, disabled weekends, disabled past dates |
 | Card | src/playground/previews/card.tsx | Card composite |
 | Combobox | src/playground/previews/combobox.tsx | Combobox usage |
 | Dropdown Menu | src/playground/previews/dropdown-menu.tsx | Dropdown usage |

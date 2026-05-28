@@ -19,9 +19,18 @@
 
 ## Current Intent
 
-- **Component**: Text Input
-- **Intent started**: 2026-05-20
-- **Current pass**: Pass 1 — Figma design (pending approval)
+- **Component**: None — awaiting next intent
+- **Last completed**: Calendar (2026-05-28)
+
+## Completed Components
+
+| Component | Pass 1 (Figma) | Pass 2 (Code) | DoD | Notes |
+|---|---|---|---|---|
+| Button | pre-AI-DLC | pre-AI-DLC | ✓ | Existed at inception |
+| Card | pre-AI-DLC | pre-AI-DLC | ✓ | Existed at inception |
+| Dropdown Menu | pre-AI-DLC | pre-AI-DLC | ✓ | Existed at inception |
+| Text Input | COMPLETED (2026-05-20) | COMPLETED (2026-05-20) | ✓ | First AI-DLC component |
+| Calendar | COMPLETED (2026-05-28) | COMPLETED (2026-05-28) | ✓ | react-day-picker v10; 42 tokens |
 
 ## Stage Progress
 
@@ -31,8 +40,10 @@
 | Reverse Engineering | COMPLETED | 2026-05-20 |
 | Requirements Analysis | COMPLETED | 2026-05-20 |
 | Workflow Planning | COMPLETED | 2026-05-20 |
-| Pass 1: Figma Design | PENDING | — |
-| Pass 2: Code Implementation | PENDING | — |
+| Pass 1: Figma Design (Text Input) | COMPLETED | 2026-05-20 |
+| Pass 2: Code Implementation (Text Input) | COMPLETED | 2026-05-20 |
+| Pass 1: Figma Design (Calendar) | COMPLETED | 2026-05-28 |
+| Pass 2: Code Implementation (Calendar) | COMPLETED | 2026-05-28 |
 
 ## Reverse Engineering Status
 - [x] Reverse Engineering — Completed 2026-05-20

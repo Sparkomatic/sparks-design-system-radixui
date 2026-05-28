@@ -1,0 +1,169 @@
+/* ── Root ──────────────────────────────────────────────────────────────── */
+.calendar-root {
+  display: inline-block;
+  background-color: var(--calendar-color-background);
+  border: var(--calendar-border-width) solid var(--calendar-color-border);
+  border-radius: var(--calendar-radius);
+  padding: var(--calendar-padding);
+}
+
+/* ── Months container ──────────────────────────────────────────────────── */
+.calendar-months {
+  display: flex;
+  gap: var(--calendar-gap);
+}
+
+/* ── Single month ──────────────────────────────────────────────────────── */
+.calendar-month {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--calendar-gap);
+}
+
+/* ── Caption / header row ───────────────────────────────────────────────── */
+.calendar-month-caption {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--calendar-nav-button-size);
+  /* Inset the label so it doesn't overlap the absolutely-positioned nav buttons */
+  padding-inline: calc(var(--calendar-nav-button-size) + var(--calendar-header-gap));
+}
+
+.calendar-caption-label {
+  color: var(--calendar-header-color-foreground);
+  font-weight: var(--calendar-caption-font-weight);
+}
+
+/* ── Nav buttons (navLayout="around" — absolutely positioned in .calendar-month) */
+.calendar-nav-button {
+  position: absolute;
+  top: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--calendar-nav-button-size);
+  height: var(--calendar-nav-button-size);
+  border-radius: var(--calendar-nav-button-radius);
+  background-color: var(--calendar-nav-button-color-default-background);
+  color: var(--calendar-nav-button-color-default-foreground);
+  border: var(--calendar-border-width) solid transparent;
+  cursor: pointer;
+}
+
+.calendar-nav-button--prev {
+  left: 0;
+}
+
+.calendar-nav-button--next {
+  right: 0;
+}
+
+.calendar-nav-button:hover {
+  background-color: var(--calendar-nav-button-color-hover-background);
+  color: var(--calendar-nav-button-color-hover-foreground);
+}
+
+.calendar-nav-button:focus-visible {
+  background-color: var(--calendar-nav-button-color-focused-background);
+  color: var(--calendar-nav-button-color-focused-foreground);
+  border-color: var(--calendar-nav-button-color-focused-border);
+  outline: none;
+}
+
+.calendar-nav-button[aria-disabled="true"] {
+  background-color: var(--calendar-nav-button-color-disabled-background);
+  color: var(--calendar-nav-button-color-disabled-foreground);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ── Month grid (table) ─────────────────────────────────────────────────── */
+.calendar-month-grid {
+  border-collapse: separate;
+  border-spacing: var(--calendar-day-gap);
+  /* Offset the outer edge so the grid aligns flush with the caption */
+  margin: calc(var(--calendar-day-gap) * -1);
+}
+
+/* ── Weekday header ─────────────────────────────────────────────────────── */
+.calendar-weekday {
+  width: var(--calendar-day-size);
+  height: var(--calendar-day-size);
+  text-align: center;
+  color: var(--calendar-weekday-color-foreground);
+  font-weight: normal;
+}
+
+/* ── Day cell (td) ──────────────────────────────────────────────────────── */
+.calendar-day {
+  padding: 0;
+  text-align: center;
+}
+
+/* ── Day button ─────────────────────────────────────────────────────────── */
+.calendar-day-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--calendar-day-size);
+  height: var(--calendar-day-size);
+  border-radius: var(--calendar-day-radius);
+  background-color: var(--calendar-day-color-default-background);
+  color: var(--calendar-day-color-default-foreground);
+  border: var(--calendar-day-border-width) solid transparent;
+  cursor: pointer;
+}
+
+.calendar-day-button:hover {
+  background-color: var(--calendar-day-color-hover-background);
+  color: var(--calendar-day-color-hover-foreground);
+}
+
+.calendar-day-button:focus-visible,
+.calendar-day.calendar-day--focused .calendar-day-button {
+  background-color: var(--calendar-day-color-focused-background);
+  color: var(--calendar-day-color-focused-foreground);
+  border-color: var(--calendar-day-color-focused-border);
+  outline: none;
+}
+
+/* Today — border highlight, primary foreground */
+.calendar-day.calendar-day--today .calendar-day-button {
+  background-color: var(--calendar-day-color-today-background);
+  color: var(--calendar-day-color-today-foreground);
+  border-color: var(--calendar-day-color-today-border);
+}
+
+/* Selected — takes precedence over today */
+.calendar-day.calendar-day--selected .calendar-day-button {
+  background-color: var(--calendar-day-color-selected-background);
+  color: var(--calendar-day-color-selected-foreground);
+  border-color: var(--calendar-day-color-selected-border);
+}
+
+.calendar-day.calendar-day--selected .calendar-day-button:hover {
+  background-color: var(--calendar-day-color-selected-background);
+  color: var(--calendar-day-color-selected-foreground);
+  border-color: var(--calendar-day-color-selected-border);
+}
+
+/* Outside — muted appearance */
+.calendar-day.calendar-day--outside .calendar-day-button {
+  background-color: var(--calendar-day-color-outside-background);
+  color: var(--calendar-day-color-outside-foreground);
+}
+
+/* Disabled — muted, non-interactive */
+.calendar-day.calendar-day--disabled .calendar-day-button {
+  background-color: var(--calendar-day-color-disabled-background);
+  color: var(--calendar-day-color-disabled-foreground);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Hidden — invisible but preserves layout */
+.calendar-day.calendar-day--hidden {
+  visibility: hidden;
+}
