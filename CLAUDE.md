@@ -9,11 +9,9 @@ This project follows AI-DLC Lite for all component work. For design system compo
 
 **Pass 1 — Figma design (invoke `design-systems:figma-create-component-orchestrator`):**
 - Autonomous loop: creates missing tokens, builds the component, audits, repairs, re-audits until clean (max 3 passes)
-- Internally calls `figma-variables-and-styles`, `figma-components`, `figma-component-audit`, and `figma-repair`
-- Before presenting for approval, run final independent audits and include all results in the approval message:
-  - `design-systems:figma-component-audit` — final check on variants, states, and structure
-  - `design-systems:figma-token-audit` — final check on token architecture, naming, completeness, hardcoded values, and composite gaps
-- If any final audit finds issues: invoke `design-systems:figma-repair` with the issue report, then re-run the failed audit before presenting for approval
+- Internally calls `figma-variables-and-styles`, `figma-components`, `figma-token-audit`, `figma-component-audit`, and `figma-repair`
+- Each pass of the loop runs both audits in order: `figma-token-audit` first (so any token renames are settled), then `figma-component-audit` (so binding checks reflect corrected token names). All findings from both are collected before any repair is applied.
+- When the loop exits clean (or after 3 passes), present all audit results for approval
 
 **Approval gate 1 — human reviews the Figma component and all audit results. Do not proceed to code until explicitly approved.**
 
