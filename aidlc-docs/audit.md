@@ -95,8 +95,44 @@ Never overwrite this file — always append new entries.
 
 ---
 
+## Pass 1: Figma Design — Data Table (approved)
+**Timestamp**: 2026-05-29T00:00:00Z
+**User Input**: "yes, ready" / "I approve pass 1 but I want to go into pass 2 in a new chat window"
+**AI Response**: Completed full Pass 1 for Data Table component. Work performed across multiple sessions:
+
+Token work: Created 44 component tokens in the Components collection covering row states (default/hover/selected/selected-hover/focus/focus-background), header, cell, status badge (active/pending/archived), action icon, empty state, border widths, radius, spacing, and row height. Fixed modifier vocabulary — renamed 28 semantic colour tokens from `strong`/`subtle` to `emphasis`/`muted` across the Semantic Colours collection.
+
+Component sets built on the "Data Table" page:
+- `Data Table` — 2 variants: State=Empty (header + empty state icon/text), State=Filled (header + 3 representative rows)
+- `.Data Table/Status Badge` — 3 variants: Status=Active/Pending/Archived
+- `.Data Table/Header Cell` — 4 variants: Type=Checkbox, Type=Text Sort=None/Asc/Desc
+- `.Data Table/Row` — 5 variants: State=Default/Hover/Selected/Selected+Hover/Focus (with Focus Ring layer, absolutely positioned, visible only in Focus state)
+- `.Data Table/Row Slot` — 5 variants matching Row, using Figma Slots feature for flexible cell composition
+- `.Data Table/Cell` — 2 variants: Type=Text, Type=Amount
+- `.Data Table/Check Cell` — single component, temporary placeholder pending full Checkbox component
+- `.Data Table/Status Cell` — single component, Status Badge in a cell frame
+
+All components on the "Data Table" page inside "Data Table Components" section.
+
+Audit results: 5 errors found and fixed (Header Cell paddingRight unbound; Empty Icon fill bound to wrong token; Row Focus Ring stroke weights unbound; Row cell paddingRight unbound; Status Badge paddingBottom unbound). 3 warnings carry forward (orphaned action-icon hover tokens pre-declared for code; empty state text bindings per-variable not text-style; component set itemSpacing canvas-only). 5 advisories carry forward (no Disabled variant; Check Cell is placeholder; Selected+Hover naming; Archived badge contrast; action icon hover not in Figma).
+
+Design decisions: Data Table uses simple two-variant approach (Empty/Filled) rather than slot-based rows — slots add complexity without solving column alignment in Figma. Row Slot component remains available for custom mockups. Architecture is intentionally "representative" not "compositional" — token bindings are the parity contract.
+
+**Context**: Pass 1 approved. Ready for Pass 2 (code implementation) in a new session. Token export required before Pass 2 begins.
+
+---
+
 ## Requirements Analysis — Date Picker (answers received)
 **Timestamp**: 2026-05-23T19:26:00Z
 **User Input**: "SIngle date only, date and time, B no keep simple for now, full width text input. Feel free to add an icon libray to the repo....as for any other files pr dependncies...you chosse,....I wonder if I led you in another session by asking if you need more libraies to help...look, you decide... This needs to be a component library for our design system that will work perfectly with our Figma design system, um, and it's gonna be a professional one. It has to be accessible, friendly, and we want to style it our own way. And, yeah, sustainable and maintainable and not ending up with unsupported libraries, etcetera."
 **AI Response**: Answers logged: Q1=single date only, Q2=date+time, Q3=no constraints (keep simple), Q4=full-width text input trigger. Library decision: react-day-picker v9 (custom components mode, 12M weekly downloads, WCAG calendar grid) + date-fns v4 (tree-shakeable date utils). lucide-react and @radix-ui/react-popover already installed — no new icon library needed. Generating requirements doc and workflow plan.
 **Context**: INCEPTION — Requirements Analysis complete; proceeding to generate requirements doc + workflow plan
+
+---
+
+## Data Table — Pass 2 Complete
+**Timestamp**: 2026-05-30T00:00:00Z
+**User Input**: "Using AI-DLC Lite, Pass 2 — code implementation of the Data Table component. Pass 1 (Figma design) has been approved."
+**AI Response**: Implemented DataTable compound component. Files created: src/components/ui/data-table/data-table.css, data-table.tsx, data-table.stories.tsx, index.ts; src/playground/previews/data-table.tsx; registered in src/playground/index.tsx. Sub-components: DataTable.Header, .Body, .Row, .HeaderCell, .Cell, .CheckCell, .StatusBadge, .ActionButton, .EmptyState. All 44 component tokens consumed. TypeScript clean. Parity audit and token auditor both passed. Fixed bugs: checkbox click double-toggle (stopPropagation), header check cell missing background, color/transparent dark mode token set to white instead of transparent (fixed in Figma branch).
+**Context**: CONSTRUCTION — Pass 2 approved by user.
+

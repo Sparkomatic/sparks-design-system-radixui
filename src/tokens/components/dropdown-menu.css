@@ -4,7 +4,7 @@
   --dropdown-menu-separator-color: var(--border-emphasis);
   --dropdown-menu-label-color-foreground: var(--foreground-muted);
   --dropdown-menu-item-color-background: var(--background-raised);
-  --dropdown-menu-item-color-hover-background: var(--background-tertiary-subtle);
+  --dropdown-menu-item-color-hover-background: var(--background-tertiary-muted);
   --dropdown-menu-item-color-foreground: var(--foreground-default);
   --dropdown-menu-item-color-hover-foreground: var(--foreground-emphasis);
   --dropdown-menu-item-color-icon: var(--foreground-muted);
@@ -14,7 +14,7 @@
   --dropdown-menu-item-color-disabled-foreground: var(--foreground-disabled);
   --dropdown-menu-item-color-disabled-icon: var(--foreground-disabled);
   --dropdown-menu-item-color-destructive-background: var(--background-raised);
-  --dropdown-menu-item-color-destructive-hover-background: var(--background-destructive-subtle);
+  --dropdown-menu-item-color-destructive-hover-background: var(--background-destructive-muted);
   --dropdown-menu-item-color-destructive-foreground: var(--foreground-destructive-default);
   --dropdown-menu-item-color-destructive-hover-foreground: var(--foreground-destructive-default);
   --dropdown-menu-item-color-destructive-icon: var(--foreground-destructive-default);

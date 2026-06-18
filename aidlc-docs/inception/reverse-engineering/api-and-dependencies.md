@@ -130,6 +130,81 @@ Generated: 2026-05-20
 
 ---
 
+### DataTable
+
+**Import**: `import { DataTable } from "@/components/ui/data-table"`
+
+**Origin**: Layout component — no Radix primitive, native `<table>` with ARIA
+
+**Compound API**:
+
+| Sub-component | Element | Key props |
+|---|---|---|
+| `DataTable` | `<div>` wrapper + `<table>` | `className` |
+| `DataTable.Header` | `<thead>` | standard thead props |
+| `DataTable.Body` | `<tbody>` | standard tbody props |
+| `DataTable.Row` | `<tr>` | `selected`, `onSelect` |
+| `DataTable.HeaderCell` | `<th>` | `sortDirection`, `onSort` |
+| `DataTable.Cell` | `<td>` | `muted` |
+| `DataTable.CheckCell` | `<td>` or `<th>` | `checked`, `indeterminate`, `onCheckedChange`, `asHeader` |
+| `DataTable.StatusBadge` | `<span>` | `status: "active" \| "pending" \| "archived"` |
+| `DataTable.ActionButton` | `<button>` | `icon` |
+| `DataTable.EmptyState` | `<tr>` | `colSpan`, `message`, `icon` |
+
+**DataTable.Row props**:
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `selected` | `boolean` | — | Marks row as selected; applies `data-selected` attribute and selected background token |
+| `onSelect` | `(selected: boolean) => void` | — | Called when row is clicked or Space/Enter pressed; makes row focusable |
+
+**DataTable.HeaderCell props**:
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `sortDirection` | `"asc" \| "desc" \| null` | — | Current sort direction; controls active triangle colour in sort icon |
+| `onSort` | `() => void` | — | Called on header click; makes header sortable (adds cursor-pointer, aria-sort) |
+
+**DataTable.CheckCell props**:
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `checked` | `boolean` | `false` | Checkbox checked state |
+| `indeterminate` | `boolean` | — | Indeterminate state (partial selection) — set via DOM ref |
+| `onCheckedChange` | `(checked: boolean) => void` | — | Checkbox change handler; click is stopPropagated to prevent row double-toggle |
+| `asHeader` | `boolean` | `false` | Renders as `<th scope="col">` instead of `<td>` |
+
+**DataTable.StatusBadge props**:
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `status` | `"active" \| "pending" \| "archived"` | — | Badge variant; controls background, foreground, and border tokens |
+| `children` | `React.ReactNode` | status capitalised | Label text; defaults to "Active" / "Pending" / "Archived" |
+
+**Row selection pattern** (controlled by consumer):
+
+```tsx
+const [selectedRows, setSelectedRows] = React.useState<string[]>([])
+const toggle = (id: string) =>
+  setSelectedRows(prev => prev.includes(id) ? prev.filter(r => r !== id) : [...prev, id])
+
+<DataTable.Row selected={selectedRows.includes(row.id)} onSelect={() => toggle(row.id)}>
+  <DataTable.CheckCell checked={selectedRows.includes(row.id)} onCheckedChange={() => toggle(row.id)} />
+```
+
+**Token file**: `src/tokens/components/data-table.css` (44 tokens)
+
+**CSS class rules**: `src/components/ui/data-table/data-table.css`
+
+**Architecture notes**:
+- No CVA — table has a single visual treatment; no variant axis
+- Row states (hover, selected, selected+hover, focus) handled via CSS pseudo-classes and `data-selected` attribute
+- Sorting is visual-only — the component renders sort icons and fires `onSort`, but does not sort data
+- CheckCell checkbox is temporary — will be replaced with the Checkbox component when built; `onClick` stopPropagation prevents double-toggle with row click handler
+- `color/transparent` primitive must be `oklch(0 0 0 / 0)` (not white) for dark mode row backgrounds to work correctly
+
+---
+
 ## Internal APIs
 
 ### cn() Utility

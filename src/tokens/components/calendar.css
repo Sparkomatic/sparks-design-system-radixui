@@ -9,9 +9,9 @@
   --calendar-header-gap: var(--spacing-stack);
   --calendar-nav-button-color-default-background: var(--background-raised);
   --calendar-nav-button-color-default-foreground: var(--foreground-default);
-  --calendar-nav-button-color-hover-background: var(--background-secondary-subtle);
+  --calendar-nav-button-color-hover-background: var(--background-secondary-muted);
   --calendar-nav-button-color-hover-foreground: var(--foreground-default);
-  --calendar-nav-button-color-focused-background: var(--background-secondary-subtle);
+  --calendar-nav-button-color-focused-background: var(--background-secondary-muted);
   --calendar-nav-button-color-focused-foreground: var(--foreground-default);
   --calendar-nav-button-color-focused-border: var(--border-focus);
   --calendar-nav-button-color-disabled-background: var(--background-raised);
@@ -21,12 +21,12 @@
   --calendar-weekday-color-foreground: var(--foreground-muted);
   --calendar-day-color-default-background: var(--background-raised);
   --calendar-day-color-default-foreground: var(--foreground-default);
-  --calendar-day-color-hover-background: var(--background-secondary-subtle);
+  --calendar-day-color-hover-background: var(--background-secondary-muted);
   --calendar-day-color-hover-foreground: var(--foreground-default);
-  --calendar-day-color-focused-background: var(--background-secondary-subtle);
+  --calendar-day-color-focused-background: var(--background-secondary-muted);
   --calendar-day-color-focused-foreground: var(--foreground-default);
   --calendar-day-color-focused-border: var(--border-focus);
-  --calendar-day-color-selected-background: var(--background-primary-strong);
+  --calendar-day-color-selected-background: var(--background-primary-emphasis);
   --calendar-day-color-selected-foreground: var(--foreground-on-primary);
   --calendar-day-color-today-background: var(--background-raised);
   --calendar-day-color-today-foreground: var(--foreground-primary-default);

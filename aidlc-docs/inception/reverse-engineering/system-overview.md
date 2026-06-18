@@ -177,6 +177,7 @@ sparks-design-system-radixui/
 |   |       +-- calendar/        calendar.tsx  calendar.css  calendar.stories.tsx  index.ts
 |   |       +-- card/            card.tsx  card.css  card.stories.tsx  index.ts
 |   |       +-- combobox/        combobox.tsx  combobox.stories.tsx  index.ts
+|   |       +-- data-table/      data-table.tsx  data-table.css  data-table.stories.tsx  index.ts  (Pass 2 pending)
 |   |       +-- dropdown-menu/   dropdown-menu.tsx  dropdown-menu.css  dropdown-menu.stories.tsx  index.ts
 |   +-- tokens/
 |   |   +-- index.css            (auto-generated -- do not edit)
@@ -191,6 +192,7 @@ sparks-design-system-radixui/
 |   |       +-- button.css
 |   |       +-- calendar.css
 |   |       +-- card.css
+|   |       +-- data-table.css        (44 tokens — export from Figma before Pass 2)
 |   |       +-- dropdown-menu.css
 |   |       +-- text-input.css
 |   +-- lib/
@@ -269,6 +271,7 @@ sparks-design-system-radixui/
 | Combobox | src/components/ui/combobox/ | Partial | @radix-ui/react-popover | — | — | No dedicated .css file; complex open-state management via Popover.Anchor pattern |
 | Dropdown Menu | src/components/ui/dropdown-menu/ | Complete | @radix-ui/react-dropdown-menu | — | — | Full Radix DropdownMenu wrapping with token-driven CSS |
 | Text Input | src/components/ui/text-input/ | Complete | None (layout component — native `<input>`) | status: default, error, success | sm, md, lg | Supports leadingIcon, trailingIcon; CSS classes use `ti-` prefix to avoid tailwind-merge collision |
+| Data Table | src/components/ui/data-table/ | Complete | None (layout component — native `<table>`) | — (single visual treatment) | md only | Compound: DataTable + .Header .Body .Row .HeaderCell .Cell .CheckCell .StatusBadge .ActionButton .EmptyState; 44 component tokens; controlled row selection; visual-only sort; StatusBadge has Active/Pending/Archived variants |
 
 ### Playground Previews
 
@@ -280,6 +283,7 @@ sparks-design-system-radixui/
 | Combobox | src/playground/previews/combobox.tsx | Combobox usage |
 | Dropdown Menu | src/playground/previews/dropdown-menu.tsx | Dropdown usage |
 | Text Input | src/playground/previews/text-input.tsx | 3 sizes, 3 statuses, icon slots, disabled |
+| Data Table | src/playground/previews/data-table.tsx | Interactive table with selection + sorting, status badges, empty state |
 
 ---
 

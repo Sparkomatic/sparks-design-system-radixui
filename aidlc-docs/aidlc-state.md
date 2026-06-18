@@ -20,7 +20,7 @@
 ## Current Intent
 
 - **Component**: None — awaiting next intent
-- **Last completed**: Calendar (2026-05-28)
+- **Last completed**: Data Table (2026-05-30)
 
 ## Completed Components
 
@@ -31,6 +31,7 @@
 | Dropdown Menu | pre-AI-DLC | pre-AI-DLC | ✓ | Existed at inception |
 | Text Input | COMPLETED (2026-05-20) | COMPLETED (2026-05-20) | ✓ | First AI-DLC component |
 | Calendar | COMPLETED (2026-05-28) | COMPLETED (2026-05-28) | ✓ | react-day-picker v10; 42 tokens |
+| Data Table | COMPLETED (2026-05-29) | COMPLETED (2026-05-30) | ✓ | Native table; 44 tokens; compound API; controlled selection; visual-only sort; StatusBadge sub-component |
 
 ## Stage Progress
 
@@ -44,6 +45,8 @@
 | Pass 2: Code Implementation (Text Input) | COMPLETED | 2026-05-20 |
 | Pass 1: Figma Design (Calendar) | COMPLETED | 2026-05-28 |
 | Pass 2: Code Implementation (Calendar) | COMPLETED | 2026-05-28 |
+| Pass 1: Figma Design (Data Table) | COMPLETED | 2026-05-29 |
+| Pass 2: Code Implementation (Data Table) | COMPLETED | 2026-05-30 |
 
 ## Reverse Engineering Status
 - [x] Reverse Engineering — Completed 2026-05-20

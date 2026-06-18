@@ -3,6 +3,7 @@ import { Moon, Sun } from "lucide-react"
 
 import "./playground.css"
 import { ButtonPreview } from "./previews/button"
+import { DataTablePreview } from "./previews/data-table"
 import { CalendarPreview } from "./previews/calendar"
 import { CardPreview } from "./previews/card"
 import { ComboboxPreview } from "./previews/combobox"
@@ -11,6 +12,7 @@ import { TextInputPreview } from "./previews/text-input"
 
 const previews: { name: string; component: React.ComponentType }[] = [
   { name: "Button", component: ButtonPreview },
+  { name: "Data Table", component: DataTablePreview },
   { name: "Calendar", component: CalendarPreview },
   { name: "Card", component: CardPreview },
   { name: "Combobox", component: ComboboxPreview },
